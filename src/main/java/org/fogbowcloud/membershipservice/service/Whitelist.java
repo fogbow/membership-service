@@ -1,4 +1,6 @@
-package org.fogbowcloud.membershipservice;
+package org.fogbowcloud.membershipservice.service;
+
+import org.fogbowcloud.membershipservice.MembershipService;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,7 +28,7 @@ public class Whitelist implements MembershipService {
                 membersId.add(memberId);
             }
         } catch (IOException e) {
-            throw new IOException("Conf file was not found.");
+            throw new IOException("Membership conf file was not found.");
         } finally {
             if (input != null) {
                 input.close();

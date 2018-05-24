@@ -1,7 +1,9 @@
 package org.fogbowcloud.membershipservice;
 
-/**
- * Created by lucas on 24/05/18.
- */
+import java.io.IOException;
+import java.util.List;
+
 public interface MembershipService {
+
+    public List<String> listMembers() throws IOException;
 }
