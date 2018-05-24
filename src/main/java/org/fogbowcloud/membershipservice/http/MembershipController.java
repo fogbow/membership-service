@@ -1,5 +1,7 @@
-package org.fogbowcloud.membershipservice;
+package org.fogbowcloud.membershipservice.http;
 
+import org.fogbowcloud.membershipservice.MembershipService;
+import org.fogbowcloud.membershipservice.service.Whitelist;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
