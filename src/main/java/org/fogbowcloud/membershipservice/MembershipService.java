@@ -1,9 +1,14 @@
 package org.fogbowcloud.membershipservice;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface MembershipService {
 
-    public List<String> listMembers() throws IOException;
+    /**
+     * This method returns a list of XMPP members ID.
+     *
+     * @return List of string with XMPP members ID.
+     * @throws Exception
+     */
+    public List<String> listMembers() throws Exception;
 }

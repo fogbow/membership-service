@@ -9,10 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class Whitelist implements MembershipService {
+public class WhiteList implements MembershipService {
 
-    private static final String PATH_CONF = "membership.conf";
+    private String membershipConfPath = "membership.conf";
 
+    public WhiteList(String membershipConfPath) {
+        this.membershipConfPath = membershipConfPath;
+    }
+
+    public WhiteList() {}
+
+    /**
+     * Read list of XMPP members ID from membership config file.
+     *
+     * @throws IOException Config file not found or badly-formatted file.
+     */
     @Override
     public List<String> listMembers() throws IOException {
         Properties properties = new Properties();
@@ -20,7 +31,7 @@ public class Whitelist implements MembershipService {
         List<String> membersId = new ArrayList<>();
 
         try {
-            input = new FileInputStream(PATH_CONF);
+            input = new FileInputStream(this.membershipConfPath);
             properties.load(input);
 
             for (String memberName : properties.stringPropertyNames()) {
@@ -28,7 +39,7 @@ public class Whitelist implements MembershipService {
                 membersId.add(memberId);
             }
         } catch (IOException e) {
-            throw new IOException("Membership conf file was not found.");
+            throw new IOException("Membership config file was not found.");
         } finally {
             if (input != null) {
                 input.close();
