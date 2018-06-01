@@ -1,5 +1,6 @@
 package org.fogbowcloud.membershipservice.http;
 
+import org.apache.log4j.Logger;
 import org.fogbowcloud.membershipservice.MembershipService;
 import org.fogbowcloud.membershipservice.service.WhiteList;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @CrossOrigin
@@ -18,10 +20,16 @@ public class MembershipController {
 
     protected static final String ENDPOINT = "members";
 
+    private static final Logger LOGGER = Logger.getLogger(MembershipController.class);
+
     private MembershipService membershipService;
 
     public MembershipController() {
-        this.membershipService = new WhiteList();
+        try {
+            this.membershipService = new WhiteList();
+        } catch (FileNotFoundException e) {
+            LOGGER.error("Configuration file not found.", e);
+        }
     }
 
     /**
@@ -29,11 +37,16 @@ public class MembershipController {
      */
     @GetMapping
     public ResponseEntity<List<String>> listMembers() {
+        if (this.membershipService == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         try {
             List<String> membersId = this.membershipService.listMembers();
             return new ResponseEntity<>(membersId, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            LOGGER.error("Internal server error.", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
