@@ -4,7 +4,7 @@ import org.fogbowcloud.membershipservice.service.WhiteList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +17,8 @@ public class WhiteListTest {
     private String INVALID_PATH_CONF = "invalid.conf";
 
     @Before
-    public void setUp() {
+    public void setUp() throws FileNotFoundException {
         this.validMembershipService = new WhiteList(VALID_PATH_CONF);
-        this.invalidMembershipService = new WhiteList(INVALID_PATH_CONF);
     }
 
     @Test
@@ -38,6 +37,7 @@ public class WhiteListTest {
 
     @Test(expected = Exception.class)
     public void testListMembersWithInvalidConfPath() throws Exception {
+        this.invalidMembershipService = new WhiteList(INVALID_PATH_CONF);
         this.invalidMembershipService.listMembers();
     }
 }
