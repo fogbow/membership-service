@@ -18,6 +18,8 @@ public class WhiteList implements MembershipService {
     private final String defaultMembershipConfPath = "membership.conf";
 
     private List<String> membersList;
+    
+    public static final String MEMBERS_LIST = "members_list";
 
     public WhiteList(String membershipConfPath) throws FileNotFoundException {
         this.membersList = readMembersFromFile(membershipConfPath);
@@ -33,7 +35,6 @@ public class WhiteList implements MembershipService {
      */
     @Override
     public List<String> listMembers() {
-
         return this.membersList;
     }
 
@@ -45,9 +46,10 @@ public class WhiteList implements MembershipService {
         try {
             properties.load(input);
 
-            for (String memberName : properties.stringPropertyNames()) {
-                String memberId = properties.getProperty(memberName);
-                membersList.add(memberId);
+            String membersListStr = properties.getProperty(MEMBERS_LIST);
+            for (String member : membersListStr.split(",")) {
+                member = member.trim();
+                membersList.add(member);
             }
         } catch (IOException e) {
             LOGGER.warn("Error trying to read configuration file found: " + membershipConfPath, e);
