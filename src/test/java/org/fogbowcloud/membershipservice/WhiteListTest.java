@@ -29,10 +29,12 @@ public class WhiteListTest {
         result.add("xmpp-id1");
         result.add("xmpp-id2");
         result.add("xmpp-id3");
+        result.add("xmpp-id4");
 
         Assert.assertTrue(membersId.contains(result.get(0)));
         Assert.assertTrue(membersId.contains(result.get(1)));
         Assert.assertTrue(membersId.contains(result.get(2)));
+        Assert.assertTrue(membersId.contains(result.get(3)));
     }
 
     @Test(expected = Exception.class)
