@@ -19,10 +19,10 @@ WORKDIR /root
 
 # Installing Reverse Tunnel
 RUN \
-  git clone https://github.com/fogbow/fogbow-membership-service.git && \
-  (cd fogbow-membership-service && mvn install)
+  git clone https://github.com/fogbow/membership-service.git && \
+  (cd membership-service && mvn install)
 
 # Define working directory.
-WORKDIR /root/fogbow-membership-service
+WORKDIR /root/membership-service
 
 CMD /bin/bash bin/start-membership-service > log.out && tail -f /dev/null
