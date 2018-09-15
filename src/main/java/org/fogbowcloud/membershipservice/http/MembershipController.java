@@ -2,6 +2,7 @@ package org.fogbowcloud.membershipservice.http;
 
 import org.apache.log4j.Logger;
 import org.fogbowcloud.membershipservice.MembershipService;
+import org.fogbowcloud.membershipservice.service.Messages;
 import org.fogbowcloud.membershipservice.service.WhiteList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class MembershipController {
         try {
             this.membershipService = new WhiteList();
         } catch (FileNotFoundException e) {
-            LOGGER.error("Configuration file not found.", e);
+            LOGGER.error(String.format(Messages.Error.CONFIGURATION_FILE_NOT_FOUND), e);
         }
     }
 
@@ -45,7 +46,7 @@ public class MembershipController {
             List<String> membersId = this.membershipService.listMembers();
             return new ResponseEntity<>(membersId, HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Internal server error.", e);
+            LOGGER.error(Messages.Error.INTERNAL_SERVER_ERROR, e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
