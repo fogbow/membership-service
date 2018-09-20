@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping(value = MembershipController.ENDPOINT)
 public class MembershipController {
 
+    public static final String API_VERSION_NUMBER = "1.1.1";
     protected static final String ENDPOINT = "members";
 
     private static final Logger LOGGER = Logger.getLogger(MembershipController.class);
