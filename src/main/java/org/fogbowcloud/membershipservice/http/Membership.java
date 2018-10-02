@@ -16,17 +16,17 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = MembershipController.ENDPOINT)
-public class MembershipController {
+@RequestMapping(value = Membership.ENDPOINT)
+public class Membership {
 
     public static final String API_VERSION_NUMBER = "1.1.1";
     protected static final String ENDPOINT = "members";
 
-    private static final Logger LOGGER = Logger.getLogger(MembershipController.class);
+    private static final Logger LOGGER = Logger.getLogger(Membership.class);
 
     private MembershipService membershipService;
 
-    public MembershipController() {
+    public Membership() {
         try {
             this.membershipService = new WhiteList();
         } catch (FileNotFoundException e) {
