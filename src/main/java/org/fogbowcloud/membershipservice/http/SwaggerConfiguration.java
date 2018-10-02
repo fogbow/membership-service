@@ -42,7 +42,7 @@ public class SwaggerConfiguration {
     }
 
     private ApiInfoBuilder apiInfo() {
-        String versionNumber = MembershipController.API_VERSION_NUMBER;
+        String versionNumber = Membership.API_VERSION_NUMBER;
 
         ApiInfoBuilder apiInfoBuilder = new ApiInfoBuilder();
 
