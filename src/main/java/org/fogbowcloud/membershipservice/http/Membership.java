@@ -1,7 +1,10 @@
 package org.fogbowcloud.membershipservice.http;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.fogbowcloud.membershipservice.MembershipService;
+import org.fogbowcloud.membershipservice.constants.ApiDocumentation;
 import org.fogbowcloud.membershipservice.service.Messages;
 import org.fogbowcloud.membershipservice.service.WhiteList;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(value = Membership.ENDPOINT)
+@Api(description = ApiDocumentation.Membership.API)
 public class Membership {
 
     public static final String API_VERSION_NUMBER = "1.1.1";
@@ -37,6 +41,7 @@ public class Membership {
     /**
      * Gets JSON response with a list of XMPP members ID.
      */
+    @ApiOperation(value = ApiDocumentation.Membership.DESCRIPTION)
     @GetMapping
     public ResponseEntity<List<String>> listMembers() {
         if (this.membershipService == null) {
