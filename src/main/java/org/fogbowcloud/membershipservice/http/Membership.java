@@ -1,7 +1,10 @@
 package org.fogbowcloud.membershipservice.http;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.fogbowcloud.membershipservice.MembershipService;
+import org.fogbowcloud.membershipservice.constants.ApiDocumentation;
 import org.fogbowcloud.membershipservice.service.Messages;
 import org.fogbowcloud.membershipservice.service.WhiteList;
 import org.springframework.http.HttpStatus;
@@ -16,17 +19,18 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = MembershipController.ENDPOINT)
-public class MembershipController {
+@RequestMapping(value = Membership.ENDPOINT)
+@Api(description = ApiDocumentation.Membership.API)
+public class Membership {
 
     public static final String API_VERSION_NUMBER = "1.1.1";
     protected static final String ENDPOINT = "members";
 
-    private static final Logger LOGGER = Logger.getLogger(MembershipController.class);
+    private static final Logger LOGGER = Logger.getLogger(Membership.class);
 
     private MembershipService membershipService;
 
-    public MembershipController() {
+    public Membership() {
         try {
             this.membershipService = new WhiteList();
         } catch (FileNotFoundException e) {
@@ -37,6 +41,7 @@ public class MembershipController {
     /**
      * Gets JSON response with a list of XMPP members ID.
      */
+    @ApiOperation(value = ApiDocumentation.Membership.DESCRIPTION)
     @GetMapping
     public ResponseEntity<List<String>> listMembers() {
         if (this.membershipService == null) {
