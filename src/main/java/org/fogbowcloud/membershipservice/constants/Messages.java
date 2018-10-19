@@ -1,4 +1,4 @@
-package org.fogbowcloud.membershipservice.service;
+package org.fogbowcloud.membershipservice.constants;
 
 public class Messages {
     public static class Exception {

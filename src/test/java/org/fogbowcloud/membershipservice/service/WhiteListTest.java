@@ -1,5 +1,6 @@
-package org.fogbowcloud.membershipservice;
+package org.fogbowcloud.membershipservice.service;
 
+import org.fogbowcloud.membershipservice.MembershipService;
 import org.fogbowcloud.membershipservice.service.WhiteList;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,7 +14,7 @@ public class WhiteListTest {
     private MembershipService validMembershipService;
     private MembershipService invalidMembershipService;
 
-    private String VALID_PATH_CONF = "src/test/resources/membership-test.conf";
+    private String VALID_PATH_CONF = "src/test/resources/ms-test.conf";
     private String INVALID_PATH_CONF = "invalid.conf";
 
     @Before

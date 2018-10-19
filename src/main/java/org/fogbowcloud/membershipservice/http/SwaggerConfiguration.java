@@ -1,5 +1,7 @@
 package org.fogbowcloud.membershipservice.http;
 
+import org.fogbowcloud.membershipservice.constants.ApiDocumentation;
+import org.fogbowcloud.membershipservice.constants.SystemConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -14,26 +16,17 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 public class SwaggerConfiguration {
 
-    public static final String BASE_PACKAGE = "org.fogbowcloud.membershipservice";
-
-    public static final String API_TITLE = "Fogbow Membership Service API";
-    public static final String API_DESCRIPTION = "This API introduces readers to Fogbow MS REST API, "
-        + "provides guidelines on how to use it, and describe the available features accessible from it.";
-
-    public static final String CONTACT_NAME = "Fogbow";
-    public static final String CONTACT_URL = "https://www.fogbowcloud.org";
-    public static final String CONTACT_EMAIL = "contact@fogbowcloud.org";
     public static final Contact CONTACT = new Contact(
-        CONTACT_NAME,
-        CONTACT_URL,
-        CONTACT_EMAIL);
+            ApiDocumentation.ApiInfo.CONTACT_NAME,
+            ApiDocumentation.ApiInfo.CONTACT_URL,
+            ApiDocumentation.ApiInfo.CONTACT_EMAIL);
 
     @Bean
     public Docket apiDetails() {
         Docket docket = new Docket(DocumentationType.SWAGGER_2);
 
         docket.select()
-            .apis(RequestHandlerSelectors.basePackage(BASE_PACKAGE))
+            .apis(RequestHandlerSelectors.basePackage(ApiDocumentation.ApiInfo.BASE_PACKAGE))
             .paths(PathSelectors.any())
             .build()
             .apiInfo(this.apiInfo().build());
@@ -42,13 +35,12 @@ public class SwaggerConfiguration {
     }
 
     private ApiInfoBuilder apiInfo() {
-        String versionNumber = Membership.API_VERSION_NUMBER;
+        String versionNumber = SystemConstants.API_VERSION_NUMBER;
 
         ApiInfoBuilder apiInfoBuilder = new ApiInfoBuilder();
 
-        // TODO Add License to the documentation?
-        apiInfoBuilder.title(API_TITLE);
-        apiInfoBuilder.description(API_DESCRIPTION);
+        apiInfoBuilder.title(ApiDocumentation.ApiInfo.API_TITLE);
+        apiInfoBuilder.description(ApiDocumentation.ApiInfo.API_DESCRIPTION);
         apiInfoBuilder.version(versionNumber);
         apiInfoBuilder.contact(CONTACT);
 

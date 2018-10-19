@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.fogbowcloud.membershipservice.MembershipService;
 import org.fogbowcloud.membershipservice.constants.ApiDocumentation;
-import org.fogbowcloud.membershipservice.service.Messages;
+import org.fogbowcloud.membershipservice.constants.Messages;
 import org.fogbowcloud.membershipservice.service.WhiteList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,6 @@ import java.util.List;
 @Api(description = ApiDocumentation.Membership.API)
 public class Membership {
 
-    public static final String API_VERSION_NUMBER = "1.1.1";
     protected static final String ENDPOINT = "members";
 
     private static final Logger LOGGER = Logger.getLogger(Membership.class);

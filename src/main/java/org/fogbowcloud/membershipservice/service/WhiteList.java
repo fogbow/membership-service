@@ -3,6 +3,9 @@ package org.fogbowcloud.membershipservice.service;
 import org.fogbowcloud.membershipservice.MembershipService;
 
 import org.apache.log4j.Logger;
+import org.fogbowcloud.membershipservice.constants.Messages;
+import org.fogbowcloud.membershipservice.constants.SystemConstants;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,8 +18,6 @@ public class WhiteList implements MembershipService {
 
     private static final Logger LOGGER = Logger.getLogger(WhiteList.class);
 
-    private final String CONF_FILE_NAME = "membership.conf";
-
     private List<String> membersList;
     
     public static final String MEMBERS_LIST_KEY = "members_list";
@@ -26,7 +27,7 @@ public class WhiteList implements MembershipService {
     }
 
     public WhiteList() throws FileNotFoundException {
-        this.membersList = readMembersFromFile(this.CONF_FILE_NAME);
+        this.membersList = readMembersFromFile(SystemConstants.CONF_FILE_NAME);
     }
 
     /**
