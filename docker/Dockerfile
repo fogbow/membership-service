@@ -25,4 +25,8 @@ RUN \
 # Define working directory.
 WORKDIR /root/membership-service
 
+# Generates the build number based on the commit checksum
+RUN \
+    (build_number=$(git rev-parse --short 'HEAD') && echo "build_number=$build_number" > build)
+
 CMD /bin/bash bin/start-membership-service > log.out && tail -f /dev/null
