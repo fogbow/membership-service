@@ -20,7 +20,7 @@ WORKDIR /root
 # Installing Reverse Tunnel
 RUN \
   git clone https://github.com/fogbow/membership-service.git && \
-  (cd membership-service && mvn install)
+  (cd membership-service && mvn install && git checkout develop)
 
 # Define working directory.
 WORKDIR /root/membership-service
