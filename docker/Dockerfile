@@ -17,10 +17,10 @@ ENV HOME /root
 # Define working directory.
 WORKDIR /root
 
-# Installing Reverse Tunnel
+# Installing service
 RUN \
   git clone https://github.com/fogbow/membership-service.git && \
-  (cd membership-service && mvn install)
+  (cd membership-service && mvn install && git checkout master)
 
 # Define working directory.
 WORKDIR /root/membership-service
