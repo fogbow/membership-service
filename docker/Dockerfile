@@ -1,5 +1,7 @@
 FROM openjdk:8
 
+ARG BRANCH=master
+
 # Install.
 RUN \
   sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
@@ -20,7 +22,7 @@ WORKDIR /root
 # Installing Reverse Tunnel
 RUN \
   git clone https://github.com/fogbow/membership-service.git && \
-  (cd membership-service && mvn install && git checkout develop)
+  (cd membership-service && mvn install && git checkout $BRANCH)
 
 # Define working directory.
 WORKDIR /root/membership-service
