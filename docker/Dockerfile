@@ -19,7 +19,7 @@ ENV HOME /root
 # Define working directory.
 WORKDIR /root
 
-# Installing 
+# Installing
 RUN \
   git clone https://github.com/fogbow/membership-service.git && \
   (cd membership-service && git checkout $BRANCH)
