@@ -19,10 +19,10 @@ ENV HOME /root
 # Define working directory.
 WORKDIR /root
 
-# Installing Reverse Tunnel
+# Installing 
 RUN \
   git clone https://github.com/fogbow/membership-service.git && \
-  (cd membership-service && mvn install && git checkout $BRANCH)
+  (cd membership-service && git checkout $BRANCH)
 
 # Define working directory.
 WORKDIR /root/membership-service
@@ -30,4 +30,7 @@ WORKDIR /root/membership-service
 # Generates the build number based on the commit checksum
 RUN \
     (build_number=$(git rev-parse --short 'HEAD') && echo "build_number=$build_number" > build)
+
+RUN \
+  mvn dependency:sources
 
