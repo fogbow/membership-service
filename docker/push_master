@@ -2,3 +2,6 @@
 
 ./push fogbow/membership-service:latest
 
+sudo docker tag fogbow/membership-service:latest fogbow/membership-service:angra
+./push fogbow/membership-service:angra
+
