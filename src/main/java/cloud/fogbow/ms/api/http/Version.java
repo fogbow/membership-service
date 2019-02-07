@@ -1,9 +1,10 @@
-package org.fogbowcloud.membershipservice.http;
+package cloud.fogbow.ms.api.http;
 
+import cloud.fogbow.common.util.HomeDir;
+import cloud.fogbow.ms.constants.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
-import org.fogbowcloud.membershipservice.constants.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,14 +46,14 @@ public class Version {
 
     private String readBuildFromFile(String membershipConfPath) throws FileNotFoundException {
         Properties properties = new Properties();
-        InputStream input = new FileInputStream(membershipConfPath);
+        InputStream input = new FileInputStream(HomeDir.getPath() + membershipConfPath);
         String build = "empty";
 
         try {
             properties.load(input);
 
-            build = properties.getProperty(ConfigurationPropertiesKeys.BUILD_NUMBER,
-                    ConfigurationPropertiesDefault.BUILD_NUMBER);
+            build = properties.getProperty(ConfigurationPropertyKeys.BUILD_NUMBER,
+                    ConfigurationPropertyDefaults.BUILD_NUMBER);
         } catch (IOException e) {
             LOGGER.warn(String.format(Messages.Warn.ERROR_READING_CONF_FILE, membershipConfPath), e);
         } finally {

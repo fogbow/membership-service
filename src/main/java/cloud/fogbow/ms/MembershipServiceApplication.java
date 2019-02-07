@@ -1,4 +1,4 @@
-package org.fogbowcloud.membershipservice;
+package cloud.fogbow.ms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

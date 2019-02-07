@@ -1,4 +1,4 @@
-package org.fogbowcloud.membershipservice.constants;
+package cloud.fogbow.ms.constants;
 
 public class SystemConstants {
     public static final String API_VERSION_NUMBER = "1.0.0";

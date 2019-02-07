@@ -1,10 +1,7 @@
-package org.fogbowcloud.membershipservice.http;
+package cloud.fogbow.ms.api.http;
 
-import org.fogbowcloud.membershipservice.constants.ApiDocumentation;
-import org.fogbowcloud.membershipservice.constants.SystemConstants;
-import org.fogbowcloud.membershipservice.http.Version;
+import cloud.fogbow.ms.constants.SystemConstants;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;

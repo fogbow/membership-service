@@ -1,7 +1,7 @@
-package org.fogbowcloud.membershipservice.constants;
+package cloud.fogbow.ms.constants;
 
 import java.util.concurrent.TimeUnit;
 
-public class ConfigurationPropertiesDefault {
+public class ConfigurationPropertyDefaults {
     public static final String BUILD_NUMBER = "[testing mode]";
 }

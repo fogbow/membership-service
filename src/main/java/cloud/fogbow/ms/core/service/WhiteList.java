@@ -1,10 +1,12 @@
-package org.fogbowcloud.membershipservice.service;
+package cloud.fogbow.ms.core.service;
 
-import org.fogbowcloud.membershipservice.MembershipService;
+import cloud.fogbow.common.util.HomeDir;
+import cloud.fogbow.ms.MembershipService;
 
+import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import org.apache.log4j.Logger;
-import org.fogbowcloud.membershipservice.constants.Messages;
-import org.fogbowcloud.membershipservice.constants.SystemConstants;
+import cloud.fogbow.ms.constants.Messages;
+import cloud.fogbow.ms.constants.SystemConstants;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,8 +21,6 @@ public class WhiteList implements MembershipService {
     private static final Logger LOGGER = Logger.getLogger(WhiteList.class);
 
     private List<String> membersList;
-    
-    public static final String MEMBERS_LIST_KEY = "members_list";
 
     public WhiteList(String membershipConfPath) throws FileNotFoundException {
         this.membersList = readMembersFromFile(membershipConfPath);
@@ -41,13 +41,13 @@ public class WhiteList implements MembershipService {
 
     private List<String> readMembersFromFile(String membershipConfPath) throws FileNotFoundException {
         Properties properties = new Properties();
-        InputStream input = new FileInputStream(membershipConfPath);
+        InputStream input = new FileInputStream(HomeDir.getPath() + membershipConfPath);
         List<String> membersList = new ArrayList<>();
 
         try {
             properties.load(input);
 
-            String membersListStr = properties.getProperty(MEMBERS_LIST_KEY);
+            String membersListStr = properties.getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
             for (String member : membersListStr.split(",")) {
                 member = member.trim();
                 membersList.add(member);

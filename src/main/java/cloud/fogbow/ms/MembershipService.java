@@ -1,4 +1,4 @@
-package org.fogbowcloud.membershipservice;
+package cloud.fogbow.ms;
 
 import java.util.List;
 
