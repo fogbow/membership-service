@@ -52,7 +52,7 @@ public class Version {
         try {
             properties.load(input);
 
-            build = properties.getProperty(ConfigurationPropertyKeys.BUILD_NUMBER,
+            build = properties.getProperty(ConfigurationPropertyKeys.BUILD_NUMBER_KEY,
                     ConfigurationPropertyDefaults.BUILD_NUMBER);
         } catch (IOException e) {
             LOGGER.warn(String.format(Messages.Warn.ERROR_READING_CONF_FILE, membershipConfPath), e);
