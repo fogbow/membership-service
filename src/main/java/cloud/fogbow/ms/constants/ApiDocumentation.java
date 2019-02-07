@@ -3,7 +3,6 @@ package cloud.fogbow.ms.constants;
 public class ApiDocumentation {
 
     public static class ApiInfo {
-        public static final String BASE_PACKAGE = "cloud.fogbow.ms";
         public static final String API_TITLE = "Fogbow Membership Service API";
         public static final String API_DESCRIPTION = "This API introduces readers to Fogbow MS REST API, "
                 + "provides guidelines on how to use it, and describes the available features accessible from it.";

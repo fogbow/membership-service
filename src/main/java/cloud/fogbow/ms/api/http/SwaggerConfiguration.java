@@ -15,6 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Configuration
 public class SwaggerConfiguration {
+    public static final String BASE_PACKAGE = "cloud.fogbow.ms";
 
     public static final Contact CONTACT = new Contact(
             ApiDocumentation.ApiInfo.CONTACT_NAME,
@@ -26,7 +27,7 @@ public class SwaggerConfiguration {
         Docket docket = new Docket(DocumentationType.SWAGGER_2);
 
         docket.select()
-            .apis(RequestHandlerSelectors.basePackage(ApiDocumentation.ApiInfo.BASE_PACKAGE))
+            .apis(RequestHandlerSelectors.basePackage(BASE_PACKAGE))
             .paths(PathSelectors.any())
             .build()
             .apiInfo(this.apiInfo().build());
