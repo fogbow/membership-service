@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.fogbowcloud.membershipservice.constants.*;
+import org.fogbowcloud.membershipservice.service.VersionNumber;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,9 +30,9 @@ public class Version {
 
     @ApiOperation(value = ApiDocumentation.Version.GET_OPERATION)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> getVersion() throws FileNotFoundException {
+    public ResponseEntity<VersionNumber> getVersion() throws FileNotFoundException {
         String versionNumber = getVersionNumber();
-        return new ResponseEntity<>(versionNumber, HttpStatus.OK);
+        return new ResponseEntity<VersionNumber>(new VersionNumber(versionNumber), HttpStatus.OK);
     }
 
     public String getVersionNumber() throws FileNotFoundException {
