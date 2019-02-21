@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.fogbowcloud.membershipservice.MembershipService;
 import org.fogbowcloud.membershipservice.constants.ApiDocumentation;
 import org.fogbowcloud.membershipservice.constants.Messages;
+import org.fogbowcloud.membershipservice.service.MembersList;
 import org.fogbowcloud.membershipservice.service.WhiteList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +43,15 @@ public class Membership {
      */
     @ApiOperation(value = ApiDocumentation.Membership.DESCRIPTION)
     @GetMapping
-    public ResponseEntity<List<String>> listMembers() {
+    public ResponseEntity<MembersList> listMembers() {
         if (this.membershipService == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         try {
             List<String> membersId = this.membershipService.listMembers();
-            return new ResponseEntity<>(membersId, HttpStatus.OK);
+            MembersList membersList = new MembersList(membersId);
+            return new ResponseEntity<MembersList>(membersList, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error(Messages.Error.INTERNAL_SERVER_ERROR, e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
