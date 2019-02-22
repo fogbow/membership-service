@@ -1,7 +1,6 @@
-package org.fogbowcloud.membershipservice.service;
+package org.fogbowcloud.ms.core;
 
-import org.fogbowcloud.membershipservice.MembershipService;
-import org.fogbowcloud.membershipservice.service.WhiteList;
+import org.fogbowcloud.ms.MembershipService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

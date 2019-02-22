@@ -1,4 +1,4 @@
-package org.fogbowcloud.membershipservice.constants;
+package org.fogbowcloud.ms.constants;
 
 public class ApiDocumentation {
 

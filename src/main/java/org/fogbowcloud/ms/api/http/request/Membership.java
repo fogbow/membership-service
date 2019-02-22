@@ -1,13 +1,13 @@
-package org.fogbowcloud.membershipservice.http;
+package org.fogbowcloud.ms.api.http.request;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
-import org.fogbowcloud.membershipservice.MembershipService;
-import org.fogbowcloud.membershipservice.constants.ApiDocumentation;
-import org.fogbowcloud.membershipservice.constants.Messages;
-import org.fogbowcloud.membershipservice.service.MembersList;
-import org.fogbowcloud.membershipservice.service.WhiteList;
+import org.fogbowcloud.ms.MembershipService;
+import org.fogbowcloud.ms.constants.ApiDocumentation;
+import org.fogbowcloud.ms.constants.Messages;
+import org.fogbowcloud.ms.api.http.response.MembersList;
+import org.fogbowcloud.ms.core.WhiteList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

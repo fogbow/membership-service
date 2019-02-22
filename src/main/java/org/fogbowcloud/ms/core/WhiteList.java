@@ -1,10 +1,10 @@
-package org.fogbowcloud.membershipservice.service;
+package org.fogbowcloud.ms.core;
 
-import org.fogbowcloud.membershipservice.MembershipService;
+import org.fogbowcloud.ms.MembershipService;
 
 import org.apache.log4j.Logger;
-import org.fogbowcloud.membershipservice.constants.Messages;
-import org.fogbowcloud.membershipservice.constants.SystemConstants;
+import org.fogbowcloud.ms.constants.Messages;
+import org.fogbowcloud.ms.constants.SystemConstants;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

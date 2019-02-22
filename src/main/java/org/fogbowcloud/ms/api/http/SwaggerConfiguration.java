@@ -1,7 +1,7 @@
-package org.fogbowcloud.membershipservice.http;
+package org.fogbowcloud.ms.api.http;
 
-import org.fogbowcloud.membershipservice.constants.ApiDocumentation;
-import org.fogbowcloud.membershipservice.constants.SystemConstants;
+import org.fogbowcloud.ms.constants.ApiDocumentation;
+import org.fogbowcloud.ms.constants.SystemConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;

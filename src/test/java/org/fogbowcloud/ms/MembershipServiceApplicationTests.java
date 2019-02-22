@@ -1,4 +1,4 @@
-package org.fogbowcloud.membershipservice;
+package org.fogbowcloud.ms;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

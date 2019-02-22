@@ -1,10 +1,10 @@
-package org.fogbowcloud.membershipservice.http;
+package org.fogbowcloud.ms.api.http.request;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
-import org.fogbowcloud.membershipservice.constants.*;
-import org.fogbowcloud.membershipservice.service.VersionNumber;
+import org.fogbowcloud.ms.constants.*;
+import org.fogbowcloud.ms.api.http.response.VersionNumber;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

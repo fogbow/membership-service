@@ -1,4 +1,4 @@
-package org.fogbowcloud.membershipservice.service;
+package org.fogbowcloud.ms.api.http.response;
 
 import java.util.List;
 
