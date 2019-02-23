@@ -31,3 +31,10 @@ buildNumber.properties
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### Private Folder ###
+src/main/resources/private/
+
+### LOGS ###
+*.log
+
