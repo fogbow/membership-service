@@ -1,4 +1,0 @@
-#!/bin/bash
-
-./push fogbow/membership-service:develop
-
