@@ -1,5 +1,5 @@
 #!/bin/bash
 
-sudo docker build --build-arg BRANCH_MS=develop \
- --build-arg BRANCH_COMMON=develop --no-cache -t fogbow/membership-service:develop .
+sudo docker build --build-arg MS_BRANCH=develop \
+ --build-arg COMMON_BRANCH=develop --no-cache -t fogbow/membership-service:develop .
  
