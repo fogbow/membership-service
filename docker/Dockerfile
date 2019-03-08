@@ -1,6 +1,7 @@
 FROM openjdk:8
 
-ARG BRANCH=master
+ARG COMMON_BRANCH
+ARG MS_BRANCH
 
 # Install.
 RUN \
@@ -19,17 +20,24 @@ ENV HOME /root
 # Define working directory.
 WORKDIR /root
 
-# Installing
+# Installing Common
+RUN \
+  git clone https://github.com/fogbow/common.git && \
+  (cd common && git checkout $COMMON_BRANCH && mvn install -Dmaven.test.skip=true)
+
+# Installing Membership
 RUN \
   git clone https://github.com/fogbow/membership-service.git && \
-  (cd membership-service && git checkout $BRANCH)
+  (cd membership-service && git checkout $MS_BRANCH)
 
 # Define working directory.
 WORKDIR /root/membership-service
 
 # Generates the build number based on the commit checksum
 RUN \
-    (build_number=$(git rev-parse --short 'HEAD') && echo "build_number=$build_number-(angra)" > build)
+    (ms_build_number=$(git rev-parse --short 'HEAD') && \
+    cd ../common && common_build_number=$(git rev-parse --short 'HEAD') && \
+    echo "build_number=ms-$ms_build_number-common-$common_build_number" > build)
 
 RUN \
   mvn dependency:sources
