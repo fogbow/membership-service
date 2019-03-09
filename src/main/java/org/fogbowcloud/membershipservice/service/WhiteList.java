@@ -1,5 +1,6 @@
 package org.fogbowcloud.membershipservice.service;
 
+import cloud.fogbow.common.util.HomeDir;
 import org.fogbowcloud.membershipservice.MembershipService;
 
 import org.apache.log4j.Logger;
@@ -27,7 +28,7 @@ public class WhiteList implements MembershipService {
     }
 
     public WhiteList() throws FileNotFoundException {
-        this.membersList = readMembersFromFile(SystemConstants.CONF_FILE_NAME);
+        this.membersList = readMembersFromFile(HomeDir.getPath() + SystemConstants.CONF_FILE_NAME);
     }
 
     /**

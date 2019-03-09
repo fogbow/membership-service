@@ -1,5 +1,6 @@
 package org.fogbowcloud.membershipservice.http;
 
+import cloud.fogbow.common.util.HomeDir;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
@@ -35,7 +36,7 @@ public class Version {
     }
 
     public String getVersionNumber() throws FileNotFoundException {
-        return getVersionNumber(SystemConstants.CONF_FILE_NAME);
+        return getVersionNumber(HomeDir.getPath() + SystemConstants.CONF_FILE_NAME);
     }
 
     // Used in tests only
