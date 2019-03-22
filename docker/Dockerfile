@@ -37,6 +37,7 @@ WORKDIR /root/membership-service
 RUN \
     (ms_build_number=$(git rev-parse --short 'HEAD') && \
     cd ../common && common_build_number=$(git rev-parse --short 'HEAD') && \
+    cd /root/membership-service && \
     echo "build_number=ms-$ms_build_number-common-$common_build_number" > build)
 
 RUN \
