@@ -24,7 +24,7 @@ import java.util.List;
 @Api(description = ApiDocumentation.Membership.API)
 public class Membership {
 
-    protected static final String ENDPOINT = "members";
+    protected static final String ENDPOINT = "ms/members";
 
     private static final Logger LOGGER = Logger.getLogger(Membership.class);
 
