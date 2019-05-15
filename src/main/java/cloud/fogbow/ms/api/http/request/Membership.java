@@ -1,5 +1,6 @@
 package cloud.fogbow.ms.api.http.request;
 
+import cloud.fogbow.ms.constants.SystemConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
@@ -24,7 +25,7 @@ import java.util.List;
 @Api(description = ApiDocumentation.Membership.API)
 public class Membership {
 
-    protected static final String ENDPOINT = "ms/members";
+    protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "members";
 
     private static final Logger LOGGER = Logger.getLogger(Membership.class);
 

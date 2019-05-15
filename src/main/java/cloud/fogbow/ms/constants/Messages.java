@@ -2,6 +2,7 @@ package cloud.fogbow.ms.constants;
 
 public class Messages {
     public static class Exception {
+        public static final String GENERIC_EXCEPTION = "Operation returned error: %s";
     }
 
     public static class Fatal {
@@ -13,6 +14,7 @@ public class Messages {
     }
 
     public static class Info {
+        public static final String REDIRECT_SWAGGER_DOCUMENTATION = "Redirecting swagger documentation to fixed location.";
     }
 
     public static class Error {

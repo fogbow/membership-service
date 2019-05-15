@@ -25,7 +25,7 @@ import java.util.Properties;
 @Api(description = ApiDocumentation.Version.API)
 public class Version {
 
-    public static final String VERSION_ENDPOINT = "ms/version";
+    public static final String VERSION_ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "version";
 
     private final Logger LOGGER = Logger.getLogger(Version.class);
 
