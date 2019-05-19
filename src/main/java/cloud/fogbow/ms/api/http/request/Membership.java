@@ -3,6 +3,7 @@ package cloud.fogbow.ms.api.http.request;
 import cloud.fogbow.ms.constants.SystemConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import org.apache.log4j.Logger;
 import cloud.fogbow.ms.MembershipService;
 import cloud.fogbow.ms.constants.ApiDocumentation;

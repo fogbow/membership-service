@@ -1,6 +1,7 @@
 package cloud.fogbow.ms.api.http.request;
 
 import cloud.fogbow.common.util.HomeDir;
+import cloud.fogbow.common.constants.ApiDocumentation;
 import cloud.fogbow.ms.api.http.response.VersionNumber;
 import cloud.fogbow.ms.constants.*;
 import io.swagger.annotations.Api;
