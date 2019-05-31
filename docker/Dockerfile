@@ -28,7 +28,7 @@ RUN \
 # Installing Membership
 RUN \
   git clone https://github.com/fogbow/membership-service.git && \
-  (cd membership-service && git checkout $MS_BRANCH)
+  (cd membership-service && git checkout $MS_BRANCH && mvn install -Dmaven.test.skip=true)
 
 # Define working directory.
 WORKDIR /root/membership-service
