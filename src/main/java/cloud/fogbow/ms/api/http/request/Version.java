@@ -49,14 +49,14 @@ public class Version {
 
     private String readBuildFromFile(String membershipConfPath) throws FileNotFoundException {
         Properties properties = new Properties();
-        InputStream input = new FileInputStream(membershipConfPath);
+        InputStream input = new FileInputStream(HomeDir.getPath() + membershipConfPath);
         String build = "empty";
 
         try {
             properties.load(input);
 
-            build = properties.getProperty(ConfigurationPropertiesKeys.BUILD_NUMBER,
-                    ConfigurationPropertiesDefault.BUILD_NUMBER);
+            build = properties.getProperty(ConfigurationPropertyKeys.BUILD_NUMBER,
+                    ConfigurationPropertyDefaults.BUILD_NUMBER);
         } catch (IOException e) {
             LOGGER.warn(String.format(Messages.Warn.ERROR_READING_CONF_FILE, membershipConfPath), e);
         } finally {
