@@ -13,12 +13,12 @@ public class WhiteListTest {
     private MembershipService validMembershipService;
     private MembershipService invalidMembershipService;
 
-    private String VALID_PATH_CONF = "src/test/resources/ms-test.conf";
-    private String INVALID_PATH_CONF = "invalid.conf";
+    private String VALID_CONF = "ms-test.conf";
+    private String INVALID_CONF = "invalid.conf";
 
     @Before
     public void setUp() throws FileNotFoundException {
-        this.validMembershipService = new WhiteList(VALID_PATH_CONF);
+        this.validMembershipService = new WhiteList(VALID_CONF);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class WhiteListTest {
 
     @Test(expected = Exception.class)
     public void testListMembersWithInvalidConfPath() throws Exception {
-        this.invalidMembershipService = new WhiteList(INVALID_PATH_CONF);
+        this.invalidMembershipService = new WhiteList(INVALID_CONF);
         this.invalidMembershipService.listMembers();
     }
 }
