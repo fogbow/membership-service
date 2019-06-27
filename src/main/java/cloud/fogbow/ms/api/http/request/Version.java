@@ -1,7 +1,8 @@
-package cloud.fogbow.ms.api.http;
+package cloud.fogbow.ms.api.http.request;
 
 import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.common.constants.ApiDocumentation;
+import cloud.fogbow.ms.api.http.response.VersionNumber;
 import cloud.fogbow.ms.constants.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,19 +26,20 @@ import java.util.Properties;
 @Api(description = ApiDocumentation.Version.API)
 public class Version {
 
-    public static final String VERSION_ENDPOINT = "version";
+    public static final String VERSION_ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "version";
 
     private final Logger LOGGER = Logger.getLogger(Version.class);
 
     @ApiOperation(value = ApiDocumentation.Version.GET_OPERATION)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> getVersion() throws FileNotFoundException {
+    public ResponseEntity<VersionNumber> getVersion() throws FileNotFoundException {
         String versionNumber = getVersionNumber();
-        return new ResponseEntity<>(versionNumber, HttpStatus.OK);
+        return new ResponseEntity<VersionNumber>(new VersionNumber(versionNumber), HttpStatus.OK);
     }
 
     public String getVersionNumber() throws FileNotFoundException {
-        return getVersionNumber(SystemConstants.CONF_FILE_NAME);
+        String path = HomeDir.getPath();
+        return getVersionNumber(path + SystemConstants.CONF_FILE_NAME);
     }
 
     // Used in tests only

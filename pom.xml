@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.fogbowcloud</groupId>
-	<artifactId>membership-service</artifactId>
+	<groupId>fogbow</groupId>
+	<artifactId>fogbow-ms</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>membership-service</name>
-	<description>Component responsible for knowing and sharing information about the members of a Fogbow federation</description>
+	<name>fogbow-ms</name>
+	<description>Fogbow Membership Service: component responsible for discovering and sharing information about the members of a Fogbow federation</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -25,6 +25,12 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>fogbow</groupId>
+			<artifactId>common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -61,7 +67,11 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
+<<<<<<< HEAD
 </dependencies>
+=======
+	</dependencies>
+>>>>>>> develop
 
 	<build>
 		<plugins>

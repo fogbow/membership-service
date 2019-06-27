@@ -6,14 +6,13 @@ public class ApiDocumentation {
         public static final String API_TITLE = "Fogbow Membership Service API";
         public static final String API_DESCRIPTION = "This API introduces readers to Fogbow MS REST API, "
                 + "provides guidelines on how to use it, and describes the available features accessible from it.";
-        public static final String CONTACT_NAME = "Fogbow";
-        public static final String CONTACT_URL = "https://www.fogbow.cloud";
-        public static final String CONTACT_EMAIL = "contact@fogbow.cloud";
     }
 
-    public static class Version {
-        public static final String API = "Queries the version of the service's API.";
-        public static final String GET_OPERATION = "Returns the version of the API.";
+    public static class Model {
+        public static final String MEMBERS_LIST = "[\n" +
+                "    \"provider1.domain1\",\n" +
+                "    \"provider2.domain2\"\n" +
+                "  ]\n";
     }
 
     public static class Membership {
