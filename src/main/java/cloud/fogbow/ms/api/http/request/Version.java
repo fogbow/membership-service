@@ -49,7 +49,7 @@ public class Version {
 
     private String readBuildFromFile(String membershipConfPath) throws FileNotFoundException {
         Properties properties = new Properties();
-        InputStream input = new FileInputStream(HomeDir.getPath() + membershipConfPath);
+        InputStream input = new FileInputStream(membershipConfPath);
         String build = "empty";
 
         try {

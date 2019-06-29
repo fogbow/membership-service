@@ -1,6 +1,7 @@
 package cloud.fogbow.ms.api.http.request;
 
 import cloud.fogbow.ms.constants.SystemConstants;
+import cloud.fogbow.ms.core.service.WhiteList;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
@@ -8,7 +9,6 @@ import cloud.fogbow.ms.MembershipService;
 import cloud.fogbow.ms.constants.ApiDocumentation;
 import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.api.http.response.MembersList;
-import cloud.fogbow.ms.core.WhiteList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

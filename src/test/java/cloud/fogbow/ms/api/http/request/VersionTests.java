@@ -1,5 +1,6 @@
 package cloud.fogbow.ms.api.http.request;
 
+import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.ms.constants.SystemConstants;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class VersionTests {
     public void testVersion() throws Exception {
         Version version = new Version();
 
-        String build = version.getVersionNumber(this.VALID_CONF);
+        String build = version.getVersionNumber(HomeDir.getPath() + this.VALID_CONF);
 
         Assert.assertEquals(SystemConstants.API_VERSION_NUMBER + "-" + "abcd", build);
     }
@@ -24,7 +25,7 @@ public class VersionTests {
     public void testVersionWithoutBuildProperty() throws Exception {
         Version version = new Version();
 
-        String build = version.getVersionNumber(this.VALID_CONF_WITHOUT_BUILD_PROPERTY);
+        String build = version.getVersionNumber(HomeDir.getPath() + this.VALID_CONF_WITHOUT_BUILD_PROPERTY);
 
         Assert.assertTrue(build.equals(SystemConstants.API_VERSION_NUMBER + "-" + "[testing mode]"));
     }
