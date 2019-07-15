@@ -29,56 +29,56 @@ import io.swagger.annotations.ApiOperation;
 @Api(description = ApiDocumentation.Version.API)
 public class Version {
 
-	private static final Logger LOGGER = Logger.getLogger(Version.class);
+    private static final Logger LOGGER = Logger.getLogger(Version.class);
 
-	public static final String VERSION_ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "version";
+    public static final String VERSION_ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "version";
 
-	@ApiOperation(value = ApiDocumentation.Version.GET_OPERATION)
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<VersionNumber> getVersion() throws FileNotFoundException {
-		String versionNumber = getVersionNumber();
-		return new ResponseEntity<VersionNumber>(new VersionNumber(versionNumber), HttpStatus.OK);
-	}
+    @ApiOperation(value = ApiDocumentation.Version.GET_OPERATION)
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<VersionNumber> getVersion() throws FileNotFoundException {
+        String versionNumber = getVersionNumber();
+        return new ResponseEntity<VersionNumber>(new VersionNumber(versionNumber), HttpStatus.OK);
+    }
 
-	public String getVersionNumber() throws FileNotFoundException {
-		String path = HomeDir.getPath();
-		return getVersionNumber(path + SystemConstants.CONF_FILE_NAME);
-	}
+    public String getVersionNumber() throws FileNotFoundException {
+        String path = HomeDir.getPath();
+        return getVersionNumber(path + SystemConstants.CONF_FILE_NAME);
+    }
 
-	// Used in tests only
-	protected String getVersionNumber(String filePath) throws FileNotFoundException {
-		return SystemConstants.API_VERSION_NUMBER + "-" + readBuildFromFile(filePath);
-	}
+    // Used in tests only
+    protected String getVersionNumber(String filePath) throws FileNotFoundException {
+        return SystemConstants.API_VERSION_NUMBER + "-" + readBuildFromFile(filePath);
+    }
 
-	private String readBuildFromFile(String membershipConfPath) throws FileNotFoundException {
-		InputStream input = loadFileInputStream(membershipConfPath);
-		Properties properties = new Properties();
-		String build = "empty";
+    private String readBuildFromFile(String membershipConfPath) throws FileNotFoundException {
+        InputStream input = loadFileInputStream(membershipConfPath);
+        Properties properties = new Properties();
+        String build = "empty";
 
-		try {
-			properties.load(input);
+        try {
+            properties.load(input);
 
-			build = properties.getProperty(ConfigurationPropertyKeys.BUILD_NUMBER_KEY,
-					ConfigurationPropertyDefaults.BUILD_NUMBER);
-		} catch (Exception e) {
-			LOGGER.warn(String.format(Messages.Warn.ERROR_READING_CONF_FILE, membershipConfPath), e);
-		} finally {
-			try {
-				input.close();
-			} catch (Exception e) {
-				LOGGER.warn(String.format(Messages.Warn.ERROR_CLOSING_CONF_FILE, membershipConfPath), e);
-			}
-		}
-		return build;
-	}
+            build = properties.getProperty(ConfigurationPropertyKeys.BUILD_NUMBER_KEY,
+                    ConfigurationPropertyDefaults.BUILD_NUMBER);
+        } catch (Exception e) {
+            LOGGER.warn(String.format(Messages.Warn.ERROR_READING_CONF_FILE, membershipConfPath), e);
+        } finally {
+            try {
+                input.close();
+            } catch (Exception e) {
+                LOGGER.warn(String.format(Messages.Warn.ERROR_CLOSING_CONF_FILE, membershipConfPath), e);
+            }
+        }
+        return build;
+    }
 
-	private InputStream loadFileInputStream(String membershipConfPath) throws FileNotFoundException {
-		InputStream inputStream = null;
-		try {
-			inputStream = new FileInputStream(membershipConfPath);
-		} catch (Exception e) {
-			LOGGER.error(String.format(Messages.Error.CONFIGURATION_FILE_NOT_FOUND, membershipConfPath), e);
-		}
-		return inputStream;
-	}
+    private InputStream loadFileInputStream(String membershipConfPath) throws FileNotFoundException {
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(membershipConfPath);
+        } catch (Exception e) {
+            LOGGER.error(String.format(Messages.Error.CONFIGURATION_FILE_NOT_FOUND, membershipConfPath), e);
+        }
+        return inputStream;
+    }
 }
