@@ -18,7 +18,7 @@ import cloud.fogbow.ms.constants.SystemConstants;
 public class WhiteList implements MembershipService {
 
     private static final Logger LOGGER = Logger.getLogger(WhiteList.class);
-	private static final String SEPARATOR = ",";
+    private static final String SEPARATOR = ",";
 
     private List<String> membersList;
 
@@ -63,14 +63,14 @@ public class WhiteList implements MembershipService {
         return membersList;
     }
 
-	private InputStream loadFileInputStream(String membershipConfPath) throws FileNotFoundException {
-		InputStream inputStream = null;
-		String path = HomeDir.getPath();
-		try {
-			inputStream = new FileInputStream(path + membershipConfPath);
-		} catch (FileNotFoundException e) {
-			LOGGER.error(String.format(Messages.Error.CONFIGURATION_FILE_NOT_FOUND, membershipConfPath), e);
-		}
-		return inputStream;
-	}
+    private InputStream loadFileInputStream(String membershipConfPath) throws FileNotFoundException {
+        InputStream inputStream = null;
+        String path = HomeDir.getPath();
+        try {
+            inputStream = new FileInputStream(path + membershipConfPath);
+        } catch (FileNotFoundException e) {
+            LOGGER.error(String.format(Messages.Error.CONFIGURATION_FILE_NOT_FOUND, membershipConfPath), e);
+        }
+        return inputStream;
+    }
 }
