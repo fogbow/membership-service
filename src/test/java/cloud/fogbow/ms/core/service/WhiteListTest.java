@@ -1,4 +1,4 @@
-package cloud.fogbow.ms.core.service;
+package cloud.fogbow.ms.core.services;
 
 import java.util.ArrayList;
 import java.util.List;

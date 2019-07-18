@@ -32,11 +32,7 @@ public class Membership {
     private MembershipService membershipService;
 
     public Membership() {
-        try {
-            this.membershipService = new WhiteList();
-        } catch (FileNotFoundException e) {
-            LOGGER.error(String.format(Messages.Error.CONFIGURATION_FILE_NOT_FOUND), e);
-        }
+        this.membershipService = new WhiteList();
     }
 
     /**
