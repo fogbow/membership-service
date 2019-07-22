@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 @CrossOrigin
@@ -32,11 +31,7 @@ public class Membership {
     private MembershipService membershipService;
 
     public Membership() {
-        try {
-            this.membershipService = new WhiteList();
-        } catch (FileNotFoundException e) {
-            LOGGER.error(String.format(Messages.Error.CONFIGURATION_FILE_NOT_FOUND), e);
-        }
+        this.membershipService = new WhiteList();
     }
 
     /**

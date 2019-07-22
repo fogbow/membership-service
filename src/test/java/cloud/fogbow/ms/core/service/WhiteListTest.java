@@ -1,45 +1,37 @@
 package cloud.fogbow.ms.core.service;
 
-import cloud.fogbow.ms.MembershipService;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Test;
+
+import cloud.fogbow.ms.MembershipService;
+
 public class WhiteListTest {
 
-    private MembershipService validMembershipService;
-    private MembershipService invalidMembershipService;
+    private MembershipService service;
 
-    private String VALID_CONF = "ms-test.conf";
-    private String INVALID_CONF = "invalid.conf";
-
-    @Before
-    public void setUp() throws FileNotFoundException {
-        this.validMembershipService = new WhiteList(VALID_CONF);
-    }
-
+    // test case: When invoking the listMembers method from an instance created with
+    // the MembershipService class constructor with a valid parameter, it must list
+    // the configured membership in the file passed by parameter.
     @Test
     public void testListMembers() throws Exception {
-        List<String> membersId = this.validMembershipService.listMembers();
-
+        // set up
         List<String> result = new ArrayList<>();
         result.add("xmpp-id1");
         result.add("xmpp-id2");
         result.add("xmpp-id3");
         result.add("xmpp-id4");
 
+        // exercise
+        this.service = new WhiteList();
+        List<String> membersId = this.service.listMembers();
+
+        // verify
         Assert.assertTrue(membersId.contains(result.get(0)));
         Assert.assertTrue(membersId.contains(result.get(1)));
         Assert.assertTrue(membersId.contains(result.get(2)));
         Assert.assertTrue(membersId.contains(result.get(3)));
-    }
-
-    @Test(expected = Exception.class)
-    public void testListMembersWithInvalidConfPath() throws Exception {
-        this.invalidMembershipService = new WhiteList(INVALID_CONF);
-        this.invalidMembershipService.listMembers();
     }
 }
