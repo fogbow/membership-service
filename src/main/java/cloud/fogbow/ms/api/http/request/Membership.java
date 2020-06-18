@@ -49,7 +49,7 @@ public class Membership {
             MembersList membersList = new MembersList(membersId);
             return new ResponseEntity<MembersList>(membersList, HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error(Messages.Error.INTERNAL_SERVER_ERROR, e);
+            LOGGER.error(Messages.Log.INTERNAL_SERVER_ERROR, e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
