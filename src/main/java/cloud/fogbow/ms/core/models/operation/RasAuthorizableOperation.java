@@ -7,6 +7,11 @@ public class RasAuthorizableOperation implements AuthorizableOperation {
     private String targetProvider;
     private OperationType operationType;
     
+    public RasAuthorizableOperation(String provider, OperationType operationType) {
+        this.targetProvider = provider;
+        this.operationType = operationType;
+    }
+
     @Override
     public String getTargetProvider() {
         return targetProvider;
