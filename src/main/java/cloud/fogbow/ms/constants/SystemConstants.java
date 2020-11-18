@@ -7,4 +7,9 @@ public class SystemConstants {
     
     public static final String OPERATIONS_LIST_KEY_SUFFIX = "_operations";
     public static final String OPERATION_NAME_SEPARATOR = ",";
+    
+    public static final String ROLE_NAME_SEPARATOR = ",";
+    
+    public static final String USER_NAME_SEPARATOR = ",";
+    public static final String USER_ROLES_SEPARATOR = ",";
 }

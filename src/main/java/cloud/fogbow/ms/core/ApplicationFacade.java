@@ -1,6 +1,7 @@
 package cloud.fogbow.ms.core;
 
 import java.security.interfaces.RSAPublicKey;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -40,6 +41,10 @@ public class ApplicationFacade {
     public Boolean isAuthorized(String systemUserToken, AuthorizableOperation operation) throws FogbowException {
         SystemUser user = authenticate(systemUserToken);
         return this.authorizationPlugin.isAuthorized(user, operation);
+    }
+    
+    public List<String> listMembers() throws Exception {
+        return this.authorizationPlugin.listMembers();
     }
     
     protected SystemUser authenticate(String userToken) throws FogbowException {

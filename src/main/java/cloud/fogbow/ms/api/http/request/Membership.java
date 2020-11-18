@@ -1,11 +1,11 @@
 package cloud.fogbow.ms.api.http.request;
 
 import cloud.fogbow.ms.constants.SystemConstants;
-import cloud.fogbow.ms.core.service.WhiteList;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
-import cloud.fogbow.ms.MembershipService;
+
+import cloud.fogbow.ms.core.ApplicationFacade;
 import cloud.fogbow.ms.constants.ApiDocumentation;
 import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.api.http.response.MembersList;
@@ -28,10 +28,8 @@ public class Membership {
 
     private static final Logger LOGGER = Logger.getLogger(Membership.class);
 
-    private MembershipService membershipService;
-
     public Membership() {
-        this.membershipService = new WhiteList();
+
     }
 
     /**
@@ -40,12 +38,8 @@ public class Membership {
     @ApiOperation(value = ApiDocumentation.Membership.DESCRIPTION)
     @GetMapping
     public ResponseEntity<MembersList> listMembers() {
-        if (this.membershipService == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
         try {
-            List<String> membersId = this.membershipService.listMembers();
+            List<String> membersId = ApplicationFacade.getInstance().listMembers();
             MembersList membersList = new MembersList(membersId);
             return new ResponseEntity<MembersList>(membersList, HttpStatus.OK);
         } catch (Exception e) {
