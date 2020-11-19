@@ -16,6 +16,7 @@ public class DefaultAuthorizationPlugin implements AuthorizationPlugin {
     private MembershipService membership;
     private RoleManager roleManager;
     
+    // TODO start using this constructor
     public DefaultAuthorizationPlugin(MembershipService membershipService, 
             RoleManager roleManager) {
         this.membership = membershipService;

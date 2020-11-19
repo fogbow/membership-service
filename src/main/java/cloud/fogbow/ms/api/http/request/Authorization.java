@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cloud.fogbow.common.exceptions.FogbowException;
-import cloud.fogbow.ms.api.http.response.MembersList;
+import cloud.fogbow.ms.api.http.CommonKeys;
 import cloud.fogbow.ms.constants.SystemConstants;
 import cloud.fogbow.ms.core.ApplicationFacade;
 import cloud.fogbow.ms.core.models.operation.RasAuthorizableOperation;
@@ -25,10 +25,9 @@ public class Authorization {
     private static final Logger LOGGER = Logger.getLogger(Authorization.class);
     
     // TODO add documentation
-    // TODO create a constant for header value
     @GetMapping
     public ResponseEntity<Boolean> isAuthorized(
-            @RequestHeader(required = false, value = "Fogbow-User-Token") String systemUserToken, 
+            @RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken, 
             @RequestBody RasAuthorizableOperation operation) throws FogbowException {
         Boolean authorized = ApplicationFacade.getInstance().isAuthorized(systemUserToken, operation);
         return new ResponseEntity<Boolean>(authorized, HttpStatus.OK);
