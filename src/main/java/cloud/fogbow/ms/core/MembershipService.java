@@ -4,7 +4,6 @@ import java.util.List;
 
 import cloud.fogbow.ms.core.models.AuthorizableOperation;
 
-// TODO move this to core package
 public interface MembershipService {
 
     /**
@@ -15,7 +14,9 @@ public interface MembershipService {
      */
     public List<String> listMembers() throws Exception;
     
+    // TODO documentation
     public boolean isMember(String provider);
     
+    // TODO documentation
     public boolean canPerformOperation(AuthorizableOperation operation);
 }
