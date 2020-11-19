@@ -31,7 +31,10 @@ public class ApplicationFacade {
     }
 
     public ApplicationFacade() {
+        // TODO replace this by the second constructor
+        // or create an authorization plugin instantiator
         authorizationPlugin = new DefaultAuthorizationPlugin();
+        // TODO move this initialization to main
         String publicKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PUBLIC_KEY_FILE_PATH);
         String privateKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PRIVATE_KEY_FILE_PATH);
         ServiceAsymmetricKeysHolder.getInstance().setPublicKeyFilePath(publicKeyFilePath);

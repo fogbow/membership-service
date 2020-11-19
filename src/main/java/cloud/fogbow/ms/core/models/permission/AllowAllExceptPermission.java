@@ -20,6 +20,7 @@ public class AllowAllExceptPermission implements Permission {
     public AllowAllExceptPermission(String permissionName) {
         this.notAllowedOperationTypes = new HashSet<OperationType>();
         
+        // TODO check how this works with empty operation list
         String operationTypesString = PropertiesHolder.getInstance().getProperty(permissionName + 
                 SystemConstants.OPERATIONS_LIST_KEY_SUFFIX);
         

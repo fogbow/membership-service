@@ -14,6 +14,7 @@ import cloud.fogbow.ms.core.models.Permission;
 import cloud.fogbow.ms.core.models.Role;
 import cloud.fogbow.ms.core.models.role.DefaultRole;
 
+// TODO create an interface for this
 public class RoleAttributionManager {
     private Map<String, Set<Role>> usersRoles;
     private Map<String, Role> availableRoles;
