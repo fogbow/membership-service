@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cloud.fogbow.ms.MembershipService;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PermissionInstantiator;
 import cloud.fogbow.ms.core.PropertiesHolder;
 import cloud.fogbow.ms.core.models.AuthorizableOperation;

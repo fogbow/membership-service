@@ -1,4 +1,4 @@
-package cloud.fogbow.ms;
+package cloud.fogbow.ms.core;
 
 import java.util.List;
 

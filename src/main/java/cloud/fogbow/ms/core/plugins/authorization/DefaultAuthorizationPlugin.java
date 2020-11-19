@@ -3,7 +3,7 @@ package cloud.fogbow.ms.core.plugins.authorization;
 import java.util.List;
 
 import cloud.fogbow.common.models.SystemUser;
-import cloud.fogbow.ms.MembershipService;
+import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PermissionInstantiator;
 import cloud.fogbow.ms.core.models.AuthorizableOperation;
 import cloud.fogbow.ms.core.plugins.AuthorizationPlugin;

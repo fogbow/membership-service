@@ -12,8 +12,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import cloud.fogbow.ms.MembershipService;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PermissionInstantiator;
 import cloud.fogbow.ms.core.PropertiesHolder;
 import cloud.fogbow.ms.core.models.operation.OperationType;
