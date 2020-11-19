@@ -15,6 +15,12 @@ public class DefaultAuthorizationPlugin implements AuthorizationPlugin {
     private MembershipService membership;
     private RoleAttributionManager roleManager;
     
+    public DefaultAuthorizationPlugin(MembershipService membershipService, 
+            RoleAttributionManager roleManager) {
+        this.membership = membershipService;
+        this.roleManager = roleManager;
+    }
+    
     public DefaultAuthorizationPlugin() {
         this.membership = new WhiteList(new PermissionInstantiator());
         this.roleManager = new RoleAttributionManager(new PermissionInstantiator());
