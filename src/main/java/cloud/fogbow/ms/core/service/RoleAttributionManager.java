@@ -9,13 +9,13 @@ import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.constants.SystemConstants;
 import cloud.fogbow.ms.core.PermissionInstantiator;
 import cloud.fogbow.ms.core.PropertiesHolder;
+import cloud.fogbow.ms.core.RoleManager;
 import cloud.fogbow.ms.core.models.AuthorizableOperation;
 import cloud.fogbow.ms.core.models.Permission;
 import cloud.fogbow.ms.core.models.Role;
 import cloud.fogbow.ms.core.models.role.DefaultRole;
 
-// TODO create an interface for this
-public class RoleAttributionManager {
+public class RoleAttributionManager implements RoleManager {
     private Map<String, Set<Role>> usersRoles;
     private Map<String, Role> availableRoles;
     
@@ -47,6 +47,7 @@ public class RoleAttributionManager {
         }
     }
     
+    @Override
     public boolean isUserAuthorized(String userId, AuthorizableOperation operation) {
         Set<Role> userRoles = usersRoles.get(userId);
         

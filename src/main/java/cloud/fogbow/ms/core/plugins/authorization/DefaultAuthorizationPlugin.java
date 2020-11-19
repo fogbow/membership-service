@@ -5,6 +5,7 @@ import java.util.List;
 import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PermissionInstantiator;
+import cloud.fogbow.ms.core.RoleManager;
 import cloud.fogbow.ms.core.models.AuthorizableOperation;
 import cloud.fogbow.ms.core.plugins.AuthorizationPlugin;
 import cloud.fogbow.ms.core.service.RoleAttributionManager;
@@ -13,10 +14,10 @@ import cloud.fogbow.ms.core.service.WhiteList;
 public class DefaultAuthorizationPlugin implements AuthorizationPlugin {
 
     private MembershipService membership;
-    private RoleAttributionManager roleManager;
+    private RoleManager roleManager;
     
     public DefaultAuthorizationPlugin(MembershipService membershipService, 
-            RoleAttributionManager roleManager) {
+            RoleManager roleManager) {
         this.membership = membershipService;
         this.roleManager = roleManager;
     }
