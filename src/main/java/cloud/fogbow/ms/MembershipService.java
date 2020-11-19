@@ -16,5 +16,5 @@ public interface MembershipService {
     
     public boolean isMember(String provider);
     
-    public boolean canPerformOperation(String provider, AuthorizableOperation operation);
+    public boolean canPerformOperation(AuthorizableOperation operation);
 }

@@ -28,7 +28,7 @@ public class DefaultAuthorizationPlugin implements AuthorizationPlugin {
             return false;
         }
         
-        if (!membership.canPerformOperation(provider, operation)) {
+        if (!membership.canPerformOperation(operation)) {
             return false;
         }
         

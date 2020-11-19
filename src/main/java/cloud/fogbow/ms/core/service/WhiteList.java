@@ -58,8 +58,12 @@ public class WhiteList implements MembershipService {
     }
 
     @Override
-    public boolean canPerformOperation(String provider, AuthorizableOperation operation) {
-        // TODO check contains
-        return this.membersPermissions.get(provider).isAuthorized(operation);
+    public boolean canPerformOperation(AuthorizableOperation operation) {
+        String targetProvider = operation.getTargetProvider();
+        if (!isMember(targetProvider)) {
+            return false;
+        }
+        Permission providerPermission = this.membersPermissions.get(targetProvider);
+        return providerPermission.isAuthorized(operation);
     }
 }
