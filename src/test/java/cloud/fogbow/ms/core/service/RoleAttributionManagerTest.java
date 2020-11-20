@@ -13,6 +13,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import cloud.fogbow.common.exceptions.ConfigurationErrorException;
+import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.core.PermissionInstantiator;
 import cloud.fogbow.ms.core.PropertiesHolder;
@@ -45,13 +46,19 @@ public class RoleAttributionManagerTest {
     private String role1Permissions = permissionName1;
     private String role2Permissions = permissionName2;
     
+    private String userId1 = "userId1";
+    private String userId2 = "userId2";
+    private String userIdWithDefaultRoles = "userIdWithDefaultRole";
+    
     private String userName1 = "user1";
     private String userName2 = "user2";
     private String userWithDefaultRole = "user3";
-    private String userNames = String.format("%s,%s", userName1, userName2);
+    private String userIds = String.format("%s,%s", userId1, userId2);
     
     private String rolesUser1 = roleName1;
     private String rolesUser2 = String.format("%s,%s", roleName1, roleName2);
+    
+    private String identityProviderId = "provider";
     
     private RoleAttributionManager manager;
     private PropertiesHolder propertiesHolder;
@@ -71,9 +78,9 @@ public class RoleAttributionManagerTest {
         Mockito.doReturn(role2Permissions).when(propertiesHolder).getProperty(roleName2);
         Mockito.doReturn(permissionType1).when(propertiesHolder).getProperty(permissionName1);
         Mockito.doReturn(permissionType2).when(propertiesHolder).getProperty(permissionName2);
-        Mockito.doReturn(userNames).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.USER_NAMES_KEY);
-        Mockito.doReturn(rolesUser1).when(propertiesHolder).getProperty(userName1);
-        Mockito.doReturn(rolesUser2).when(propertiesHolder).getProperty(userName2);
+        Mockito.doReturn(userIds).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.USER_NAMES_KEY);
+        Mockito.doReturn(rolesUser1).when(propertiesHolder).getProperty(userId1);
+        Mockito.doReturn(rolesUser2).when(propertiesHolder).getProperty(userId2);
         Mockito.doReturn(defaultRoleName).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY);
         BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
         
@@ -102,8 +109,8 @@ public class RoleAttributionManagerTest {
         // Reads correctly user names
         Mockito.verify(propertiesHolder, Mockito.times(1)).getProperty(ConfigurationPropertyKeys.USER_NAMES_KEY);
         // Reads correctly user roles
-        Mockito.verify(propertiesHolder, Mockito.times(1)).getProperty(userName1);
-        Mockito.verify(propertiesHolder, Mockito.times(1)).getProperty(userName2);
+        Mockito.verify(propertiesHolder, Mockito.times(1)).getProperty(userId1);
+        Mockito.verify(propertiesHolder, Mockito.times(1)).getProperty(userId2);
         Mockito.verify(propertiesHolder, Mockito.times(1)).getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY);
         PowerMockito.verifyStatic(PropertiesHolder.class, Mockito.atLeastOnce());
     }
@@ -137,24 +144,28 @@ public class RoleAttributionManagerTest {
         Mockito.when(this.permission1.isAuthorized(operationReload)).thenReturn(false);
         Mockito.when(this.permission2.isAuthorized(operationReload)).thenReturn(false);
 
+        SystemUser user1 = new SystemUser(userId1, userName1, identityProviderId);
+        SystemUser user2 = new SystemUser(userId2, userName2, identityProviderId);
+        SystemUser userWithDefaultRoles = new SystemUser(userIdWithDefaultRoles, userWithDefaultRole, identityProviderId);
+        
         // user1 has role1
         // role1 has permission1
         // permission1 allows only get operations
-        assertTrue(this.manager.isUserAuthorized(userName1, operationGet));
-        assertFalse(this.manager.isUserAuthorized(userName1, operationCreate));
-        assertFalse(this.manager.isUserAuthorized(userName1, operationReload));
+        assertTrue(this.manager.isUserAuthorized(user1, operationGet));
+        assertFalse(this.manager.isUserAuthorized(user1, operationCreate));
+        assertFalse(this.manager.isUserAuthorized(user1, operationReload));
 
         // user2 has role2
         // role2 has permission2
         // permission2 allows only get and create operations
-        assertTrue(this.manager.isUserAuthorized(userName2, operationGet));
-        assertTrue(this.manager.isUserAuthorized(userName2, operationCreate));
-        assertFalse(this.manager.isUserAuthorized(userName2, operationReload));
+        assertTrue(this.manager.isUserAuthorized(user2, operationGet));
+        assertTrue(this.manager.isUserAuthorized(user2, operationCreate));
+        assertFalse(this.manager.isUserAuthorized(user2, operationReload));
         
         // user3 is not listed on users names list
         // therefore user3 will have the default role, role 1
-        assertTrue(this.manager.isUserAuthorized(userWithDefaultRole, operationGet));
-        assertFalse(this.manager.isUserAuthorized(userWithDefaultRole, operationCreate));
-        assertFalse(this.manager.isUserAuthorized(userWithDefaultRole, operationReload));
+        assertTrue(this.manager.isUserAuthorized(userWithDefaultRoles, operationGet));
+        assertFalse(this.manager.isUserAuthorized(userWithDefaultRoles, operationCreate));
+        assertFalse(this.manager.isUserAuthorized(userWithDefaultRoles, operationReload));
     }
 }

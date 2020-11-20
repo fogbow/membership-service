@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import cloud.fogbow.common.exceptions.ConfigurationErrorException;
+import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.constants.SystemConstants;
@@ -61,7 +62,8 @@ public class RoleAttributionManager implements RoleManager {
     }
     
     @Override
-    public boolean isUserAuthorized(String userId, AuthorizableOperation operation) {
+    public boolean isUserAuthorized(SystemUser user, AuthorizableOperation operation) {
+        String userId = user.getId();
         Set<Role> userRoles;
         
         if (usersRoles.containsKey(userId)) {
@@ -76,6 +78,31 @@ public class RoleAttributionManager implements RoleManager {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean isRemoteUserAuthorized(SystemUser user, AuthorizableOperation operation) {
+        for (String tokenRole : user.getUserRoles()) {
+            if (availableRoles.containsKey(tokenRole)) {
+                Role role = availableRoles.get(tokenRole);
+                
+                if (role.canPerformOperation(operation)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void setRoles(SystemUser user) {
+        Set<String> tokenRoles = new HashSet<String>();
+        
+        for (Role role : usersRoles.get(user.getId())) {
+            tokenRoles.add(role.getName());
+        }
+        
+        user.setUserRoles(tokenRoles);
     }
 
 }

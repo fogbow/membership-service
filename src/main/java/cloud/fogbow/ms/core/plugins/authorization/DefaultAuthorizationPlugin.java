@@ -30,12 +30,12 @@ public class DefaultAuthorizationPlugin implements AuthorizationPlugin {
         
         if (userIsLocal(user)) {
             isProviderAuthorized = isLocalProviderAuthorizedToRequestFromTarget(targetProvider, operation);
-            isUserAuthorized = roleManager.isUserAuthorized(user.getId(), operation);
-            // TODO add roles to user token
+            isUserAuthorized = roleManager.isUserAuthorized(user, operation);
+            roleManager.setRoles(user);
         } else {
             if (providerIsLocal(targetProvider)) {
                 isProviderAuthorized = isProviderAuthorized(user.getIdentityProviderId(), operation);
-                isUserAuthorized = roleManager.isUserAuthorized(user.getId(), operation);
+                isUserAuthorized = roleManager.isRemoteUserAuthorized(user, operation);
             } else {
                 // TODO should throw an exception
             }

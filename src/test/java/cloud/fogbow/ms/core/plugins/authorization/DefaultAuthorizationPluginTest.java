@@ -73,9 +73,9 @@ public class DefaultAuthorizationPluginTest {
         Mockito.when(this.membershipService.canPerformOperation(localOperation)).thenReturn(false);
         
         this.roleManager = Mockito.mock(RoleAttributionManager.class);
-        Mockito.when(this.roleManager.isUserAuthorized(userId1, remoteOperation)).thenReturn(false);
-        Mockito.when(this.roleManager.isUserAuthorized(userId1, localOperation)).thenReturn(false);
-        Mockito.when(this.roleManager.isUserAuthorized(userId2, localOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(localUser, remoteOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(localUser, localOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isRemoteUserAuthorized(remoteUser, localOperation)).thenReturn(false);
 
         this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager, localProviderId);
         
@@ -98,9 +98,9 @@ public class DefaultAuthorizationPluginTest {
         Mockito.when(this.membershipService.canPerformOperation(localOperation)).thenReturn(false);
         
         this.roleManager = Mockito.mock(RoleAttributionManager.class);
-        Mockito.when(this.roleManager.isUserAuthorized(userId1, remoteOperation)).thenReturn(false);
-        Mockito.when(this.roleManager.isUserAuthorized(userId1, localOperation)).thenReturn(false);
-        Mockito.when(this.roleManager.isUserAuthorized(userId2, localOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(localUser, remoteOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(localUser, localOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(remoteUser, localOperation)).thenReturn(false);
         
         this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager, localProviderId);
         
@@ -121,9 +121,9 @@ public class DefaultAuthorizationPluginTest {
         Mockito.when(this.membershipService.canPerformOperation(remoteOperation)).thenReturn(true);
         
         this.roleManager = Mockito.mock(RoleAttributionManager.class);
-        Mockito.when(this.roleManager.isUserAuthorized(userId1, remoteOperation)).thenReturn(false);
-        Mockito.when(this.roleManager.isUserAuthorized(userId1, localOperation)).thenReturn(false);
-        Mockito.when(this.roleManager.isUserAuthorized(userId2, localOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(localUser, remoteOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(localUser, localOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(remoteUser, localOperation)).thenReturn(false);
         
         this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager, localProviderId);
         
@@ -147,9 +147,9 @@ public class DefaultAuthorizationPluginTest {
         Mockito.when(this.membershipService.canPerformOperation(remoteOperation)).thenReturn(true);
         
         this.roleManager = Mockito.mock(RoleAttributionManager.class);
-        Mockito.when(this.roleManager.isUserAuthorized(userId1, remoteOperation)).thenReturn(true);
-        Mockito.when(this.roleManager.isUserAuthorized(userId1, localOperation)).thenReturn(true);
-        Mockito.when(this.roleManager.isUserAuthorized(userId2, localOperation)).thenReturn(true);
+        Mockito.when(this.roleManager.isUserAuthorized(localUser, remoteOperation)).thenReturn(true);
+        Mockito.when(this.roleManager.isUserAuthorized(localUser, localOperation)).thenReturn(true);
+        Mockito.when(this.roleManager.isRemoteUserAuthorized(remoteUser, localOperation)).thenReturn(true);
         
         this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager, localProviderId);
         
