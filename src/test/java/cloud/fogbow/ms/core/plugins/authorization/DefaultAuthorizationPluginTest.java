@@ -26,7 +26,10 @@ public class DefaultAuthorizationPluginTest {
     
     private String userId1 = "userId1";
     private String userName1 = "userName1";
-    private String identityProviderId1 = "idProvider1";
+    private String userId2 = "userId2";
+    private String userName2 = "userName2";
+    
+    private String localProviderId = "localProvider";
     
     private List<String> membersList = Arrays.asList(member1,
                                                      member2, 
@@ -40,7 +43,7 @@ public class DefaultAuthorizationPluginTest {
         
         Mockito.when(this.membershipService.listMembers()).thenReturn(membersList);
         
-        this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager);
+        this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager, localProviderId);
                 
         List<String> returnedMembersList = this.plugin.listMembers();
         
@@ -58,63 +61,101 @@ public class DefaultAuthorizationPluginTest {
         
         Mockito.when(this.membershipService.isMember(notmember1)).thenReturn(false);
         
-        SystemUser user = new SystemUser(userId1, userName1, identityProviderId1);
-        RasAuthorizableOperation operation = new RasAuthorizableOperation(notmember1, OperationType.CREATE);
+        SystemUser localUser = new SystemUser(userId1, userName1, localProviderId);
+        SystemUser remoteUser = new SystemUser(userId2, userName2, notmember1);
         
-        this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager);
+        RasAuthorizableOperation remoteOperation = new RasAuthorizableOperation(notmember1, OperationType.CREATE);
+        RasAuthorizableOperation localOperation = new RasAuthorizableOperation(localProviderId, OperationType.CREATE);
         
-        Assert.assertFalse(this.plugin.isAuthorized(user, operation));
+        this.membershipService = Mockito.mock(WhiteList.class);
+        Mockito.when(this.membershipService.isMember(member1)).thenReturn(true);
+        Mockito.when(this.membershipService.canPerformOperation(remoteOperation)).thenReturn(false);
+        Mockito.when(this.membershipService.canPerformOperation(localOperation)).thenReturn(false);
+        
+        this.roleManager = Mockito.mock(RoleAttributionManager.class);
+        Mockito.when(this.roleManager.isUserAuthorized(userId1, remoteOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(userId1, localOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(userId2, localOperation)).thenReturn(false);
+
+        this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager, localProviderId);
+        
+        Assert.assertFalse(this.plugin.isAuthorized(localUser, remoteOperation));
+        Assert.assertFalse(this.plugin.isAuthorized(remoteUser, localOperation));
     }
     
     // TODO documentation
     @Test
     public void testIsAuthorizedProviderHasWrongPermission() {
-        SystemUser user = new SystemUser(userId1, userName1, identityProviderId1);
-        RasAuthorizableOperation operation = new RasAuthorizableOperation(member1, OperationType.CREATE);
+        SystemUser localUser = new SystemUser(userId1, userName1, localProviderId);
+        SystemUser remoteUser = new SystemUser(userId1, userName1, member1);
+        
+        RasAuthorizableOperation remoteOperation = new RasAuthorizableOperation(member1, OperationType.CREATE);
+        RasAuthorizableOperation localOperation = new RasAuthorizableOperation(localProviderId, OperationType.CREATE);
         
         this.membershipService = Mockito.mock(WhiteList.class);
         Mockito.when(this.membershipService.isMember(member1)).thenReturn(true);
-        Mockito.when(this.membershipService.canPerformOperation(operation)).thenReturn(false);
+        Mockito.when(this.membershipService.canPerformOperation(remoteOperation)).thenReturn(false);
+        Mockito.when(this.membershipService.canPerformOperation(localOperation)).thenReturn(false);
         
-        this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager);
+        this.roleManager = Mockito.mock(RoleAttributionManager.class);
+        Mockito.when(this.roleManager.isUserAuthorized(userId1, remoteOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(userId1, localOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(userId2, localOperation)).thenReturn(false);
         
-        Assert.assertFalse(this.plugin.isAuthorized(user, operation));
+        this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager, localProviderId);
+        
+        Assert.assertFalse(this.plugin.isAuthorized(localUser, remoteOperation));
+        Assert.assertFalse(this.plugin.isAuthorized(remoteUser, localOperation));
     }
     
     // TODO documentation
     @Test
     public void testIsAuthorizedUserIsNotAuthorized() {
-        SystemUser user = new SystemUser(userId1, userName1, identityProviderId1);
-        RasAuthorizableOperation operation = new RasAuthorizableOperation(member1, OperationType.CREATE);
+        SystemUser localUser = new SystemUser(userId1, userName1, localProviderId);
+        SystemUser remoteUser = new SystemUser(userId2, userName2, member1);
+        RasAuthorizableOperation localOperation = new RasAuthorizableOperation(localProviderId, OperationType.CREATE);
+        RasAuthorizableOperation remoteOperation = new RasAuthorizableOperation(member1, OperationType.CREATE);
         
         this.membershipService = Mockito.mock(WhiteList.class);
         Mockito.when(this.membershipService.isMember(member1)).thenReturn(true);
-        Mockito.when(this.membershipService.canPerformOperation(operation)).thenReturn(true);
+        Mockito.when(this.membershipService.canPerformOperation(remoteOperation)).thenReturn(true);
         
         this.roleManager = Mockito.mock(RoleAttributionManager.class);
-        Mockito.when(this.roleManager.isUserAuthorized(userId1, operation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(userId1, remoteOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(userId1, localOperation)).thenReturn(false);
+        Mockito.when(this.roleManager.isUserAuthorized(userId2, localOperation)).thenReturn(false);
         
-        this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager);
+        this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager, localProviderId);
         
-        Assert.assertFalse(this.plugin.isAuthorized(user, operation));
+        Assert.assertFalse(this.plugin.isAuthorized(localUser, remoteOperation));
+        Assert.assertFalse(this.plugin.isAuthorized(localUser, localOperation));
+        Assert.assertFalse(this.plugin.isAuthorized(remoteUser, localOperation));
     }
     
     // TODO documentation
     @Test
     public void testIsAuthorizedUserIsAuthorized() {
-        SystemUser user = new SystemUser(userId1, userName1, identityProviderId1);
-        RasAuthorizableOperation operation = new RasAuthorizableOperation(member1, OperationType.CREATE);
+        SystemUser localUser = new SystemUser(userId1, userName1, localProviderId);
+        SystemUser remoteUser = new SystemUser(userId2, userName2, member1);
+        
+        RasAuthorizableOperation remoteOperation = new RasAuthorizableOperation(member1, OperationType.CREATE);
+        RasAuthorizableOperation localOperation = new RasAuthorizableOperation(localProviderId, OperationType.CREATE);
         
         this.membershipService = Mockito.mock(WhiteList.class);
         Mockito.when(this.membershipService.isMember(member1)).thenReturn(true);
-        Mockito.when(this.membershipService.canPerformOperation(operation)).thenReturn(true);
+        Mockito.when(this.membershipService.canPerformOperation(localOperation)).thenReturn(true);
+        Mockito.when(this.membershipService.canPerformOperation(remoteOperation)).thenReturn(true);
         
         this.roleManager = Mockito.mock(RoleAttributionManager.class);
-        Mockito.when(this.roleManager.isUserAuthorized(userId1, operation)).thenReturn(true);
+        Mockito.when(this.roleManager.isUserAuthorized(userId1, remoteOperation)).thenReturn(true);
+        Mockito.when(this.roleManager.isUserAuthorized(userId1, localOperation)).thenReturn(true);
+        Mockito.when(this.roleManager.isUserAuthorized(userId2, localOperation)).thenReturn(true);
         
-        this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager);
+        this.plugin = new DefaultAuthorizationPlugin(membershipService, roleManager, localProviderId);
         
-        Assert.assertTrue(this.plugin.isAuthorized(user, operation));
+        Assert.assertTrue(this.plugin.isAuthorized(localUser, remoteOperation));
+        Assert.assertTrue(this.plugin.isAuthorized(localUser, localOperation));
+        Assert.assertTrue(this.plugin.isAuthorized(remoteUser, localOperation));
     }
 
 }
