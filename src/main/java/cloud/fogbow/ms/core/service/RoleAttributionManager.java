@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import cloud.fogbow.common.exceptions.ConfigurationErrorException;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.constants.SystemConstants;
 import cloud.fogbow.ms.core.PermissionInstantiator;
 import cloud.fogbow.ms.core.PropertiesHolder;
@@ -18,8 +20,9 @@ import cloud.fogbow.ms.core.models.role.DefaultRole;
 public class RoleAttributionManager implements RoleManager {
     private Map<String, Set<Role>> usersRoles;
     private Map<String, Role> availableRoles;
+    private HashSet<Role> defaultRoles;
     
-    public RoleAttributionManager(PermissionInstantiator permissionInstantiator) {
+    public RoleAttributionManager(PermissionInstantiator permissionInstantiator) throws ConfigurationErrorException {
         this.availableRoles = new HashMap<String, Role>();
         this.usersRoles = new HashMap<String, Set<Role>>();
         
@@ -45,11 +48,27 @@ public class RoleAttributionManager implements RoleManager {
             }
             this.usersRoles.put(userName, userRoles);
         }
+        
+        String defaultRoleName = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY);
+        
+        if (availableRoles.containsKey(defaultRoleName)) {
+            defaultRoles = new HashSet<Role>();
+            Role defaultRole = availableRoles.get(defaultRoleName);
+            defaultRoles.add(defaultRole);
+        } else {
+            throw new ConfigurationErrorException(Messages.Exception.DEFAULT_ROLE_NAME_IS_INVALID);
+        }
     }
     
     @Override
     public boolean isUserAuthorized(String userId, AuthorizableOperation operation) {
-        Set<Role> userRoles = usersRoles.get(userId);
+        Set<Role> userRoles;
+        
+        if (usersRoles.containsKey(userId)) {
+            userRoles = usersRoles.get(userId);
+        } else {
+            userRoles = defaultRoles;
+        }
         
         for (Role role : userRoles) {
             if (role.canPerformOperation(operation)) {

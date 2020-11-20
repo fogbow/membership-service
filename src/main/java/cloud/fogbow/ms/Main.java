@@ -6,6 +6,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import cloud.fogbow.common.constants.FogbowConstants;
+import cloud.fogbow.common.exceptions.ConfigurationErrorException;
 import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.ms.core.ApplicationFacade;
@@ -18,7 +19,7 @@ public class Main implements ApplicationRunner {
     private final Logger LOGGER = Logger.getLogger(Main.class);
 
     @Override
-    public void run(ApplicationArguments args) {
+    public void run(ApplicationArguments args) throws ConfigurationErrorException {
         try {
             String publicKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PUBLIC_KEY_FILE_PATH);
             String privateKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PRIVATE_KEY_FILE_PATH);

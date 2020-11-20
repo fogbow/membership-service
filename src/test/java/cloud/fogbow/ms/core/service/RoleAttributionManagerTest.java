@@ -12,6 +12,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import cloud.fogbow.common.exceptions.ConfigurationErrorException;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.core.PermissionInstantiator;
 import cloud.fogbow.ms.core.PropertiesHolder;
@@ -37,6 +38,8 @@ public class RoleAttributionManagerTest {
     
     private String roleName1 = "role1";
     private String roleName2 = "role2";
+    private String defaultRoleName = roleName1;
+    private String invalidRoleName = "invalidrole";
     private String rolesNames = String.format("%s,%s", roleName1, roleName2);
     
     private String role1Permissions = permissionName1;
@@ -44,6 +47,7 @@ public class RoleAttributionManagerTest {
     
     private String userName1 = "user1";
     private String userName2 = "user2";
+    private String userWithDefaultRole = "user3";
     private String userNames = String.format("%s,%s", userName1, userName2);
     
     private String rolesUser1 = roleName1;
@@ -58,7 +62,7 @@ public class RoleAttributionManagerTest {
     private String provider = "member1";
     
     @Before
-    public void setUp() {
+    public void setUp() throws ConfigurationErrorException {
      // set up PropertiesHolder 
         PowerMockito.mockStatic(PropertiesHolder.class);
         this.propertiesHolder = Mockito.mock(PropertiesHolder.class);
@@ -70,6 +74,7 @@ public class RoleAttributionManagerTest {
         Mockito.doReturn(userNames).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.USER_NAMES_KEY);
         Mockito.doReturn(rolesUser1).when(propertiesHolder).getProperty(userName1);
         Mockito.doReturn(rolesUser2).when(propertiesHolder).getProperty(userName2);
+        Mockito.doReturn(defaultRoleName).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY);
         BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
         
         this.permission1 = Mockito.mock(AllowOnlyPermission.class);
@@ -99,8 +104,21 @@ public class RoleAttributionManagerTest {
         // Reads correctly user roles
         Mockito.verify(propertiesHolder, Mockito.times(1)).getProperty(userName1);
         Mockito.verify(propertiesHolder, Mockito.times(1)).getProperty(userName2);
-        
+        Mockito.verify(propertiesHolder, Mockito.times(1)).getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY);
         PowerMockito.verifyStatic(PropertiesHolder.class, Mockito.atLeastOnce());
+    }
+    
+    // TODO documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void constructorThrowsExceptionIfInvalidDefaultRoleIsPassed() throws ConfigurationErrorException {
+        Mockito.doReturn(invalidRoleName).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY);
+        
+        PermissionInstantiator instantiator = Mockito.mock(PermissionInstantiator.class);
+        
+        Mockito.when(instantiator.getPermissionInstance(permissionType1, permissionName1)).thenReturn(permission1);
+        Mockito.when(instantiator.getPermissionInstance(permissionType2, permissionName2)).thenReturn(permission2);
+        
+        new RoleAttributionManager(instantiator);
     }
     
     // TODO documentation
@@ -132,5 +150,11 @@ public class RoleAttributionManagerTest {
         assertTrue(this.manager.isUserAuthorized(userName2, operationGet));
         assertTrue(this.manager.isUserAuthorized(userName2, operationCreate));
         assertFalse(this.manager.isUserAuthorized(userName2, operationReload));
+        
+        // user3 is not listed on users names list
+        // therefore user3 will have the default role, role 1
+        assertTrue(this.manager.isUserAuthorized(userWithDefaultRole, operationGet));
+        assertFalse(this.manager.isUserAuthorized(userWithDefaultRole, operationCreate));
+        assertFalse(this.manager.isUserAuthorized(userWithDefaultRole, operationReload));
     }
 }

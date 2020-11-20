@@ -8,4 +8,5 @@ public class ConfigurationPropertyKeys {
     public static final String ROLES_NAMES_KEY = "roles";
     public static final String USER_NAMES_KEY = "users";
     public static final String AUTHORIZATION_PLUGIN_CLASS_KEY = "authorization_plugin_class";
+    public static final String DEFAULT_ROLE_KEY = "default_role";
 }
