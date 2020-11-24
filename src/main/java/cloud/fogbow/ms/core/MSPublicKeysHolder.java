@@ -8,7 +8,8 @@ import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 
 public class MSPublicKeysHolder {
     private RSAPublicKey asPublicKey;
-
+    private RSAPublicKey rasPublicKey;
+    
     private static MSPublicKeysHolder instance;
 
     private MSPublicKeysHolder() {
@@ -32,5 +33,14 @@ public class MSPublicKeysHolder {
             this.asPublicKey = PublicKeysHolder.getPublicKey(asAddress, asPort, cloud.fogbow.as.api.http.request.PublicKey.PUBLIC_KEY_ENDPOINT);
         }
         return this.asPublicKey;
+    }
+    
+    public RSAPublicKey getRASPublicKey() throws FogbowException {
+        if (this.rasPublicKey == null) {
+            String rasAddress = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.RAS_URL_KEY);
+            String rasPort = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.RAS_PORT_KEY);
+            this.rasPublicKey = PublicKeysHolder.getPublicKey(rasAddress, rasPort, "ras/publicKey");
+        }
+        return this.rasPublicKey;
     }
 }
