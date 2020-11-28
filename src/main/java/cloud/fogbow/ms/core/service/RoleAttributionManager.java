@@ -21,12 +21,20 @@ import cloud.fogbow.ms.core.models.role.DefaultRole;
 public class RoleAttributionManager implements RoleManager {
     private Map<String, Set<Role>> usersRoles;
     private Map<String, Role> availableRoles;
+    // This field was defined as a Set instead of 
+    // a Role to simplify some of the authorization code
+    // and to not need to recreate this object on every 
+    // authorization call.
     private HashSet<Role> defaultRoles;
     
     public RoleAttributionManager(PermissionInstantiator permissionInstantiator) throws ConfigurationErrorException {
+        setUpAvailableRoles(permissionInstantiator);
+        setUpUsersRoles();
+        setUpDefaultRole();
+    }
+
+    private void setUpAvailableRoles(PermissionInstantiator permissionInstantiator) {
         this.availableRoles = new HashMap<String, Role>();
-        this.usersRoles = new HashMap<String, Set<Role>>();
-        
         String rolesNamesString = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.ROLES_NAMES_KEY);
         
         for (String roleName : rolesNamesString.split(SystemConstants.ROLE_NAME_SEPARATOR)) {
@@ -35,9 +43,12 @@ public class RoleAttributionManager implements RoleManager {
             
             Permission permission = permissionInstantiator.getPermissionInstance(permissionType, permissionName);
             Role role = new DefaultRole(roleName, permission);
-            availableRoles.put(roleName, role);
+            this.availableRoles.put(roleName, role);
         }
-        
+    }
+    
+    private void setUpUsersRoles() {
+        this.usersRoles = new HashMap<String, Set<Role>>();
         String userNamesString = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.USER_NAMES_KEY);
         
         for (String userName : userNamesString.split(SystemConstants.USER_NAME_SEPARATOR)) {
@@ -49,13 +60,15 @@ public class RoleAttributionManager implements RoleManager {
             }
             this.usersRoles.put(userName, userRoles);
         }
-        
+    }
+    
+    private void setUpDefaultRole() throws ConfigurationErrorException {
         String defaultRoleName = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY);
         
         if (availableRoles.containsKey(defaultRoleName)) {
-            defaultRoles = new HashSet<Role>();
+            this.defaultRoles = new HashSet<Role>();
             Role defaultRole = availableRoles.get(defaultRoleName);
-            defaultRoles.add(defaultRole);
+            this.defaultRoles.add(defaultRole);
         } else {
             throw new ConfigurationErrorException(Messages.Exception.DEFAULT_ROLE_NAME_IS_INVALID);
         }
