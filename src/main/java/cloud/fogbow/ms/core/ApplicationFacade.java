@@ -34,7 +34,7 @@ public class ApplicationFacade {
         return instance;
     }
 
-    public ApplicationFacade() {
+    private ApplicationFacade() {
 
     }
     
@@ -55,19 +55,19 @@ public class ApplicationFacade {
         return this.authorizationPlugin.listMembers();
     }
     
-    protected SystemUser authenticate(String userToken) throws FogbowException {
+    private SystemUser authenticate(String userToken) throws FogbowException {
         RSAPublicKey keyRSA = getAsPublicKey();
         return AuthenticationUtil.authenticate(keyRSA, userToken);
     }
     
-    protected RSAPublicKey getAsPublicKey() throws FogbowException {
+    private RSAPublicKey getAsPublicKey() throws FogbowException {
         if (this.asPublicKey == null) {
             this.asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
         }
         return this.asPublicKey;
     }
     
-    protected RSAPublicKey getRasPublicKey() throws FogbowException {
+    private RSAPublicKey getRasPublicKey() throws FogbowException {
         if (this.rasPublicKey == null) {
             this.rasPublicKey = MSPublicKeysHolder.getInstance().getRASPublicKey();
         }

@@ -5,6 +5,7 @@ import java.util.Map;
 public class AuthorizationResponse {
     public static final String AUTHORIZATION_RESPONSE_AUTHORIZED_FIELD = "authorized";
     public static final String AUTHORIZATION_RESPONSE_TOKEN_FIELD = "token";
+    // TODO documentation
     private Boolean authorized;
     private String token;
     

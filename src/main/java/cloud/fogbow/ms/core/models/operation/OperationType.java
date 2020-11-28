@@ -2,6 +2,9 @@ package cloud.fogbow.ms.core.models.operation;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+// FIXME this is a copy of the Operation enum in RAS
+// We use this in MS to avoid referencing RAS code here
+// Maybe we should move these enums to common
 public enum OperationType {
     CREATE("create"),
     GET_ALL("getAll"),
@@ -13,7 +16,6 @@ public enum OperationType {
     PAUSE("pause"),
     HIBERNATE("hibernate"),
     RESUME("resume");
-
 
     private String value;
 
