@@ -54,6 +54,9 @@ public class AllowOnlyPermissionTest {
         return String.join(SystemConstants.OPERATION_NAME_SEPARATOR, operationsNames);
     }
     
+    //
+    // TODO documentation
+    //
     @Test
     public void testIsAuthorized() {
         setUpTest(allowedOperations);
@@ -69,6 +72,9 @@ public class AllowOnlyPermissionTest {
         }
     }
     
+    //
+    // TODO documentation
+    //
     @Test
     public void testIsAuthorizedNoAuthorizedOperation() {
         setUpTest(noOperation);

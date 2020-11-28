@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -29,12 +28,12 @@ public class AllowAllExceptPermissionTest {
     private String operationsNamesString;
     private List<OperationType> notAllowedOperations = Arrays.asList(OperationType.RELOAD, 
                                                                   OperationType.CREATE);
+    private List<OperationType> noOperation = new ArrayList<OperationType>();
     
     private String provider = "member1";
     
-    @Before
-    public void setUp() {
-        operationsNamesString = generateOperationNamesString(notAllowedOperations);
+    private void setUpVariables(List<OperationType> operations) {
+        operationsNamesString = generateOperationNamesString(operations);
         
         // set up PropertiesHolder 
         PowerMockito.mockStatic(PropertiesHolder.class);
@@ -54,8 +53,13 @@ public class AllowAllExceptPermissionTest {
         return String.join(SystemConstants.OPERATION_NAME_SEPARATOR, operationsNames);
     }
     
+    //
+    // TODO documentation
+    //
     @Test
     public void testIsAuthorized() {
+        setUpVariables(notAllowedOperations);
+        
         for (OperationType type : OperationType.values()) {
             RasAuthorizableOperation operation = new RasAuthorizableOperation(provider, type);
             
@@ -66,5 +70,17 @@ public class AllowAllExceptPermissionTest {
             }
         }
     }
-
+    
+    //
+    // TODO documentation
+    //
+    @Test
+    public void testIsAuthorizedAllOperationsAreAuthorized() {
+        setUpVariables(noOperation);
+        
+        for (OperationType type : OperationType.values()) {
+            RasAuthorizableOperation operation = new RasAuthorizableOperation(provider, type);
+            assertTrue(permission.isAuthorized(operation));
+        }
+    }
 }
