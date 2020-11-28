@@ -20,12 +20,13 @@ public class AllowOnlyPermission implements Permission {
     public AllowOnlyPermission(String permissionName) {
         this.allowedOperationTypes = new HashSet<OperationType>();
         
-        // TODO check how this works with empty operation list
         String operationTypesString = PropertiesHolder.getInstance().getProperty(permissionName + 
-                SystemConstants.OPERATIONS_LIST_KEY_SUFFIX);
+                SystemConstants.OPERATIONS_LIST_KEY_SUFFIX).trim();
         
-        for (String operationString : operationTypesString.split(SystemConstants.OPERATION_NAME_SEPARATOR)) {
-            this.allowedOperationTypes.add(OperationType.fromString(operationString.trim()));
+        if (!operationTypesString.isEmpty()) {
+            for (String operationString : operationTypesString.split(SystemConstants.OPERATION_NAME_SEPARATOR)) {
+                this.allowedOperationTypes.add(OperationType.fromString(operationString.trim()));
+            }
         }
     }
 

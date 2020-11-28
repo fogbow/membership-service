@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -30,11 +29,11 @@ public class AllowOnlyPermissionTest {
     private String operationsNamesString;
     private List<OperationType> allowedOperations = Arrays.asList(OperationType.GET, 
                                                                   OperationType.CREATE);
+    private List<OperationType> noOperation = new ArrayList<OperationType>();
     
     private String provider = "member1";
     
-    @Before
-    public void setUp() {
+    private void setUpTest(List<OperationType> allowedOperations) {
         operationsNamesString = generateOperationNamesString(allowedOperations);
         
         // set up PropertiesHolder 
@@ -57,6 +56,8 @@ public class AllowOnlyPermissionTest {
     
     @Test
     public void testIsAuthorized() {
+        setUpTest(allowedOperations);
+
         for (OperationType type : OperationType.values()) {
             RasAuthorizableOperation operation = new RasAuthorizableOperation(provider, type);
             
@@ -65,6 +66,16 @@ public class AllowOnlyPermissionTest {
             } else {
                 assertFalse(permission.isAuthorized(operation));
             }
+        }
+    }
+    
+    @Test
+    public void testIsAuthorizedNoAuthorizedOperation() {
+        setUpTest(noOperation);
+        
+        for (OperationType type : OperationType.values()) {
+            RasAuthorizableOperation operation = new RasAuthorizableOperation(provider, type);
+            assertFalse(permission.isAuthorized(operation));
         }
     }
 }
