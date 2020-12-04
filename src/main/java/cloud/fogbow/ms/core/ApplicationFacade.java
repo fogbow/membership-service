@@ -83,5 +83,9 @@ public class ApplicationFacade {
             throw new InternalServerErrorException(e.getMessage());
         } 
     }
+
+    public boolean isAuthorized(String provider) {
+        return this.authorizationPlugin.isAuthorized(provider);
+    }
     
 }

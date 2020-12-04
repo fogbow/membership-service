@@ -68,4 +68,9 @@ public class DefaultAuthorizationPlugin implements AuthorizationPlugin {
     public List<String> listMembers() throws Exception {
         return membership.listMembers();
     }
+
+    @Override
+    public boolean isAuthorized(String provider) {
+        return membership.isMember(provider);
+    }
 }

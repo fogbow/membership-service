@@ -10,4 +10,5 @@ public interface AuthorizationPlugin {
 
     boolean isAuthorized(SystemUser user, AuthorizableOperation operation);
     List<String> listMembers() throws Exception;
+    boolean isAuthorized(String provider);
 }

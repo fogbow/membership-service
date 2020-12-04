@@ -6,16 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cloud.fogbow.common.exceptions.FogbowException;
-import cloud.fogbow.ms.api.http.CommonKeys;
-import cloud.fogbow.ms.api.http.response.AuthorizationResponse;
+import cloud.fogbow.ms.api.http.response.Authorized;
+import cloud.fogbow.ms.api.parameters.Provider;
 import cloud.fogbow.ms.constants.SystemConstants;
 import cloud.fogbow.ms.core.ApplicationFacade;
-import cloud.fogbow.ms.core.models.operation.RasAuthorizableOperation;
 
 @CrossOrigin
 @RestController
@@ -27,11 +24,11 @@ public class Authorization {
 
     // TODO add documentation
     @PostMapping
-    public ResponseEntity<AuthorizationResponse> isAuthorized(
-            @RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken, 
-            @RequestBody RasAuthorizableOperation operation) throws FogbowException {
-        AuthorizationResponse response = ApplicationFacade.getInstance().isAuthorized(systemUserToken, operation);
-        return new ResponseEntity<AuthorizationResponse>(response, HttpStatus.OK);
+    public ResponseEntity<Authorized> isAuthorized(
+            @RequestBody Provider provider) {
+        boolean authorized = ApplicationFacade.getInstance().isAuthorized(provider.getProvider());
+        return new ResponseEntity<Authorized>(new Authorized(authorized),
+                HttpStatus.OK);
     }
 
 }
