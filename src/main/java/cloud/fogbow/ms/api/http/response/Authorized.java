@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class Authorized {
 
-    private static final Object AUTHORIZATION_RESPONSE_AUTHORIZED_FIELD = "authorized";
+    public static final String AUTHORIZATION_RESPONSE_AUTHORIZED_FIELD = "authorized";
     private Boolean authorized;
     
     public Authorized(Map<String, Object> requestResponse) {

@@ -2,8 +2,6 @@ package cloud.fogbow.ms.core;
 
 import java.util.List;
 
-import cloud.fogbow.ms.core.models.AuthorizableOperation;
-
 public interface MembershipService {
 
     /**
@@ -16,7 +14,4 @@ public interface MembershipService {
     
     // TODO documentation
     public boolean isMember(String provider);
-    
-    // TODO documentation
-    public boolean canPerformOperation(AuthorizableOperation operation);
 }
