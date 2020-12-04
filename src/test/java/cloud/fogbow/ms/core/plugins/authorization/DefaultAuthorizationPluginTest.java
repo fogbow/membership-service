@@ -23,7 +23,9 @@ public class DefaultAuthorizationPluginTest {
                                                      member2, 
                                                      member3);
     
-    // TODO documentation
+    // test case: the method listMembers must call the listMembers method
+    // of a MembershipService instance, and then return a list containing 
+    // the same members.
     @Test
     public void testListMembers() throws Exception {
         this.membershipService = Mockito.mock(WhiteList.class);
@@ -41,7 +43,8 @@ public class DefaultAuthorizationPluginTest {
         Mockito.verify(this.membershipService, Mockito.atLeastOnce()).listMembers();
     }
     
-    // TODO documentation
+    // test case: the method isMember must call the isMember method of a 
+    // MembershipService instance, and then return the same boolean.
     @Test
     public void testIsAuthorizedProviderIsMember() {
         this.membershipService = Mockito.mock(WhiteList.class);
@@ -52,7 +55,8 @@ public class DefaultAuthorizationPluginTest {
         Assert.assertTrue(this.plugin.isAuthorized(member1));
     }
     
-    // TODO documentation
+    // test case: the method isMember must call the isMember method of a 
+    // MembershipService instance, and then return the same boolean.
     @Test
     public void testIsAuthorizedProviderIsNotMember() {
         this.membershipService = Mockito.mock(WhiteList.class);

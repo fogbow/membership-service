@@ -12,6 +12,13 @@ public interface MembershipService {
      */
     public List<String> listMembers() throws Exception;
     
-    // TODO documentation
+    /**
+     * Returns whether or not the given provider is in 
+     * the list of known providers.
+     * 
+     * @param provider
+     * @return a boolean value stating whether the given 
+     * provider is a member or not.
+     */
     public boolean isMember(String provider);
 }
