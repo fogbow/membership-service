@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PropertiesHolder;
-
-import cloud.fogbow.ms.MembershipService;
 
 public class WhiteList implements MembershipService {
 
     private static final String SEPARATOR = ",";
 
     private List<String> membersList;
-
+    
     public WhiteList() {
         this.membersList = readMembers();
     }
@@ -36,5 +35,10 @@ public class WhiteList implements MembershipService {
         }
 
         return membersList;
+    }
+
+    @Override
+    public boolean isMember(String provider) {
+        return this.membersList.contains(provider);
     }
 }

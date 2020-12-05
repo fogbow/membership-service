@@ -35,4 +35,8 @@ public class PropertiesHolder {
         }
         return propertyValue;
     }
+    
+    public Properties getProperties() {
+        return this.properties;
+    }
 }

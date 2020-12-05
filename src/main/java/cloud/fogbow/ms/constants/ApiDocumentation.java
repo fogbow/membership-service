@@ -20,4 +20,9 @@ public class ApiDocumentation {
         public static final String DESCRIPTION = "Lists the member ids in the federation.";
     }
 
+    public static class Authorization {
+        public static final String API = "States whether the provider is a member or not.";
+        public static final String DESCRIPTION = "States whether the provider is a member or not.";
+    }
+
 }
