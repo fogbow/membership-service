@@ -22,4 +22,14 @@ public class DefaultAuthorizationPlugin implements AuthorizationPlugin {
     public boolean isAuthorized(String provider) {
         return membership.isMember(provider);
     }
+
+    @Override
+    public boolean isTargetAuthorized(String provider) {
+        return membership.isTargetAuthorized(provider);
+    }
+
+    @Override
+    public boolean isRequesterAuthorized(String provider) {
+        return membership.isRequesterAuthorized(provider);
+    }
 }

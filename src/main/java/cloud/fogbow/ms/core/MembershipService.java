@@ -21,4 +21,8 @@ public interface MembershipService {
      * provider is a member or not.
      */
     public boolean isMember(String provider);
+
+    public boolean isTargetAuthorized(String provider);
+
+    public boolean isRequesterAuthorized(String provider);
 }

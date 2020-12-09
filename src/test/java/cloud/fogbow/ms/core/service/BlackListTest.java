@@ -19,33 +19,33 @@ import cloud.fogbow.ms.core.PropertiesHolder;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PropertiesHolder.class})
-public class WhiteListTest {
+public class BlackListTest {
 
     private MembershipService service;
 
-    private String memberAuthorizedAsRequesterAndTarget = "requesterAndTarget";
-    private String memberAuthorizedAsRequester = "requester";
-    private String memberAuthorizedAsTarget = "target";
+    private String memberNotAuthorizedAsRequesterAndTarget = "requesterAndTarget";
+    private String memberNotAuthorizedAsRequester = "requester";
+    private String memberNotAuthorizedAsTarget = "target";
     private String notMember1 = "notMember1";
-    private String membersListString = String.join(",", memberAuthorizedAsRequesterAndTarget, 
-                                        memberAuthorizedAsRequester, memberAuthorizedAsTarget);
-    private String allowedRequestersList = String.join(",", memberAuthorizedAsRequester, 
-                                        memberAuthorizedAsRequesterAndTarget);
-    private String allowedTargetsList = String.join(",", memberAuthorizedAsTarget, 
-                                        memberAuthorizedAsRequesterAndTarget);
+    private String membersListString = String.join(",", memberNotAuthorizedAsRequesterAndTarget, 
+                                        memberNotAuthorizedAsRequester, memberNotAuthorizedAsTarget);
+    private String notAllowedRequestersList = String.join(",", memberNotAuthorizedAsRequester, 
+                                        memberNotAuthorizedAsRequesterAndTarget);
+    private String notAllowedTargetsList = String.join(",", memberNotAuthorizedAsTarget, 
+                                        memberNotAuthorizedAsRequesterAndTarget);
     
     @Before
     public void setUp() throws ConfigurationErrorException {
         setUpConfigurationInfo();
-        this.service = new WhiteList();
+        this.service = new BlackList();
     }
 
     private void setUpConfigurationInfo() {
         PowerMockito.mockStatic(PropertiesHolder.class);
         PropertiesHolder propertiesHolder = Mockito.mock(PropertiesHolder.class);
         Mockito.doReturn(membersListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
-        Mockito.doReturn(allowedRequestersList).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.AUTHORIZED_REQUESTER_MEMBERS_LIST_KEY);
-        Mockito.doReturn(allowedTargetsList).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.AUTHORIZED_TARGET_MEMBERS_LIST_KEY);
+        Mockito.doReturn(notAllowedRequestersList).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.NOT_AUTHORIZED_REQUESTER_MEMBERS_LIST_KEY);
+        Mockito.doReturn(notAllowedTargetsList).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.NOT_AUTHORIZED_TARGET_MEMBERS_LIST_KEY);
         BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
     }
     
@@ -57,36 +57,37 @@ public class WhiteListTest {
         List<String> membersId = this.service.listMembers();
 
         // verify
-        Assert.assertTrue(membersId.contains(memberAuthorizedAsRequesterAndTarget));
-        Assert.assertTrue(membersId.contains(memberAuthorizedAsRequester));
-        Assert.assertTrue(membersId.contains(memberAuthorizedAsTarget));
+        Assert.assertTrue(membersId.contains(memberNotAuthorizedAsRequesterAndTarget));
+        Assert.assertTrue(membersId.contains(memberNotAuthorizedAsRequester));
+        Assert.assertTrue(membersId.contains(memberNotAuthorizedAsTarget));
     }
     
     // test case: When invoking the isMember method, it must return whether or 
     // not the provider passed as argument is member, based on the configuration file.
     @Test
     public void testIsMember() {
-        Assert.assertTrue(this.service.isMember(memberAuthorizedAsRequesterAndTarget));
-        Assert.assertTrue(this.service.isMember(memberAuthorizedAsRequester));
-        Assert.assertTrue(this.service.isMember(memberAuthorizedAsTarget));
+        Assert.assertTrue(this.service.isMember(memberNotAuthorizedAsRequesterAndTarget));
+        Assert.assertTrue(this.service.isMember(memberNotAuthorizedAsRequester));
+        Assert.assertTrue(this.service.isMember(memberNotAuthorizedAsTarget));
         Assert.assertFalse(this.service.isMember(notMember1));
     }
     
     // TODO: documentation
     @Test
     public void testIsTargetAuthorized() {
-        Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsTarget));
-        Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsRequesterAndTarget));
-        Assert.assertFalse(this.service.isTargetAuthorized(memberAuthorizedAsRequester));
+        Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsTarget));
+        Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsRequesterAndTarget));
+        Assert.assertTrue(this.service.isTargetAuthorized(memberNotAuthorizedAsRequester));
         Assert.assertFalse(this.service.isTargetAuthorized(notMember1));
     }
     
     // TODO: documentation
     @Test
     public void testIsRequesterAuthorized() {
-        Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequesterAndTarget));
-        Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequester));
-        Assert.assertFalse(this.service.isRequesterAuthorized(memberAuthorizedAsTarget));
+        Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequesterAndTarget));
+        Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequester));
+        Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
         Assert.assertFalse(this.service.isRequesterAuthorized(notMember1));
     }
+
 }

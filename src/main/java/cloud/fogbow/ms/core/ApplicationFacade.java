@@ -8,14 +8,13 @@ import org.apache.log4j.Logger;
 import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
-import cloud.fogbow.ms.core.plugins.AuthorizationPlugin;
 
 public class ApplicationFacade {
 
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);
 
     private static ApplicationFacade instance;
-    private AuthorizationPlugin authorizationPlugin;
+    private MembershipService membershipService;
     
     public static ApplicationFacade getInstance() {
         if (instance == null) {
@@ -28,12 +27,8 @@ public class ApplicationFacade {
 
     }
     
-    public void setAuthorizationPlugin(AuthorizationPlugin authorizationPlugin) {
-        this.authorizationPlugin = authorizationPlugin;
-    }
-    
     public List<String> listMembers() throws Exception {
-        return this.authorizationPlugin.listMembers();
+        return this.membershipService.listMembers();
     }
 
     public String getPublicKey() throws InternalServerErrorException {
@@ -46,7 +41,15 @@ public class ApplicationFacade {
         } 
     }
 
-    public boolean isAuthorized(String provider) {
-        return this.authorizationPlugin.isAuthorized(provider);
+    public boolean isTargetAuthorized(String provider) {
+        return this.membershipService.isTargetAuthorized(provider);
+    }
+
+    public boolean isRequesterAuthorized(String provider) {
+        return this.membershipService.isRequesterAuthorized(provider);
+    }
+
+    public void setMembershipService(MembershipService membershipService) {
+        this.membershipService = membershipService;
     }
 }

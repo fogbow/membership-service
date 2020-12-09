@@ -8,18 +8,18 @@ import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PropertiesHolder;
 
-public class WhiteList implements MembershipService {
+public class BlackList implements MembershipService {
 
     private static final String SEPARATOR = ",";
 
     private List<String> membersList;
-    private List<String> authorizedTargetMembers;
-    private List<String> authorizedRequesterMembers;
+    private List<String> notAuthorizedTargetMembers;
+    private List<String> notAuthorizedRequesterMembers;
     
-    public WhiteList() throws ConfigurationErrorException {
+    public BlackList() throws ConfigurationErrorException {
         this.membersList = readMembers();
-        this.authorizedTargetMembers = readAuthorizedTargetMembers();
-        this.authorizedRequesterMembers = readAuthorizedRequesterMembers();
+        this.notAuthorizedTargetMembers = readNotAuthorizedTargetMembers();
+        this.notAuthorizedRequesterMembers = readNotAuthorizedRequesterMembers();
     }
 
     /**
@@ -42,11 +42,11 @@ public class WhiteList implements MembershipService {
         return membersList;
     }
     
-    private List<String> readAuthorizedTargetMembers() throws ConfigurationErrorException {
-        List<String> authorizedTargetMembers = new ArrayList<String>();
+    private List<String> readNotAuthorizedTargetMembers() throws ConfigurationErrorException {
+        List<String> notAuthorizedTargetMembers = new ArrayList<String>();
         
-        String authorizedTargetMembersListStr = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.AUTHORIZED_TARGET_MEMBERS_LIST_KEY);
-        for (String member : authorizedTargetMembersListStr.split(SEPARATOR)) {
+        String notAuthorizedTargetMembersListStr = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.NOT_AUTHORIZED_TARGET_MEMBERS_LIST_KEY);
+        for (String member : notAuthorizedTargetMembersListStr.split(SEPARATOR)) {
             member = member.trim();
             
             if (!this.membersList.contains(member)) {
@@ -54,17 +54,17 @@ public class WhiteList implements MembershipService {
                 throw new ConfigurationErrorException();
             }
             
-            authorizedTargetMembers.add(member);
+            notAuthorizedTargetMembers.add(member);
         }
         
-        return authorizedTargetMembers;
+        return notAuthorizedTargetMembers;
     }
     
-    private List<String> readAuthorizedRequesterMembers() throws ConfigurationErrorException {
-        List<String> authorizedRequesterMembers = new ArrayList<String>();
+    private List<String> readNotAuthorizedRequesterMembers() throws ConfigurationErrorException {
+        List<String> notAuthorizedTargetMembers = new ArrayList<String>();
         
-        String authorizedRequesterMembersListStr = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.AUTHORIZED_REQUESTER_MEMBERS_LIST_KEY);
-        for (String member : authorizedRequesterMembersListStr.split(SEPARATOR)) {
+        String notAuthorizedRequesterMembersListStr = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.NOT_AUTHORIZED_REQUESTER_MEMBERS_LIST_KEY);
+        for (String member : notAuthorizedRequesterMembersListStr.split(SEPARATOR)) {
             member = member.trim();
             
             if (!this.membersList.contains(member)) {
@@ -72,10 +72,10 @@ public class WhiteList implements MembershipService {
                 throw new ConfigurationErrorException();
             }
             
-            authorizedRequesterMembers.add(member);
+            notAuthorizedTargetMembers.add(member);
         }
         
-        return authorizedRequesterMembers;
+        return notAuthorizedTargetMembers;
     }
 
     @Override
@@ -85,11 +85,12 @@ public class WhiteList implements MembershipService {
 
     @Override
     public boolean isTargetAuthorized(String provider) {
-        return this.authorizedTargetMembers.contains(provider);
+        return isMember(provider) && !this.notAuthorizedTargetMembers.contains(provider);
     }
 
     @Override
     public boolean isRequesterAuthorized(String provider) {
-        return this.authorizedRequesterMembers.contains(provider);
+        return isMember(provider) && !this.notAuthorizedRequesterMembers.contains(provider);
     }
+
 }
