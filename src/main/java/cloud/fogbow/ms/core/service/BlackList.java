@@ -5,6 +5,7 @@ import java.util.List;
 
 import cloud.fogbow.common.exceptions.ConfigurationErrorException;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PropertiesHolder;
 
@@ -51,8 +52,7 @@ public class BlackList implements MembershipService {
                 member = member.trim();
                 
                 if (!this.membersList.contains(member)) {
-                    // TODO add message
-                    throw new ConfigurationErrorException();
+                    throw new ConfigurationErrorException(Messages.Exception.INVALID_MEMBER_NAME);
                 }
                 
                 notAuthorizedTargetMembers.add(member);
@@ -72,8 +72,7 @@ public class BlackList implements MembershipService {
                 member = member.trim();
                 
                 if (!this.membersList.contains(member)) {
-                    // TODO add message
-                    throw new ConfigurationErrorException();
+                    throw new ConfigurationErrorException(Messages.Exception.INVALID_MEMBER_NAME);
                 }
                 
                 notAuthorizedTargetMembers.add(member);
