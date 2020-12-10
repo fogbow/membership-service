@@ -46,17 +46,19 @@ public class BlackList implements MembershipService {
         List<String> notAuthorizedTargetMembers = new ArrayList<String>();
         
         String notAuthorizedTargetMembersListStr = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.NOT_AUTHORIZED_TARGET_MEMBERS_LIST_KEY);
-        for (String member : notAuthorizedTargetMembersListStr.split(SEPARATOR)) {
-            member = member.trim();
-            
-            if (!this.membersList.contains(member)) {
-                // TODO add message
-                throw new ConfigurationErrorException();
+        if (!notAuthorizedTargetMembersListStr.isEmpty()) {
+            for (String member : notAuthorizedTargetMembersListStr.split(SEPARATOR)) {
+                member = member.trim();
+                
+                if (!this.membersList.contains(member)) {
+                    // TODO add message
+                    throw new ConfigurationErrorException();
+                }
+                
+                notAuthorizedTargetMembers.add(member);
             }
-            
-            notAuthorizedTargetMembers.add(member);
         }
-        
+
         return notAuthorizedTargetMembers;
     }
     
@@ -64,15 +66,18 @@ public class BlackList implements MembershipService {
         List<String> notAuthorizedTargetMembers = new ArrayList<String>();
         
         String notAuthorizedRequesterMembersListStr = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.NOT_AUTHORIZED_REQUESTER_MEMBERS_LIST_KEY);
-        for (String member : notAuthorizedRequesterMembersListStr.split(SEPARATOR)) {
-            member = member.trim();
-            
-            if (!this.membersList.contains(member)) {
-                // TODO add message
-                throw new ConfigurationErrorException();
+        
+        if (!notAuthorizedRequesterMembersListStr.isEmpty()) {
+            for (String member : notAuthorizedRequesterMembersListStr.split(SEPARATOR)) {
+                member = member.trim();
+                
+                if (!this.membersList.contains(member)) {
+                    // TODO add message
+                    throw new ConfigurationErrorException();
+                }
+                
+                notAuthorizedTargetMembers.add(member);
             }
-            
-            notAuthorizedTargetMembers.add(member);
         }
         
         return notAuthorizedTargetMembers;

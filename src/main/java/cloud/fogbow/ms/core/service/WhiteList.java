@@ -46,15 +46,18 @@ public class WhiteList implements MembershipService {
         List<String> authorizedTargetMembers = new ArrayList<String>();
         
         String authorizedTargetMembersListStr = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.AUTHORIZED_TARGET_MEMBERS_LIST_KEY);
-        for (String member : authorizedTargetMembersListStr.split(SEPARATOR)) {
-            member = member.trim();
-            
-            if (!this.membersList.contains(member)) {
-                // TODO add message
-                throw new ConfigurationErrorException();
+        
+        if (!authorizedTargetMembersListStr.isEmpty()) {
+            for (String member : authorizedTargetMembersListStr.split(SEPARATOR)) {
+                member = member.trim();
+                
+                if (!this.membersList.contains(member)) {
+                    // TODO add message
+                    throw new ConfigurationErrorException();
+                }
+                
+                authorizedTargetMembers.add(member);
             }
-            
-            authorizedTargetMembers.add(member);
         }
         
         return authorizedTargetMembers;
@@ -64,15 +67,18 @@ public class WhiteList implements MembershipService {
         List<String> authorizedRequesterMembers = new ArrayList<String>();
         
         String authorizedRequesterMembersListStr = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.AUTHORIZED_REQUESTER_MEMBERS_LIST_KEY);
-        for (String member : authorizedRequesterMembersListStr.split(SEPARATOR)) {
-            member = member.trim();
-            
-            if (!this.membersList.contains(member)) {
-                // TODO add message
-                throw new ConfigurationErrorException();
+        
+        if (!authorizedRequesterMembersListStr.isEmpty()) {
+            for (String member : authorizedRequesterMembersListStr.split(SEPARATOR)) {
+                member = member.trim();
+                
+                if (!this.membersList.contains(member)) {
+                    // TODO add message
+                    throw new ConfigurationErrorException();
+                }
+                
+                authorizedRequesterMembers.add(member);
             }
-            
-            authorizedRequesterMembers.add(member);
         }
         
         return authorizedRequesterMembers;
