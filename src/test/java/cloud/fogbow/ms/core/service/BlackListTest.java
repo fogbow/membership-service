@@ -63,7 +63,10 @@ public class BlackListTest {
         Assert.assertFalse(this.service.isMember(""));
     }
     
-    // TODO: documentation
+    // test case: When invoking the isTargetAuthorized method, it must return 
+    // whether or not local users are allowed to perform operations in the 
+    // remote provider passed as argument. In the case of BlackList implementation,
+    // it must return whether or not the provider is in the "not-allowed" list.
     @Test
     public void testIsTargetAuthorized() throws ConfigurationErrorException {
         setUpBlackListWithDefaultLists();
@@ -75,7 +78,10 @@ public class BlackListTest {
         Assert.assertFalse(this.service.isTargetAuthorized(""));
     }
     
-    // TODO: documentation
+    // test case: When invoking the isRequesterAuthorized method, it must return
+    // whether or not the remote provider passed as argument is allowed to 
+    // perform local operations. In the case of BlackList implementation,
+    // it must return whether or not the provider is in the "not-allowed" list.
     @Test
     public void testIsRequesterAuthorized() throws ConfigurationErrorException {
         setUpBlackListWithDefaultLists();
@@ -87,7 +93,8 @@ public class BlackListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(""));
     }
     
-    // TODO: documentation
+    // test case: When invoking the isTargetAuthorized method on a BlackList instance with empty
+    // not allowed target lists, it must return true for all known members and false to unknown providers.
     @Test
     public void testIsTargetAuthorizedEmptyNotAllowedTargetsList() throws ConfigurationErrorException {
         setUpBlackListWithEmptyNotAllowedTargetsList();
@@ -99,7 +106,8 @@ public class BlackListTest {
         Assert.assertFalse(this.service.isTargetAuthorized(""));
     }
     
-    // TODO: documentation
+    // test case: When invoking the isRequesterAuthorized method on a BlackList instance with empty
+    // not allowed requester lists, it must return true for all known members and false to unknown providers.
     @Test
     public void testIsTargetAuthorizedEmptyNotAllowedRequestersList() throws ConfigurationErrorException {
         setUpBlackListWithEmptyNotAllowedRequestersList();

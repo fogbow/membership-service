@@ -62,7 +62,10 @@ public class WhiteListTest {
         Assert.assertFalse(this.service.isMember(notMember1));
     }
     
-    // TODO: documentation
+    // test case: When invoking the isTargetAuthorized method, it must return 
+    // whether or not local users are allowed to perform operations in the 
+    // remote provider passed as argument. In the case of WhiteList implementation,
+    // it must return whether or not the provider is in the "allowed" list.
     @Test
     public void testIsTargetAuthorized() throws ConfigurationErrorException {
         setUpBlackListWithDefaultLists();
@@ -71,9 +74,13 @@ public class WhiteListTest {
         Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsRequesterAndTarget));
         Assert.assertFalse(this.service.isTargetAuthorized(memberAuthorizedAsRequester));
         Assert.assertFalse(this.service.isTargetAuthorized(notMember1));
+        Assert.assertFalse(this.service.isTargetAuthorized(""));
     }
     
-    // TODO: documentation
+    // test case: When invoking the isRequesterAuthorized method, it must return
+    // whether or not the remote provider passed as argument is allowed to 
+    // perform local operations. In the case of WhiteList implementation,
+    // it must return whether or not the provider is in the "allowed" list.
     @Test
     public void testIsRequesterAuthorized() throws ConfigurationErrorException {
         setUpBlackListWithDefaultLists();
@@ -82,9 +89,11 @@ public class WhiteListTest {
         Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequester));
         Assert.assertFalse(this.service.isRequesterAuthorized(memberAuthorizedAsTarget));
         Assert.assertFalse(this.service.isRequesterAuthorized(notMember1));
+        Assert.assertFalse(this.service.isTargetAuthorized(""));
     }
     
-    // TODO: documentation
+    // test case: When invoking the isTargetAuthorized method on a WhiteList instance with empty
+    // allowed target lists, it must return false for all known members and false to unknown providers.
     @Test
     public void testIsTargetAuthorizedEmptyNotAllowedTargetsList() throws ConfigurationErrorException {
         setUpWhiteListWithEmptyAllowedTargetsList();
@@ -96,7 +105,8 @@ public class WhiteListTest {
         Assert.assertFalse(this.service.isTargetAuthorized(""));
     }
     
-    // TODO: documentation
+    // test case: When invoking the isRequesterAuthorized method on a WhiteList instance with empty
+    // allowed requester lists, it must return false for all known members and false to unknown providers.
     @Test
     public void testIsTargetAuthorizedEmptyNotAllowedRequestersList() throws ConfigurationErrorException {
         setUpWhiteListWithEmptyAllowedRequestersList();

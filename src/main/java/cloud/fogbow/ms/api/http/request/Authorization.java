@@ -14,6 +14,7 @@ import cloud.fogbow.ms.constants.ApiDocumentation;
 import cloud.fogbow.ms.constants.SystemConstants;
 import cloud.fogbow.ms.core.ApplicationFacade;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin
 @RestController
@@ -24,8 +25,7 @@ public class Authorization {
     public static final String TARGET_AUTHORIZED_ENDPOINT = AUTHORIZED_ENDPOINT + "/target";
     public static final String REQUESTER_AUTHORIZED_ENDPOINT = AUTHORIZED_ENDPOINT + "/requester";
     
-    // TODO create constant for target value
-    // TODO documentation
+    @ApiOperation(value = ApiDocumentation.Authorization.TARGET_OPERATION)
     @RequestMapping(value = "/target", method = RequestMethod.POST)
     public ResponseEntity<Authorized> isTargetAuthorized(
             @RequestBody Provider provider) {
@@ -33,8 +33,7 @@ public class Authorization {
         return new ResponseEntity<Authorized>(new Authorized(authorized), HttpStatus.OK);
     }
     
-    // TODO create constant for requester value
-    // TODO documentation
+    @ApiOperation(value = ApiDocumentation.Authorization.REQUESTER_OPERATION)
     @RequestMapping(value = "/requester", method = RequestMethod.POST)
     public ResponseEntity<Authorized> isRequesterAuthorized(
             @RequestBody Provider provider) {
