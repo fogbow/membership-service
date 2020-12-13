@@ -10,9 +10,9 @@ import cloud.fogbow.common.exceptions.ConfigurationErrorException;
 import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.ms.core.ApplicationFacade;
+import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PluginInstantiator;
 import cloud.fogbow.ms.core.PropertiesHolder;
-import cloud.fogbow.ms.core.plugins.AuthorizationPlugin;
 
 @Component
 public class Main implements ApplicationRunner {
@@ -26,8 +26,8 @@ public class Main implements ApplicationRunner {
             ServiceAsymmetricKeysHolder.getInstance().setPublicKeyFilePath(publicKeyFilePath);
             ServiceAsymmetricKeysHolder.getInstance().setPrivateKeyFilePath(privateKeyFilePath);
             
-            AuthorizationPlugin authorizationPlugin = PluginInstantiator.getAuthorizationPlugin();
-            ApplicationFacade.getInstance().setAuthorizationPlugin(authorizationPlugin);
+            MembershipService membershipService = PluginInstantiator.getMembershipService();
+            ApplicationFacade.getInstance().setMembershipService(membershipService);
             
         } catch (FatalErrorException errorException) {
             LOGGER.fatal(errorException.getMessage(), errorException);

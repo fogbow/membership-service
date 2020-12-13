@@ -23,6 +23,8 @@ public class ApiDocumentation {
     public static class Authorization {
         public static final String API = "States whether the provider is a member or not.";
         public static final String DESCRIPTION = "States whether the provider is a member or not.";
+        public static final String REQUESTER_OPERATION = "States whether the provider is allowed to perform operations in the local provider.";
+        public static final String TARGET_OPERATION = "States whether the local provider is allowed to perform operations in the given provider.";
     }
 
 }
