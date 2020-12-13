@@ -2,7 +2,7 @@ package cloud.fogbow.ms.core;
 
 import cloud.fogbow.common.exceptions.ConfigurationErrorException;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
-import cloud.fogbow.ms.core.service.WhiteList;
+import cloud.fogbow.ms.core.service.AllowList;
 
 public class PluginInstantiator {
     private static ClassFactory classFactory = new ClassFactory();
@@ -12,7 +12,7 @@ public class PluginInstantiator {
             String className = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MEMBERSHIP_SERVICE_CLASS_KEY);
             return (MembershipService) PluginInstantiator.classFactory.createPluginInstance(className);
         } else {
-            return new WhiteList();
+            return new AllowList();
         }
     }
         

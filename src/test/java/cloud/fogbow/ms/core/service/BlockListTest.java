@@ -18,7 +18,7 @@ import cloud.fogbow.ms.core.PropertiesHolder;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PropertiesHolder.class})
-public class BlackListTest {
+public class BlockListTest {
 
     private MembershipService service;
 
@@ -40,7 +40,7 @@ public class BlackListTest {
     // the configured membership in the file passed by parameter.
     @Test
     public void testListMembers() throws Exception {
-        setUpBlackListWithDefaultLists();
+        setUpBlockListWithDefaultLists();
         
         List<String> membersId = this.service.listMembers();
 
@@ -54,7 +54,7 @@ public class BlackListTest {
     // not the provider passed as argument is member, based on the configuration file.
     @Test
     public void testIsMember() throws ConfigurationErrorException {
-        setUpBlackListWithDefaultLists();
+        setUpBlockListWithDefaultLists();
         
         Assert.assertTrue(this.service.isMember(memberNotAuthorizedAsRequesterAndTarget));
         Assert.assertTrue(this.service.isMember(memberNotAuthorizedAsRequester));
@@ -65,11 +65,11 @@ public class BlackListTest {
     
     // test case: When invoking the isTargetAuthorized method, it must return 
     // whether or not local users are allowed to perform operations in the 
-    // remote provider passed as argument. In the case of BlackList implementation,
+    // remote provider passed as argument. In the case of BlockList implementation,
     // it must return whether or not the provider is in the "not-allowed" list.
     @Test
     public void testIsTargetAuthorized() throws ConfigurationErrorException {
-        setUpBlackListWithDefaultLists();
+        setUpBlockListWithDefaultLists();
         
         Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsTarget));
         Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsRequesterAndTarget));
@@ -80,11 +80,11 @@ public class BlackListTest {
     
     // test case: When invoking the isRequesterAuthorized method, it must return
     // whether or not the remote provider passed as argument is allowed to 
-    // perform local operations. In the case of BlackList implementation,
+    // perform local operations. In the case of BlockList implementation,
     // it must return whether or not the provider is in the "not-allowed" list.
     @Test
     public void testIsRequesterAuthorized() throws ConfigurationErrorException {
-        setUpBlackListWithDefaultLists();
+        setUpBlockListWithDefaultLists();
         
         Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequesterAndTarget));
         Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequester));
@@ -93,11 +93,11 @@ public class BlackListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(""));
     }
     
-    // test case: When invoking the isTargetAuthorized method on a BlackList instance with empty
+    // test case: When invoking the isTargetAuthorized method on a BlockList instance with empty
     // not allowed target lists, it must return true for all known members and false to unknown providers.
     @Test
     public void testIsTargetAuthorizedEmptyNotAllowedTargetsList() throws ConfigurationErrorException {
-        setUpBlackListWithEmptyNotAllowedTargetsList();
+        setUpBlockListWithEmptyNotAllowedTargetsList();
         
         Assert.assertTrue(this.service.isTargetAuthorized(memberNotAuthorizedAsTarget));
         Assert.assertTrue(this.service.isTargetAuthorized(memberNotAuthorizedAsRequesterAndTarget));
@@ -106,11 +106,11 @@ public class BlackListTest {
         Assert.assertFalse(this.service.isTargetAuthorized(""));
     }
     
-    // test case: When invoking the isRequesterAuthorized method on a BlackList instance with empty
+    // test case: When invoking the isRequesterAuthorized method on a BlockList instance with empty
     // not allowed requester lists, it must return true for all known members and false to unknown providers.
     @Test
     public void testIsTargetAuthorizedEmptyNotAllowedRequestersList() throws ConfigurationErrorException {
-        setUpBlackListWithEmptyNotAllowedRequestersList();
+        setUpBlockListWithEmptyNotAllowedRequestersList();
         
         Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
         Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequesterAndTarget));
@@ -119,7 +119,7 @@ public class BlackListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(""));
     }
     
-    private void setUpBlackList(String membersListString, String notAllowedRequestersListString, String notAllowedTargetsListString) throws ConfigurationErrorException {
+    private void setUpBlockList(String membersListString, String notAllowedRequestersListString, String notAllowedTargetsListString) throws ConfigurationErrorException {
         PowerMockito.mockStatic(PropertiesHolder.class);
         PropertiesHolder propertiesHolder = Mockito.mock(PropertiesHolder.class);
         Mockito.doReturn(membersListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
@@ -128,18 +128,18 @@ public class BlackListTest {
         
         BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
         
-        this.service = new BlackList();
+        this.service = new BlockList();
     }
     
-    private void setUpBlackListWithDefaultLists() throws ConfigurationErrorException {
-        setUpBlackList(membersListString, notAllowedRequestersList, notAllowedTargetsList);
+    private void setUpBlockListWithDefaultLists() throws ConfigurationErrorException {
+        setUpBlockList(membersListString, notAllowedRequestersList, notAllowedTargetsList);
     }
     
-    private void setUpBlackListWithEmptyNotAllowedTargetsList() throws ConfigurationErrorException {
-        setUpBlackList(membersListString, notAllowedRequestersList, emptyNotAllowedTargetsList);
+    private void setUpBlockListWithEmptyNotAllowedTargetsList() throws ConfigurationErrorException {
+        setUpBlockList(membersListString, notAllowedRequestersList, emptyNotAllowedTargetsList);
     }
     
-    private void setUpBlackListWithEmptyNotAllowedRequestersList() throws ConfigurationErrorException {
-        setUpBlackList(membersListString, emptyNotAllowedRequestersList, notAllowedTargetsList);
+    private void setUpBlockListWithEmptyNotAllowedRequestersList() throws ConfigurationErrorException {
+        setUpBlockList(membersListString, emptyNotAllowedRequestersList, notAllowedTargetsList);
     }
 }

@@ -9,7 +9,7 @@ import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PropertiesHolder;
 
-public class WhiteList implements MembershipService {
+public class AllowList implements MembershipService {
 
     private static final String SEPARATOR = ",";
 
@@ -17,7 +17,7 @@ public class WhiteList implements MembershipService {
     private List<String> authorizedTargetMembers;
     private List<String> authorizedRequesterMembers;
     
-    public WhiteList() throws ConfigurationErrorException {
+    public AllowList() throws ConfigurationErrorException {
         this.membersList = readMembers();
         this.authorizedTargetMembers = readAuthorizedTargetMembers();
         this.authorizedRequesterMembers = readAuthorizedRequesterMembers();

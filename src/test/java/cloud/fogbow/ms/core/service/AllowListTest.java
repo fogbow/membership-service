@@ -18,7 +18,7 @@ import cloud.fogbow.ms.core.PropertiesHolder;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PropertiesHolder.class})
-public class WhiteListTest {
+public class AllowListTest {
 
     private MembershipService service;
 
@@ -40,7 +40,7 @@ public class WhiteListTest {
     // the configured membership in the file passed by parameter.
     @Test
     public void testListMembers() throws Exception {
-        setUpBlackListWithDefaultLists();
+        setUpWhiteListWithDefaultLists();
         
         List<String> membersId = this.service.listMembers();
 
@@ -54,7 +54,7 @@ public class WhiteListTest {
     // not the provider passed as argument is member, based on the configuration file.
     @Test
     public void testIsMember() throws ConfigurationErrorException {
-        setUpBlackListWithDefaultLists();
+        setUpWhiteListWithDefaultLists();
         
         Assert.assertTrue(this.service.isMember(memberAuthorizedAsRequesterAndTarget));
         Assert.assertTrue(this.service.isMember(memberAuthorizedAsRequester));
@@ -64,11 +64,11 @@ public class WhiteListTest {
     
     // test case: When invoking the isTargetAuthorized method, it must return 
     // whether or not local users are allowed to perform operations in the 
-    // remote provider passed as argument. In the case of WhiteList implementation,
+    // remote provider passed as argument. In the case of AllowList implementation,
     // it must return whether or not the provider is in the "allowed" list.
     @Test
     public void testIsTargetAuthorized() throws ConfigurationErrorException {
-        setUpBlackListWithDefaultLists();
+        setUpWhiteListWithDefaultLists();
         
         Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsTarget));
         Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsRequesterAndTarget));
@@ -79,11 +79,11 @@ public class WhiteListTest {
     
     // test case: When invoking the isRequesterAuthorized method, it must return
     // whether or not the remote provider passed as argument is allowed to 
-    // perform local operations. In the case of WhiteList implementation,
+    // perform local operations. In the case of AllowList implementation,
     // it must return whether or not the provider is in the "allowed" list.
     @Test
     public void testIsRequesterAuthorized() throws ConfigurationErrorException {
-        setUpBlackListWithDefaultLists();
+        setUpWhiteListWithDefaultLists();
         
         Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequesterAndTarget));
         Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequester));
@@ -92,7 +92,7 @@ public class WhiteListTest {
         Assert.assertFalse(this.service.isTargetAuthorized(""));
     }
     
-    // test case: When invoking the isTargetAuthorized method on a WhiteList instance with empty
+    // test case: When invoking the isTargetAuthorized method on an AllowList instance with empty
     // allowed target lists, it must return false for all known members and false to unknown providers.
     @Test
     public void testIsTargetAuthorizedEmptyNotAllowedTargetsList() throws ConfigurationErrorException {
@@ -105,7 +105,7 @@ public class WhiteListTest {
         Assert.assertFalse(this.service.isTargetAuthorized(""));
     }
     
-    // test case: When invoking the isRequesterAuthorized method on a WhiteList instance with empty
+    // test case: When invoking the isRequesterAuthorized method on an AllowList instance with empty
     // allowed requester lists, it must return false for all known members and false to unknown providers.
     @Test
     public void testIsTargetAuthorizedEmptyNotAllowedRequestersList() throws ConfigurationErrorException {
@@ -127,10 +127,10 @@ public class WhiteListTest {
         
         BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
         
-        this.service = new WhiteList();
+        this.service = new AllowList();
     }
     
-    private void setUpBlackListWithDefaultLists() throws ConfigurationErrorException {
+    private void setUpWhiteListWithDefaultLists() throws ConfigurationErrorException {
         setUpWhiteList(membersListString, allowedRequestersList, allowedTargetsList);
     }
     

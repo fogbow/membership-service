@@ -9,7 +9,7 @@ import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PropertiesHolder;
 
-public class BlackList implements MembershipService {
+public class BlockList implements MembershipService {
 
     private static final String SEPARATOR = ",";
 
@@ -17,7 +17,7 @@ public class BlackList implements MembershipService {
     private List<String> notAuthorizedTargetMembers;
     private List<String> notAuthorizedRequesterMembers;
     
-    public BlackList() throws ConfigurationErrorException {
+    public BlockList() throws ConfigurationErrorException {
         this.membersList = readMembers();
         this.notAuthorizedTargetMembers = readNotAuthorizedTargetMembers();
         this.notAuthorizedRequesterMembers = readNotAuthorizedRequesterMembers();
