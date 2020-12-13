@@ -40,7 +40,7 @@ public class AllowListTest {
     // the configured membership in the file passed by parameter.
     @Test
     public void testListMembers() throws Exception {
-        setUpWhiteListWithDefaultLists();
+        setUpAllowListWithDefaultLists();
         
         List<String> membersId = this.service.listMembers();
 
@@ -54,7 +54,7 @@ public class AllowListTest {
     // not the provider passed as argument is member, based on the configuration file.
     @Test
     public void testIsMember() throws ConfigurationErrorException {
-        setUpWhiteListWithDefaultLists();
+        setUpAllowListWithDefaultLists();
         
         Assert.assertTrue(this.service.isMember(memberAuthorizedAsRequesterAndTarget));
         Assert.assertTrue(this.service.isMember(memberAuthorizedAsRequester));
@@ -68,7 +68,7 @@ public class AllowListTest {
     // it must return whether or not the provider is in the "allowed" list.
     @Test
     public void testIsTargetAuthorized() throws ConfigurationErrorException {
-        setUpWhiteListWithDefaultLists();
+        setUpAllowListWithDefaultLists();
         
         Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsTarget));
         Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsRequesterAndTarget));
@@ -83,7 +83,7 @@ public class AllowListTest {
     // it must return whether or not the provider is in the "allowed" list.
     @Test
     public void testIsRequesterAuthorized() throws ConfigurationErrorException {
-        setUpWhiteListWithDefaultLists();
+        setUpAllowListWithDefaultLists();
         
         Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequesterAndTarget));
         Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequester));
@@ -96,7 +96,7 @@ public class AllowListTest {
     // allowed target lists, it must return false for all known members and false to unknown providers.
     @Test
     public void testIsTargetAuthorizedEmptyNotAllowedTargetsList() throws ConfigurationErrorException {
-        setUpWhiteListWithEmptyAllowedTargetsList();
+        setUpAllowListWithEmptyAllowedTargetsList();
         
         Assert.assertFalse(this.service.isTargetAuthorized(memberAuthorizedAsTarget));
         Assert.assertFalse(this.service.isTargetAuthorized(memberAuthorizedAsRequesterAndTarget));
@@ -109,7 +109,7 @@ public class AllowListTest {
     // allowed requester lists, it must return false for all known members and false to unknown providers.
     @Test
     public void testIsTargetAuthorizedEmptyNotAllowedRequestersList() throws ConfigurationErrorException {
-        setUpWhiteListWithEmptyAllowedRequestersList();
+        setUpAllowListWithEmptyAllowedRequestersList();
         
         Assert.assertFalse(this.service.isRequesterAuthorized(memberAuthorizedAsTarget));
         Assert.assertFalse(this.service.isRequesterAuthorized(memberAuthorizedAsRequesterAndTarget));
@@ -118,7 +118,7 @@ public class AllowListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(""));
     }
     
-    private void setUpWhiteList(String membersListString, String allowedRequestersListString, String allowedTargetsListString) throws ConfigurationErrorException {
+    private void setUpAllowList(String membersListString, String allowedRequestersListString, String allowedTargetsListString) throws ConfigurationErrorException {
         PowerMockito.mockStatic(PropertiesHolder.class);
         PropertiesHolder propertiesHolder = Mockito.mock(PropertiesHolder.class);
         Mockito.doReturn(membersListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
@@ -130,15 +130,15 @@ public class AllowListTest {
         this.service = new AllowList();
     }
     
-    private void setUpWhiteListWithDefaultLists() throws ConfigurationErrorException {
-        setUpWhiteList(membersListString, allowedRequestersList, allowedTargetsList);
+    private void setUpAllowListWithDefaultLists() throws ConfigurationErrorException {
+        setUpAllowList(membersListString, allowedRequestersList, allowedTargetsList);
     }
     
-    private void setUpWhiteListWithEmptyAllowedTargetsList() throws ConfigurationErrorException {
-        setUpWhiteList(membersListString, allowedRequestersList, emptyAllowedTargetsList);
+    private void setUpAllowListWithEmptyAllowedTargetsList() throws ConfigurationErrorException {
+        setUpAllowList(membersListString, allowedRequestersList, emptyAllowedTargetsList);
     }
     
-    private void setUpWhiteListWithEmptyAllowedRequestersList() throws ConfigurationErrorException {
-        setUpWhiteList(membersListString, emptyAllowedRequestersList, allowedTargetsList);
+    private void setUpAllowListWithEmptyAllowedRequestersList() throws ConfigurationErrorException {
+        setUpAllowList(membersListString, emptyAllowedRequestersList, allowedTargetsList);
     }
 }
