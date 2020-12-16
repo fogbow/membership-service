@@ -25,4 +25,6 @@ public interface MembershipService {
     public boolean isTargetAuthorized(String provider);
 
     public boolean isRequesterAuthorized(String provider);
+
+	public void addMember(String provider);
 }

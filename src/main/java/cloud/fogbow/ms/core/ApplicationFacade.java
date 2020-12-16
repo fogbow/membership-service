@@ -88,6 +88,16 @@ public class ApplicationFacade {
     	this.authorizationPlugin = authorizationPlugin;
     }
     
+    public void addProvider(String userToken, String provider) throws FogbowException {
+    	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
+    	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
+    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+    	
+    	setAsReloading();
+    	this.membershipService.addMember(provider);
+    	finishReloading();
+    }
+    
     public void reload(String userToken) throws FogbowException {
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
