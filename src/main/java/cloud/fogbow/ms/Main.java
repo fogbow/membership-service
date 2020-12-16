@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.ConfigurationErrorException;
 import cloud.fogbow.common.exceptions.FatalErrorException;
+import cloud.fogbow.common.plugins.authorization.AuthorizationPlugin;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.ms.core.ApplicationFacade;
 import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PluginInstantiator;
 import cloud.fogbow.ms.core.PropertiesHolder;
+import cloud.fogbow.ms.core.authorization.AdminOperation;
 
 @Component
 public class Main implements ApplicationRunner {
@@ -26,8 +28,11 @@ public class Main implements ApplicationRunner {
             ServiceAsymmetricKeysHolder.getInstance().setPublicKeyFilePath(publicKeyFilePath);
             ServiceAsymmetricKeysHolder.getInstance().setPrivateKeyFilePath(privateKeyFilePath);
             
+            AuthorizationPlugin<AdminOperation> authorizationPlugin = PluginInstantiator.getAuthorizationPlugin();
             MembershipService membershipService = PluginInstantiator.getMembershipService();
+            
             ApplicationFacade.getInstance().setMembershipService(membershipService);
+            ApplicationFacade.getInstance().setAuthorizationPlugin(authorizationPlugin);
             
         } catch (FatalErrorException errorException) {
             LOGGER.fatal(errorException.getMessage(), errorException);

@@ -39,4 +39,8 @@ public class PropertiesHolder {
     public Properties getProperties() {
         return this.properties;
     }
+    
+    public static synchronized void reset() {
+        instance = null;
+    }
 }

@@ -1,6 +1,7 @@
 package cloud.fogbow.ms.constants;
 
 public class ConfigurationPropertyKeys {
+	public static final String ADMINS_IDS = "admins_ids";
     public static final String AS_PORT_KEY = "as_port";
     public static final String AS_URL_KEY = "as_url";
     public static final String AUTHORIZATION_PLUGIN_CLASS_KEY = "authorization_plugin_class";
