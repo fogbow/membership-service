@@ -205,6 +205,20 @@ public class AllowListTest {
         this.service.addTarget(notMember1);
     }
     
+    // TODO add documentation   
+    @Test(expected = ConfigurationErrorException.class)
+    public void testAddingDuplicateTargetMustFail() throws Exception {
+    	setUpAllowListWithTargetListBeforeAdd();
+    	
+    	try {
+	        this.service.addTarget(memberAuthorizedAsTarget);
+		} catch (Exception e) {
+			Assert.fail("This call should not throw exception.");
+		}
+        
+        this.service.addTarget(memberAuthorizedAsTarget);
+    }
+    
     // TODO add documentation
     @Test
     public void testAddRequester() throws ConfigurationErrorException {
@@ -236,6 +250,20 @@ public class AllowListTest {
     	setUpAllowListWithRequesterListBeforeAdd();
         
         this.service.addRequester(notMember1);
+    }
+    
+    // TODO add documentation   
+    @Test(expected = ConfigurationErrorException.class)
+    public void testAddingDuplicateRequesterMustFail() throws Exception {
+    	setUpAllowListWithRequesterListBeforeAdd();
+        
+    	try {
+    		this.service.addRequester(memberAuthorizedAsRequester);
+    	} catch (Exception e) {
+    		Assert.fail("This call should not throw exception.");
+    	}
+    	
+        this.service.addRequester(memberAuthorizedAsRequester);
     }
     
     // TODO add documentation

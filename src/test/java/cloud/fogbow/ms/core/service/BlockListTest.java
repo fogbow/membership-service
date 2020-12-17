@@ -176,7 +176,7 @@ public class BlockListTest {
     // TODO add documentation
     @Test
     public void testAddTarget() throws Exception {
-    	setUpBlockListWithTargetListToBeUpdated();
+    	setUpBlockListWithTargetListBeforeAdd();
     	
         Assert.assertTrue(this.service.isTargetAuthorized(memberNotAuthorizedAsTarget));
         Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsRequesterAndTarget));
@@ -200,15 +200,29 @@ public class BlockListTest {
     // TODO add documentation
     @Test(expected = ConfigurationErrorException.class)
     public void testAddNotKnownTargetMustFail() throws Exception {
-    	setUpBlockListWithTargetListToBeUpdated();
+    	setUpBlockListWithTargetListBeforeAdd();
     	
         this.service.addTarget(notMember1);
+    }
+    
+    // TODO add documentation   
+    @Test(expected = ConfigurationErrorException.class)
+    public void testAddingDuplicateTargetMustFail() throws Exception {
+    	setUpBlockListWithTargetListBeforeAdd();
+	    
+    	try {	
+	        this.service.addTarget(memberNotAuthorizedAsTarget);
+		} catch (Exception e) {
+			Assert.fail("This call should not throw exception.");
+		}
+        
+        this.service.addTarget(memberNotAuthorizedAsTarget);
     }
     
     // TODO add documentation
     @Test
     public void testAddRequester() throws ConfigurationErrorException {
-    	setUpBlockListWithRequesterListToBeUpdated();
+    	setUpBlockListWithRequesterListBeforeAdd();
     	
         Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
         Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequesterAndTarget));
@@ -232,9 +246,23 @@ public class BlockListTest {
     // TODO add documentation
     @Test(expected = ConfigurationErrorException.class)
     public void testAddingNotKnownRequesterMustFail() throws Exception {
-    	setUpBlockListWithRequesterListToBeUpdated();
+    	setUpBlockListWithRequesterListBeforeAdd();
         
         this.service.addRequester(notMember1);
+    }
+    
+    // TODO add documentation   
+    @Test(expected = ConfigurationErrorException.class)
+    public void testAddingDuplicateRequesterMustFail() throws Exception {
+    	setUpBlockListWithRequesterListBeforeAdd();
+	    
+    	try {   
+	        this.service.addRequester(memberNotAuthorizedAsRequester);
+		} catch (Exception e) {
+			Assert.fail("This call should not throw exception.");
+		}
+        
+        this.service.addRequester(memberNotAuthorizedAsRequester);
     }
 
     // TODO add documentation
@@ -341,11 +369,11 @@ public class BlockListTest {
         setUpBlockList(membersListString, emptyNotAllowedRequestersList, notAllowedTargetsList);
     }
     
-    private void setUpBlockListWithTargetListToBeUpdated() throws ConfigurationErrorException {
+    private void setUpBlockListWithTargetListBeforeAdd() throws ConfigurationErrorException {
     	setUpBlockList(membersListString, notAllowedRequestersList, targetsListBeforeAdd);
     }
     
-    private void setUpBlockListWithRequesterListToBeUpdated() throws ConfigurationErrorException {
+    private void setUpBlockListWithRequesterListBeforeAdd() throws ConfigurationErrorException {
     	setUpBlockList(membersListString, requestersListBeforeAdd, notAllowedTargetsList);
     }
     

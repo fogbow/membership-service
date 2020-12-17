@@ -45,7 +45,6 @@ public abstract class MembershipListService implements MembershipService {
                 member = member.trim();
                 
                 checkProviderIsMember(member);
-                
                 authorizedTargetMembers.add(member);
             }
         }
@@ -94,25 +93,26 @@ public abstract class MembershipListService implements MembershipService {
 	@Override
 	public void addTarget(String provider) throws ConfigurationErrorException {
         checkProviderIsMember(provider);
-        // TODO must check duplicate providers
-        targetMembers.add(provider);
         
-        String newTargetMembersList = String.join(SEPARATOR, targetMembers);
-    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, 
-    			newTargetMembersList);
-    	PropertiesHolder.getInstance().updatePropertiesFile();
+        if (targetMembers.contains(provider)) {
+        	throw new ConfigurationErrorException(Messages.Exception.PROVIDER_IS_ALREADY_A_TARGET);
+        }
+        
+        targetMembers.add(provider);
+        updateTargetsListOnPropertiesFile();
     }
+
     
 	@Override
 	public void addRequester(String provider) throws ConfigurationErrorException {
         checkProviderIsMember(provider);
-        // TODO must check duplicate providers
-        requesterMembers.add(provider);
         
-        String newRequesterMembersList = String.join(SEPARATOR, requesterMembers);
-    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, 
-    			newRequesterMembersList);
-    	PropertiesHolder.getInstance().updatePropertiesFile();
+        if (requesterMembers.contains(provider)) {
+        	throw new ConfigurationErrorException(Messages.Exception.PROVIDER_IS_ALREADY_A_REQUESTER);
+        }
+        
+        requesterMembers.add(provider);
+        updateRequestersListOnPropertiesFile();
     }
 	
 	@Override
@@ -122,11 +122,7 @@ public abstract class MembershipListService implements MembershipService {
 		}
 		
 		targetMembers.remove(provider);
-		
-        String newTargetMembersList = String.join(SEPARATOR, targetMembers);
-    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, 
-    			newTargetMembersList);
-    	PropertiesHolder.getInstance().updatePropertiesFile();
+        updateTargetsListOnPropertiesFile();
 	}
 
 	@Override
@@ -136,8 +132,18 @@ public abstract class MembershipListService implements MembershipService {
 		}
 		
 		requesterMembers.remove(provider);
-		
-        String newRequesterMembersList = String.join(SEPARATOR, requesterMembers);
+        updateRequestersListOnPropertiesFile();
+	}
+	
+	private void updateTargetsListOnPropertiesFile() {
+		String newTargetMembersList = String.join(SEPARATOR, targetMembers);
+    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, 
+    			newTargetMembersList);
+    	PropertiesHolder.getInstance().updatePropertiesFile();
+	}
+	
+	private void updateRequestersListOnPropertiesFile() {
+		String newRequesterMembersList = String.join(SEPARATOR, requesterMembers);
     	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, 
     			newRequesterMembersList);
     	PropertiesHolder.getInstance().updatePropertiesFile();
