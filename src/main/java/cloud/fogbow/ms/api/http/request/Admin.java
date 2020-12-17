@@ -35,12 +35,22 @@ public class Admin {
     }
     
     // TODO documentation
-    @RequestMapping(value = "/addprovider", method = RequestMethod.POST)
+    @RequestMapping(value = "/provider", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addProvider(
     				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
     				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
     				@RequestBody Provider provider) throws FogbowException {
     	ApplicationFacade.getInstance().addProvider(systemUserToken, provider.getProvider());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    // TODO documentation
+    @RequestMapping(value = "/provider", method = RequestMethod.DELETE)
+    public ResponseEntity<Boolean> removeProvider(
+    				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
+    				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
+    				@RequestBody Provider provider) throws FogbowException {
+    	ApplicationFacade.getInstance().removeProvider(systemUserToken, provider.getProvider());
         return new ResponseEntity<>(HttpStatus.OK);
     }
     

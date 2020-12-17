@@ -89,6 +89,28 @@ public abstract class MembershipListService implements MembershipService {
     			newMembersString);
     	PropertiesHolder.getInstance().updatePropertiesFile();
     }
+    
+	@Override
+	public void removeMember(String provider) throws ConfigurationErrorException {
+		checkProviderIsMember(provider);
+		
+		targetMembers.remove(provider);
+		requesterMembers.remove(provider);
+		membersList.remove(provider);
+		
+		String newTargetMembersList = String.join(SEPARATOR, targetMembers);
+		String newRequesterMembersList = String.join(SEPARATOR, requesterMembers);
+		String newMembersString = String.join(SEPARATOR, membersList);
+		
+    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, 
+    			newTargetMembersList);
+    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, 
+    			newRequesterMembersList);
+    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, 
+    			newMembersString);
+    	
+    	PropertiesHolder.getInstance().updatePropertiesFile();
+	}
 
 	@Override
 	public void addTarget(String provider) throws ConfigurationErrorException {
@@ -102,7 +124,6 @@ public abstract class MembershipListService implements MembershipService {
         updateTargetsListOnPropertiesFile();
     }
 
-    
 	@Override
 	public void addRequester(String provider) throws ConfigurationErrorException {
         checkProviderIsMember(provider);

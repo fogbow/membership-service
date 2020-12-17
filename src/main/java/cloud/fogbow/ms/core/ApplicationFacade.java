@@ -103,6 +103,21 @@ public class ApplicationFacade {
     	}
     }
     
+	public void removeProvider(String userToken, String provider) throws FogbowException {
+    	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
+    	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
+    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+		
+    	// TODO add logging
+    	setAsReloading();
+    	
+    	try {
+    		this.membershipService.removeMember(provider);
+    	} finally {
+    		finishReloading();    		
+    	}
+	}
+    
 	public void addTargetProvider(String userToken, String provider) throws FogbowException {
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);

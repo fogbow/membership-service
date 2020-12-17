@@ -175,6 +175,60 @@ public class AllowListTest {
     
     // TODO add documentation
     @Test
+    public void testRemoveMember() throws Exception {
+    	setUpAllowListWithDefaultLists();
+    	
+    	List<String> membersId = this.service.listMembers();
+    	
+        // verify before removing member
+        Assert.assertEquals(3, membersId.size());
+        Assert.assertTrue(membersId.contains(memberAuthorizedAsRequesterAndTarget));
+        Assert.assertTrue(membersId.contains(memberAuthorizedAsRequester));
+        Assert.assertTrue(membersId.contains(memberAuthorizedAsTarget));
+        Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsTarget));
+        Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsRequesterAndTarget));
+        Assert.assertFalse(this.service.isTargetAuthorized(memberAuthorizedAsRequester));
+        Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequesterAndTarget));
+        Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequester));
+        Assert.assertFalse(this.service.isRequesterAuthorized(memberAuthorizedAsTarget));
+    	
+    	this.service.removeMember(memberAuthorizedAsRequesterAndTarget);
+    	
+    	// verify configuration is update
+    	String updatedMembersListString = String.join(",", memberAuthorizedAsRequester, memberAuthorizedAsTarget);
+    	String updatedRequestersList = memberAuthorizedAsRequester;
+    	String updatedTargetsList = memberAuthorizedAsTarget;
+    	
+    	Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, updatedTargetsList);
+    	Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, 
+    			updatedRequestersList);
+    	Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, updatedMembersListString);
+    	Mockito.verify(propertiesHolder, Mockito.times(1)).updatePropertiesFile();
+    	
+        List<String> updateMembersId = this.service.listMembers();
+
+        // verify after removing member
+        Assert.assertEquals(2, membersId.size());
+        Assert.assertTrue(updateMembersId.contains(memberAuthorizedAsRequester));
+        Assert.assertTrue(updateMembersId.contains(memberAuthorizedAsTarget));
+        Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsTarget));
+        Assert.assertFalse(this.service.isTargetAuthorized(memberAuthorizedAsRequesterAndTarget));
+        Assert.assertFalse(this.service.isTargetAuthorized(memberAuthorizedAsRequester));
+        Assert.assertFalse(this.service.isRequesterAuthorized(memberAuthorizedAsRequesterAndTarget));
+        Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequester));
+        Assert.assertFalse(this.service.isRequesterAuthorized(memberAuthorizedAsTarget));
+    }
+    
+    // TODO add documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void testRemovingNotKnownMemberMustFail() throws ConfigurationErrorException {
+    	setUpAllowListWithDefaultLists();
+    	
+    	this.service.removeMember(notMember1);
+    }
+    
+    // TODO add documentation
+    @Test
     public void testAddTarget() throws Exception {
     	setUpAllowListWithTargetListBeforeAdd();
     	

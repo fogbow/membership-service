@@ -175,6 +175,60 @@ public class BlockListTest {
     
     // TODO add documentation
     @Test
+    public void testRemoveMember() throws Exception {
+    	setUpBlockListWithDefaultLists();
+    	
+        String updatedMembersListString = String.join(",", memberNotAuthorizedAsRequester, memberNotAuthorizedAsTarget);
+        String updatedRequestersList = memberNotAuthorizedAsRequester;
+        String updatedTargetsList = memberNotAuthorizedAsTarget;
+    	
+    	List<String> membersId = this.service.listMembers();
+    	
+        // verify before removing member
+        Assert.assertEquals(3, membersId.size());
+        Assert.assertTrue(membersId.contains(memberNotAuthorizedAsRequesterAndTarget));
+        Assert.assertTrue(membersId.contains(memberNotAuthorizedAsRequester));
+        Assert.assertTrue(membersId.contains(memberNotAuthorizedAsTarget));
+        Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsTarget));
+        Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsRequesterAndTarget));
+        Assert.assertTrue(this.service.isTargetAuthorized(memberNotAuthorizedAsRequester));
+        Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequesterAndTarget));
+        Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequester));
+        Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
+    	
+    	this.service.removeMember(memberNotAuthorizedAsRequesterAndTarget);
+    	
+    	// verify configuration is update
+    	Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, updatedTargetsList);
+    	Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, 
+    			updatedRequestersList);
+    	Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, updatedMembersListString);
+    	Mockito.verify(propertiesHolder, Mockito.times(1)).updatePropertiesFile();
+    	
+        List<String> updateMembersId = this.service.listMembers();
+
+        // verify after removing member
+        Assert.assertEquals(2, membersId.size());
+        Assert.assertTrue(updateMembersId.contains(memberNotAuthorizedAsRequester));
+        Assert.assertTrue(updateMembersId.contains(memberNotAuthorizedAsTarget));
+        Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsTarget));
+        Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsRequesterAndTarget));
+        Assert.assertTrue(this.service.isTargetAuthorized(memberNotAuthorizedAsRequester));
+        Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequesterAndTarget));
+        Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequester));
+        Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
+    }
+    
+    // TODO add documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void testRemovingNotKnownMemberMustFail() throws ConfigurationErrorException {
+    	setUpBlockListWithDefaultLists();
+    	
+    	this.service.removeMember(notMember1);
+    }
+    
+    // TODO add documentation
+    @Test
     public void testAddTarget() throws Exception {
     	setUpBlockListWithTargetListBeforeAdd();
     	
