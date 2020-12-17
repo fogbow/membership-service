@@ -45,7 +45,7 @@ public class Admin {
     }
     
     // TODO documentation
-    @RequestMapping(value = "/addtarget", method = RequestMethod.POST)
+    @RequestMapping(value = "/target", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addTarget(
     				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
     				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
@@ -55,7 +55,7 @@ public class Admin {
     }
     
     // TODO documentation
-    @RequestMapping(value = "/addrequester", method = RequestMethod.POST)
+    @RequestMapping(value = "/requester", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addRequester(
     				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
     				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
@@ -64,4 +64,24 @@ public class Admin {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
+    // TODO documentation
+    @RequestMapping(value = "/target", method = RequestMethod.DELETE)
+    public ResponseEntity<Boolean> removeTarget(
+    				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
+    				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
+    				@RequestBody Provider provider) throws FogbowException {
+    	ApplicationFacade.getInstance().removeTargetProvider(systemUserToken, provider.getProvider());
+    	// ApplicationFacade.getInstance().addTargetProvider(systemUserToken, provider.getProvider());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    // TODO documentation
+    @RequestMapping(value = "/requester", method = RequestMethod.DELETE)
+    public ResponseEntity<Boolean> removeRequester(
+    				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
+    				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
+    				@RequestBody Provider provider) throws FogbowException {
+    	ApplicationFacade.getInstance().removeRequesterProvider(systemUserToken, provider.getProvider());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

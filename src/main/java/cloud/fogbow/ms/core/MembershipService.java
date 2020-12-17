@@ -33,4 +33,8 @@ public interface MembershipService {
 	public void addTarget(String provider) throws ConfigurationErrorException;
 
 	public void addRequester(String provider) throws ConfigurationErrorException;
+
+	public void removeTarget(String provider) throws ConfigurationErrorException;
+
+	public void removeRequester(String provider) throws ConfigurationErrorException;
 }

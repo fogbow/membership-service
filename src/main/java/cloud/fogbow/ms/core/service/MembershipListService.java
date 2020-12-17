@@ -16,7 +16,12 @@ public abstract class MembershipListService implements MembershipService {
     protected List<String> membersList;
     protected List<String> targetMembers;
     protected List<String> requesterMembers;
-	
+
+    public abstract List<String> listMembers() throws Exception;
+    public abstract boolean isMember(String provider);
+    public abstract boolean isTargetAuthorized(String provider);
+    public abstract boolean isRequesterAuthorized(String provider);
+    
     protected List<String> readMembers() {
         List<String> membersList = new ArrayList<>();
 
@@ -89,6 +94,7 @@ public abstract class MembershipListService implements MembershipService {
 	@Override
 	public void addTarget(String provider) throws ConfigurationErrorException {
         checkProviderIsMember(provider);
+        // TODO must check duplicate providers
         targetMembers.add(provider);
         
         String newTargetMembersList = String.join(SEPARATOR, targetMembers);
@@ -100,6 +106,7 @@ public abstract class MembershipListService implements MembershipService {
 	@Override
 	public void addRequester(String provider) throws ConfigurationErrorException {
         checkProviderIsMember(provider);
+        // TODO must check duplicate providers
         requesterMembers.add(provider);
         
         String newRequesterMembersList = String.join(SEPARATOR, requesterMembers);
@@ -107,5 +114,33 @@ public abstract class MembershipListService implements MembershipService {
     			newRequesterMembersList);
     	PropertiesHolder.getInstance().updatePropertiesFile();
     }
+	
+	@Override
+	public void removeTarget(String provider) throws ConfigurationErrorException {
+		if (!targetMembers.contains(provider)) {
+			throw new ConfigurationErrorException(Messages.Exception.MEMBER_IS_NOT_TARGET);
+		}
+		
+		targetMembers.remove(provider);
+		
+        String newTargetMembersList = String.join(SEPARATOR, targetMembers);
+    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, 
+    			newTargetMembersList);
+    	PropertiesHolder.getInstance().updatePropertiesFile();
+	}
+
+	@Override
+	public void removeRequester(String provider) throws ConfigurationErrorException {
+		if (!requesterMembers.contains(provider)) {
+			throw new ConfigurationErrorException(Messages.Exception.MEMBER_IS_NOT_REQUESTER);
+		}
+		
+		requesterMembers.remove(provider);
+		
+        String newRequesterMembersList = String.join(SEPARATOR, requesterMembers);
+    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, 
+    			newRequesterMembersList);
+    	PropertiesHolder.getInstance().updatePropertiesFile();
+	}
 
 }
