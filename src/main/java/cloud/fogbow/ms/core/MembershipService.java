@@ -28,7 +28,7 @@ public interface MembershipService {
 
     public boolean isRequesterAuthorized(String provider);
 
-	public void addMember(String provider);
+	public void addMember(String provider) throws ConfigurationErrorException;
 
 	public void addTarget(String provider) throws ConfigurationErrorException;
 

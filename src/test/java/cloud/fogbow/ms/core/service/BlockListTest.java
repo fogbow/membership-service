@@ -49,6 +49,8 @@ public class BlockListTest {
     private String emptyNotAllowedTargetsList = "";
     private String emptyNotAllowedRequestersList = "";
 
+    private PropertiesHolder propertiesHolder;
+    
     // test case: When invoking the listMembers method from an instance created with
     // the MembershipService class constructor with a valid parameter, it must list
     // the configured membership in the file passed by parameter.
@@ -136,15 +138,7 @@ public class BlockListTest {
     // TODO add documentation
     @Test
     public void testAddMember() throws Exception {
-        PowerMockito.mockStatic(PropertiesHolder.class);
-        PropertiesHolder propertiesHolder = Mockito.mock(PropertiesHolder.class);
-        Mockito.doReturn(membersListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
-        Mockito.doReturn(notAllowedRequestersList).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY);
-        Mockito.doReturn(notAllowedTargetsList).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY);
-        
-        BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
-    	
-    	this.service = new BlockList();
+    	setUpBlockListWithDefaultLists();
     	
     	List<String> membersId = this.service.listMembers();
     	
@@ -174,15 +168,7 @@ public class BlockListTest {
     // TODO add documentation
     @Test
     public void testAddTarget() throws Exception {
-        PowerMockito.mockStatic(PropertiesHolder.class);
-        PropertiesHolder propertiesHolder = Mockito.mock(PropertiesHolder.class);
-        Mockito.doReturn(membersListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
-        Mockito.doReturn(notAllowedRequestersList).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY);
-        Mockito.doReturn(targetsListToBeUpdated).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY);
-        
-        BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
-    	
-    	this.service = new BlockList();
+    	setUpBlockListWithTargetListToBeUpdated();
     	
         Assert.assertTrue(this.service.isTargetAuthorized(memberNotAuthorizedAsTarget));
         Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsRequesterAndTarget));
@@ -206,31 +192,15 @@ public class BlockListTest {
     // TODO add documentation
     @Test(expected = ConfigurationErrorException.class)
     public void testAddNotKnownTargetMustFail() throws Exception {
-        PowerMockito.mockStatic(PropertiesHolder.class);
-        PropertiesHolder propertiesHolder = Mockito.mock(PropertiesHolder.class);
-        Mockito.doReturn(membersListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
-        Mockito.doReturn(notAllowedRequestersList).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY);
-        Mockito.doReturn(targetsListToBeUpdated).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY);
-        
-        BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
+    	setUpBlockListWithTargetListToBeUpdated();
     	
-    	this.service = new BlockList();
-        
         this.service.addTarget(notMember1);
     }
     
     // TODO add documentation
     @Test
     public void testAddRequester() throws ConfigurationErrorException {
-        PowerMockito.mockStatic(PropertiesHolder.class);
-        PropertiesHolder propertiesHolder = Mockito.mock(PropertiesHolder.class);
-        Mockito.doReturn(membersListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
-        Mockito.doReturn(requestersListToBeUpdated).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY);
-        Mockito.doReturn(notAllowedTargetsList).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY);
-        
-        BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
-    	
-    	this.service = new BlockList();
+    	setUpBlockListWithRequesterListToBeUpdated();
     	
         Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
         Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequesterAndTarget));
@@ -254,27 +224,19 @@ public class BlockListTest {
     // TODO add documentation
     @Test(expected = ConfigurationErrorException.class)
     public void testAddingNotKnownRequesterMustFail() throws Exception {
-        PowerMockito.mockStatic(PropertiesHolder.class);
-        PropertiesHolder propertiesHolder = Mockito.mock(PropertiesHolder.class);
-        Mockito.doReturn(membersListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
-        Mockito.doReturn(requestersListToBeUpdated).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY);
-        Mockito.doReturn(notAllowedTargetsList).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY);
-        
-        BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
-    	
-    	this.service = new BlockList();
+    	setUpBlockListWithRequesterListToBeUpdated();
         
         this.service.addRequester(notMember1);
     }
     
     private void setUpBlockList(String membersListString, String notAllowedRequestersListString, String notAllowedTargetsListString) throws ConfigurationErrorException {
         PowerMockito.mockStatic(PropertiesHolder.class);
-        PropertiesHolder propertiesHolder = Mockito.mock(PropertiesHolder.class);
-        Mockito.doReturn(membersListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
-        Mockito.doReturn(notAllowedRequestersListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY);
-        Mockito.doReturn(notAllowedTargetsListString).when(propertiesHolder).getProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY);
+        this.propertiesHolder = Mockito.mock(PropertiesHolder.class);
+        Mockito.doReturn(membersListString).when(this.propertiesHolder).getProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY);
+        Mockito.doReturn(notAllowedRequestersListString).when(this.propertiesHolder).getProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY);
+        Mockito.doReturn(notAllowedTargetsListString).when(this.propertiesHolder).getProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY);
         
-        BDDMockito.given(PropertiesHolder.getInstance()).willReturn(propertiesHolder);
+        BDDMockito.given(PropertiesHolder.getInstance()).willReturn(this.propertiesHolder);
         
         this.service = new BlockList();
     }
@@ -289,5 +251,13 @@ public class BlockListTest {
     
     private void setUpBlockListWithEmptyNotAllowedRequestersList() throws ConfigurationErrorException {
         setUpBlockList(membersListString, emptyNotAllowedRequestersList, notAllowedTargetsList);
+    }
+    
+    private void setUpBlockListWithTargetListToBeUpdated() throws ConfigurationErrorException {
+    	setUpBlockList(membersListString, notAllowedRequestersList, targetsListToBeUpdated);
+    }
+    
+    private void setUpBlockListWithRequesterListToBeUpdated() throws ConfigurationErrorException {
+    	setUpBlockList(membersListString, requestersListToBeUpdated, notAllowedTargetsList);
     }
 }

@@ -146,28 +146,30 @@ public class ApplicationFacade {
 	private void doReload() throws ConfigurationErrorException {
 		setAsReloading();
 		
-        while (this.onGoingRequests != 0) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-		
-        // TODO add logging
-		PropertiesHolder.reset();
-        MSPublicKeysHolder.reset();
-        
-        // TODO add logging
-        String publicKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PUBLIC_KEY_FILE_PATH);
-        String privateKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PRIVATE_KEY_FILE_PATH);
-        ServiceAsymmetricKeysHolder.reset(publicKeyFilePath, privateKeyFilePath);
-		
-        // TODO add logging
-		this.authorizationPlugin = PluginInstantiator.getAuthorizationPlugin();
-		this.membershipService = PluginInstantiator.getMembershipService();
-		
-		finishReloading();
+		try {
+	        while (this.onGoingRequests != 0) {
+	            try {
+	                Thread.sleep(10);
+	            } catch (InterruptedException e) {
+	                e.printStackTrace();
+	            }
+	        }
+			
+	        // TODO add logging
+			PropertiesHolder.reset();
+	        MSPublicKeysHolder.reset();
+	        
+	        // TODO add logging
+	        String publicKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PUBLIC_KEY_FILE_PATH);
+	        String privateKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PRIVATE_KEY_FILE_PATH);
+	        ServiceAsymmetricKeysHolder.reset(publicKeyFilePath, privateKeyFilePath);
+			
+	        // TODO add logging
+			this.authorizationPlugin = PluginInstantiator.getAuthorizationPlugin();
+			this.membershipService = PluginInstantiator.getMembershipService();
+		} finally {
+			finishReloading();
+		}
 	}
 	
     private void setAsReloading() {
