@@ -44,4 +44,24 @@ public class Admin {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
+    // TODO documentation
+    @RequestMapping(value = "/addtarget", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> addTarget(
+    				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
+    				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
+    				@RequestBody Provider provider) throws FogbowException {
+    	ApplicationFacade.getInstance().addTargetProvider(systemUserToken, provider.getProvider());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    // TODO documentation
+    @RequestMapping(value = "/addrequester", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> addRequester(
+    				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
+    				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
+    				@RequestBody Provider provider) throws FogbowException {
+    	ApplicationFacade.getInstance().addRequesterProvider(systemUserToken, provider.getProvider());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
 }

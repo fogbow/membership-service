@@ -81,5 +81,37 @@ public abstract class MembershipListService implements MembershipService {
     	
     	PropertiesHolder.getInstance().updatePropertiesFile();
     }
+    
+    protected void addTargetMember(String provider, String targetMembersListPropertyKey) throws ConfigurationErrorException {
+    	
+        if (!this.membersList.contains(provider)) {
+            throw new ConfigurationErrorException(Messages.Exception.INVALID_MEMBER_NAME);
+        }
+        
+        targetMembers.add(provider);
+        
+        String newTargetMembersList = String.join(SEPARATOR, targetMembers);
+        
+    	PropertiesHolder.getInstance().setProperty(targetMembersListPropertyKey, 
+    			newTargetMembersList);
+    	
+    	PropertiesHolder.getInstance().updatePropertiesFile();
+    }
+    
+    protected void addRequesterMember(String provider, String requesterMembersListPropertyKey) throws ConfigurationErrorException {
+    	
+        if (!this.membersList.contains(provider)) {
+            throw new ConfigurationErrorException(Messages.Exception.INVALID_MEMBER_NAME);
+        }
+        
+        requesterMembers.add(provider);
+        
+        String newRequesterMembersList = String.join(SEPARATOR, requesterMembers);
+        
+    	PropertiesHolder.getInstance().setProperty(requesterMembersListPropertyKey, 
+    			newRequesterMembersList);
+    	
+    	PropertiesHolder.getInstance().updatePropertiesFile();
+    }
 
 }

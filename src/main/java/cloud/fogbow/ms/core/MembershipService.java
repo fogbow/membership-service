@@ -2,6 +2,8 @@ package cloud.fogbow.ms.core;
 
 import java.util.List;
 
+import cloud.fogbow.common.exceptions.ConfigurationErrorException;
+
 public interface MembershipService {
 
     /**
@@ -27,4 +29,8 @@ public interface MembershipService {
     public boolean isRequesterAuthorized(String provider);
 
 	public void addMember(String provider);
+
+	public void addTarget(String provider) throws ConfigurationErrorException;
+
+	public void addRequester(String provider) throws ConfigurationErrorException;
 }

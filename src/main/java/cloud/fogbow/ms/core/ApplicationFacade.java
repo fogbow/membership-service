@@ -93,10 +93,47 @@ public class ApplicationFacade {
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
     	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
     	
+    	// TODO add logging
     	setAsReloading();
-    	this.membershipService.addMember(provider);
-    	finishReloading();
+    	
+    	try {
+    		this.membershipService.addMember(provider);
+    	} finally {
+    		finishReloading();    		
+    	}
     }
+    
+	public void addTargetProvider(String userToken, String provider) throws FogbowException {
+    	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
+    	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
+    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+		
+    	// TODO add logging
+    	setAsReloading();
+    	
+    	try {
+    		this.membershipService.addTarget(provider);
+    	} finally {
+    		finishReloading();    		
+    	}
+    	
+	}
+
+	public void addRequesterProvider(String userToken, String provider) throws FogbowException {
+    	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
+    	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
+    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+		
+    	// TODO add logging
+    	setAsReloading();
+    	
+    	try {
+    		this.membershipService.addRequester(provider);
+    	} finally {
+    		finishReloading();    		
+    	}
+		
+	}
     
     public void reload(String userToken) throws FogbowException {
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
@@ -152,4 +189,5 @@ public class ApplicationFacade {
     private synchronized void finishOperation() {
         this.onGoingRequests--;
     }
+
 }

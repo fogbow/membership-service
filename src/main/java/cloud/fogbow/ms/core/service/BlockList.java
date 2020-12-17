@@ -10,8 +10,8 @@ public class BlockList extends MembershipListService implements MembershipServic
     
     public BlockList() throws ConfigurationErrorException {
         membersList = readMembers();
-        targetMembers = readTargetMembers(ConfigurationPropertyKeys.NOT_AUTHORIZED_TARGET_MEMBERS_LIST_KEY);
-        requesterMembers = readRequesterMembers(ConfigurationPropertyKeys.NOT_AUTHORIZED_REQUESTER_MEMBERS_LIST_KEY);
+        targetMembers = readTargetMembers(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY);
+        requesterMembers = readRequesterMembers(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY);
     }
 
     /**
@@ -36,4 +36,14 @@ public class BlockList extends MembershipListService implements MembershipServic
     public boolean isRequesterAuthorized(String provider) {
         return isMember(provider) && !this.requesterMembers.contains(provider);
     }
+    
+	@Override
+	public void addTarget(String provider) throws ConfigurationErrorException {
+		addTargetMember(provider, ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY);
+	}
+	
+	@Override
+	public void addRequester(String provider) throws ConfigurationErrorException {
+		addRequesterMember(provider, ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY);
+	}
 }
