@@ -27,4 +27,19 @@ public class ApiDocumentation {
         public static final String TARGET_OPERATION = "States whether the local provider is allowed to perform operations in the given provider.";
     }
 
+    public static class Admin {
+    	public static final String API = "Manages admin-only operations";
+		public static final String RELOAD = "Reloads service configuration.";
+		public static final String ADD_PROVIDER = "Adds given provider to the list of known providers.";
+		public static final String REMOVE_PROVIDER = "Removes given provider from all the lists of providers kept by the service.";
+		public static final String ADD_TARGET = "Adds given provider to the list of targets, used by the MembershipService "
+				+ "to authorize remote operations.";
+		public static final String REMOVE_TARGET = "Removes given provider from the list of targets, used by the MembershipService "
+				+ "to authorize remote operations."; 
+		public static final String ADD_REQUESTER = "Adds given provider to the list of requesters, used by the MembershipService "
+				+ "to authorized operations from other providers";
+		public static final String REMOVE_REQUESTER = "Removes given provider from the list of requesters, used by the MembershipService "
+				+ "to authorized operations from other providers";
+    	
+    }
 }

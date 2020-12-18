@@ -8,10 +8,12 @@ import cloud.fogbow.common.exceptions.UnauthorizedRequestException;
 import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.common.plugins.authorization.AuthorizationPlugin;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.core.PropertiesHolder;
 
 public class AdminAuthorizationPlugin implements AuthorizationPlugin<AdminOperation> {
 
+	private static final String SEPARATOR = ",";
 	private Set<String> adminsIds;
 	
 	public AdminAuthorizationPlugin() throws ConfigurationErrorException {
@@ -19,12 +21,10 @@ public class AdminAuthorizationPlugin implements AuthorizationPlugin<AdminOperat
 		String adminsIdsString = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.ADMINS_IDS);
 		
 		if (adminsIdsString.isEmpty()) {
-			// TODO add message
-			throw new ConfigurationErrorException();
+			throw new ConfigurationErrorException(Messages.Exception.NO_ADMIN_SPECIFIED);
 		}
 		
-		// TODO constant
-		for (String adminId : adminsIdsString.split(",")) {
+		for (String adminId : adminsIdsString.split(SEPARATOR)) {
 			adminsIds.add(adminId);
 		}
 	}
@@ -35,8 +35,7 @@ public class AdminAuthorizationPlugin implements AuthorizationPlugin<AdminOperat
 		String userId = systemUser.getId();
 		
 		if (!adminsIds.contains(userId)) {
-			// TODO add message
-			throw new UnauthorizedRequestException();
+			throw new UnauthorizedRequestException(Messages.Exception.USER_IS_NOT_ADMIN);
 		}
 		
 		return true;

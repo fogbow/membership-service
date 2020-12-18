@@ -15,6 +15,7 @@ import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.common.plugins.authorization.AuthorizationPlugin;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
+import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.core.authorization.AdminOperation;
 
 // TODO add tests
@@ -89,11 +90,12 @@ public class ApplicationFacade {
     }
     
     public void addProvider(String userToken, String provider) throws FogbowException {
+    	LOGGER.info(String.format(Messages.Log.ADDING_NEW_PROVIDER, provider));
+
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
     	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
     	
-    	// TODO add logging
     	setAsReloading();
     	
     	try {
@@ -104,11 +106,12 @@ public class ApplicationFacade {
     }
     
 	public void removeProvider(String userToken, String provider) throws FogbowException {
+		LOGGER.info(String.format(Messages.Log.REMOVING_PROVIDER, provider));
+		
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
     	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
-		
-    	// TODO add logging
+    	
     	setAsReloading();
     	
     	try {
@@ -119,11 +122,12 @@ public class ApplicationFacade {
 	}
     
 	public void addTargetProvider(String userToken, String provider) throws FogbowException {
+		LOGGER.info(String.format(Messages.Log.ADDING_TARGET_PROVIDER, provider));
+		
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
     	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
-		
-    	// TODO add logging
+    	
     	setAsReloading();
     	
     	try {
@@ -135,11 +139,12 @@ public class ApplicationFacade {
 	}
 
 	public void addRequesterProvider(String userToken, String provider) throws FogbowException {
+		LOGGER.info(String.format(Messages.Log.ADDING_REQUESTER_PROVIDER, provider));
+		
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
     	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
-		
-    	// TODO add logging
+
     	setAsReloading();
     	
     	try {
@@ -151,11 +156,12 @@ public class ApplicationFacade {
 	}
     
 	public void removeTargetProvider(String userToken, String provider) throws FogbowException {
+		LOGGER.info(String.format(Messages.Log.REMOVING_TARGET_PROVIDER, provider));
+		
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
     	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
     	
-    	// TODO add logging
     	setAsReloading();
     	
     	try {
@@ -166,11 +172,12 @@ public class ApplicationFacade {
 	}
 
 	public void removeRequesterProvider(String userToken, String provider) throws FogbowException {
-    	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
+		LOGGER.info(String.format(Messages.Log.REMOVING_REQUESTER_PROVIDER, provider));
+		
+		RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
     	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
     	
-    	// TODO add logging
     	setAsReloading();
     	
     	try {
@@ -182,6 +189,8 @@ public class ApplicationFacade {
 	}
 	
     public void reload(String userToken) throws FogbowException {
+    	LOGGER.info(Messages.Log.RELOADING_CONFIGURATION);
+    	
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
     	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
@@ -201,17 +210,21 @@ public class ApplicationFacade {
 	            }
 	        }
 			
-	        // TODO add logging
+	        LOGGER.info(Messages.Log.RELOADING_PROPERTIES_HOLDER);
 			PropertiesHolder.reset();
+			
+			LOGGER.info(Messages.Log.RELOADING_PUBLIC_KEYS_HOLDER);
 	        MSPublicKeysHolder.reset();
 	        
-	        // TODO add logging
+	        LOGGER.info(Messages.Log.RELOADING_MS_KEYS_HOLDER);
 	        String publicKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PUBLIC_KEY_FILE_PATH);
 	        String privateKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PRIVATE_KEY_FILE_PATH);
 	        ServiceAsymmetricKeysHolder.reset(publicKeyFilePath, privateKeyFilePath);
 			
-	        // TODO add logging
+	        LOGGER.info(Messages.Log.RELOADING_AUTHORIZATION_PLUGIN);
 			this.authorizationPlugin = PluginInstantiator.getAuthorizationPlugin();
+			
+			LOGGER.info(Messages.Log.RELOADING_MEMBERSHIP_PLUGIN);
 			this.membershipService = PluginInstantiator.getMembershipService();
 		} finally {
 			finishReloading();
