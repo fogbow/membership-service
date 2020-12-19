@@ -31,7 +31,8 @@ public class AdminAuthorizationPluginTest {
 	private String identityProviderId = "providerId";
 	private String adminIDsString = String.format("%s,%s", userIdAdmin1, userIdAdmin2);
 	
-	// TODO add documentation
+	// test case: When invoking the isAuthorized method with an admin user, 
+	// it must return true
 	@Test
 	public void testIsAuthorizedUserIsAdmin() throws UnauthorizedRequestException, ConfigurationErrorException {
         setUpConfiguration();
@@ -46,7 +47,8 @@ public class AdminAuthorizationPluginTest {
 		assertTrue(plugin.isAuthorized(admin2, operation));
 	}
 	
-	// TODO add documentation
+	// test case: When invoking the isAuthorized method with a non-admin user,
+	// it must throw an UnauthorizedRequestException
 	@Test(expected = UnauthorizedRequestException.class)
 	public void testIsAuthorizedUserIsNotAdmin() throws UnauthorizedRequestException, ConfigurationErrorException {
         setUpConfiguration();
@@ -59,7 +61,9 @@ public class AdminAuthorizationPluginTest {
 		plugin.isAuthorized(notAdmin, operation);
 	}
 
-	// TODO add documentation
+	// test case: When attempting to create an instance of 
+	// AdminAuthorizationPlugin using a configuration file 
+	// with no admins listed, it must throw a ConfigurationErrorException
 	@Test(expected = ConfigurationErrorException.class)
 	public void testConfigurationMustSetAtLeastOneAdmin() throws ConfigurationErrorException {
 		String emptyAdminIdsString = "";

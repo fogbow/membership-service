@@ -143,7 +143,9 @@ public class BlockListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(""));
     }
     
-    // TODO add documentation
+    // test case: When invoking the addMember method, it must add the given provider correctly, 
+    // so that the change is reflected on the return value of the method listMembers. Also, 
+    // the configuration file must be updated.
     @Test
     public void testAddMember() throws Exception {
     	setUpBlockListWithDefaultLists();
@@ -173,7 +175,9 @@ public class BlockListTest {
         Assert.assertTrue(updateMembersId.contains(newMember));
     }
     
-    // TODO add documentation
+    // test case: When invoking the removeMember method, it must remove the given provider correctly
+    // from all internal lists, so that the change is reflected on the return value of the methods listMembers, 
+    // isTargetAuthorized and isRequesterAuthorized. Also, the configuration file must be updated.
     @Test
     public void testRemoveMember() throws Exception {
     	setUpBlockListWithDefaultLists();
@@ -219,7 +223,8 @@ public class BlockListTest {
         Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
     }
     
-    // TODO add documentation
+    // test case: When invoking the removeMember method with a provider which is not on 
+    // the memberList, it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testRemovingNotKnownMemberMustFail() throws ConfigurationErrorException {
     	setUpBlockListWithDefaultLists();
@@ -227,7 +232,9 @@ public class BlockListTest {
     	this.service.removeMember(notMember1);
     }
     
-    // TODO add documentation
+    // test case: When invoking the addTarget method, it must add the given provider 
+    // as target correctly, so that the change is reflected on the return value of the 
+    // method isTargetAuthorized. Also, the configuration file must be updated.
     @Test
     public void testAddTarget() throws Exception {
     	setUpBlockListWithTargetListBeforeAdd();
@@ -251,7 +258,8 @@ public class BlockListTest {
         Assert.assertFalse(this.service.isTargetAuthorized(""));
     }
     
-    // TODO add documentation
+    // test case: When invoking the addTarget method with a provider which is not on 
+    // the memberList, it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testAddNotKnownTargetMustFail() throws Exception {
     	setUpBlockListWithTargetListBeforeAdd();
@@ -259,7 +267,8 @@ public class BlockListTest {
         this.service.addTarget(notMember1);
     }
     
-    // TODO add documentation   
+    // test case: When invoking the addTarget method with a provider which is already 
+    // in the target providers list, it must throw a ConfigurationErrorException.   
     @Test(expected = ConfigurationErrorException.class)
     public void testAddingDuplicateTargetMustFail() throws Exception {
     	setUpBlockListWithTargetListBeforeAdd();
@@ -273,7 +282,9 @@ public class BlockListTest {
         this.service.addTarget(memberNotAuthorizedAsTarget);
     }
     
-    // TODO add documentation
+    // test case: When invoking the addRequester method, it must add the given provider 
+    // as requester correctly, so that the change is reflected on the return value of the 
+    // method isRequesterAuthorized. Also, the configuration file must be updated.
     @Test
     public void testAddRequester() throws ConfigurationErrorException {
     	setUpBlockListWithRequesterListBeforeAdd();
@@ -297,7 +308,8 @@ public class BlockListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(""));
     }
     
-    // TODO add documentation
+    // test case: When invoking the addRequester method with a provider which is not on 
+    // the memberList, it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testAddingNotKnownRequesterMustFail() throws Exception {
     	setUpBlockListWithRequesterListBeforeAdd();
@@ -305,7 +317,8 @@ public class BlockListTest {
         this.service.addRequester(notMember1);
     }
     
-    // TODO add documentation   
+    // test case: When invoking the addRequester method with a provider which is already 
+    // in the requester providers list, it must throw a ConfigurationErrorException.   
     @Test(expected = ConfigurationErrorException.class)
     public void testAddingDuplicateRequesterMustFail() throws Exception {
     	setUpBlockListWithRequesterListBeforeAdd();
@@ -319,7 +332,9 @@ public class BlockListTest {
         this.service.addRequester(memberNotAuthorizedAsRequester);
     }
 
-    // TODO add documentation
+    // test case: When invoking the removeTarget method, it must remove the given provider 
+    // from the targets list correctly, so that the change is reflected on the return value of the 
+    // method isTargetAuthorized. Also, the configuration file must be updated.
     @Test
     public void testRemoveTarget() throws Exception {
     	setUpBlockListWithTargetListBeforeRemove();
@@ -343,7 +358,8 @@ public class BlockListTest {
         Assert.assertFalse(this.service.isTargetAuthorized(""));
     }
     
-    // TODO add documentation
+    // test case: When invoking the removeTarget method with a provider 
+    // which is not a target, it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testRemovingUnknownTargetMustFail() throws Exception {
     	setUpBlockListWithTargetListBeforeRemove();
@@ -351,7 +367,8 @@ public class BlockListTest {
         this.service.removeTarget(memberNotAuthorizedAsRequester);
     }
     
-    // TODO add documentation
+    // test case: When invoking the removeTarget with an unknown provider,
+    // it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testRemovingUnknownProviderFromTargetsMustFail() throws Exception {
     	setUpBlockListWithTargetListBeforeRemove();
@@ -359,7 +376,9 @@ public class BlockListTest {
         this.service.removeTarget(notMember1);
     }
     
-    // TODO add documentation
+    // test case: When invoking the removeRequester method, it must remove the given provider 
+    // from the requesters list correctly, so that the change is reflected on the return value of the 
+    // method isRequesterAuthorized. Also, the configuration file must be updated.
     @Test
     public void testRemoveRequester() throws Exception {
     	setUpBlockListWithRequestersListBeforeRemove();
@@ -383,7 +402,8 @@ public class BlockListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(""));
     }
     
-    // TODO add documentation
+    // test case: When invoking the removeRequester method with a provider 
+    // which is not a requester, it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testRemovingUnknownRequesterMustFail() throws Exception {
     	setUpBlockListWithRequestersListBeforeRemove();
@@ -391,7 +411,8 @@ public class BlockListTest {
         this.service.removeRequester(memberNotAuthorizedAsTarget);
     }
     
-    // TODO add documentation
+    // test case: When invoking the removeRequester with an unknown provider,
+    // it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testRemovingUnknownProviderFromRequestersMustFail() throws Exception {
     	setUpBlockListWithRequestersListBeforeRemove();

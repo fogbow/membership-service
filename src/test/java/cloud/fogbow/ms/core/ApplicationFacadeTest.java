@@ -74,7 +74,10 @@ public class ApplicationFacadeTest {
 		this.facade.setAuthorizationPlugin(authorizationPlugin);
     }
 	
-	// TODO documentation
+	// test case: When invoking the listMembers method, it
+    // must call the listMembers method of the MembershipService
+    // instance it holds and return a list containing the same
+    // elements.
 	@Test
 	public void testListMembers() throws Exception {
 		this.facade = ApplicationFacade.getInstance();
@@ -86,9 +89,13 @@ public class ApplicationFacadeTest {
 		assertEquals(returnedMembersList.size(), 2);
 		assertTrue(returnedMembersList.contains(member1));
 		assertTrue(returnedMembersList.contains(member2));
+		
+		Mockito.verify(this.membershipService, Mockito.times(1)).listMembers();
 	}
 	
-	// TODO documentation
+	// test case: When invoking the addProvider method, it must 
+	// authorize the operation and call the addMember method of 
+	// the MembershipService instance it holds.
 	@Test
 	public void testAddProvider() throws FogbowException {
 		this.facade.addProvider(token, provider);
@@ -97,7 +104,9 @@ public class ApplicationFacadeTest {
 		Mockito.verify(membershipService, Mockito.times(1)).addMember(provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the addProvider method and 
+	// the operation is not authorized, it must throw an
+	// UnauthorizedRequestException
 	@Test(expected = UnauthorizedRequestException.class)
 	public void testAddProviderUnauthorizedOperation() throws FogbowException {
 		Mockito.doThrow(new UnauthorizedRequestException()).when(this.authorizationPlugin).isAuthorized(systemUser, operation);
@@ -105,7 +114,9 @@ public class ApplicationFacadeTest {
 		this.facade.addProvider(token, provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the removeProvider method, it must 
+	// authorize the operation and call the removeMember method of 
+	// the MembershipService instance it holds.
 	@Test
 	public void testRemoveProvider() throws FogbowException {
 		this.facade.removeProvider(token, provider);
@@ -114,7 +125,9 @@ public class ApplicationFacadeTest {
 		Mockito.verify(membershipService, Mockito.times(1)).removeMember(provider);
 	}
 
-	// TODO documentation
+	// test case: When invoking the removeProvider method and 
+	// the operation is not authorized, it must throw an
+	// UnauthorizedRequestException
 	@Test(expected = UnauthorizedRequestException.class)
 	public void testRemoveProviderUnauthorizedOperation() throws FogbowException {
 		Mockito.doThrow(new UnauthorizedRequestException()).when(this.authorizationPlugin).isAuthorized(systemUser, operation);
@@ -122,7 +135,9 @@ public class ApplicationFacadeTest {
 		this.facade.removeProvider(token, provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the addTargetProvider method, it must 
+	// authorize the operation and call the addTarget method of 
+	// the MembershipService instance it holds.
 	@Test
 	public void testAddTargetProvider() throws FogbowException {
 		this.facade.addTargetProvider(token, provider);
@@ -131,7 +146,9 @@ public class ApplicationFacadeTest {
 		Mockito.verify(membershipService, Mockito.times(1)).addTarget(provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the addTargetProvider method and 
+	// the operation is not authorized, it must throw an
+	// UnauthorizedRequestException
 	@Test(expected = UnauthorizedRequestException.class)
 	public void testAddTargetProviderUnauthorizedOperation() throws FogbowException {
 		Mockito.doThrow(new UnauthorizedRequestException()).when(this.authorizationPlugin).isAuthorized(systemUser, operation);
@@ -139,7 +156,9 @@ public class ApplicationFacadeTest {
 		this.facade.addTargetProvider(token, provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the removeTargetProvider method, it must 
+	// authorize the operation and call the removeTarget method of 
+	// the MembershipService instance it holds.
 	@Test
 	public void testRemoveTarget() throws FogbowException {
 		this.facade.removeTargetProvider(token, provider);
@@ -148,7 +167,9 @@ public class ApplicationFacadeTest {
 		Mockito.verify(membershipService, Mockito.times(1)).removeTarget(provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the removeTargetProvider method and 
+	// the operation is not authorized, it must throw an
+	// UnauthorizedRequestException
 	@Test(expected = UnauthorizedRequestException.class)
 	public void testRemoveTargetProviderUnauthorizedOperation() throws FogbowException {
 		Mockito.doThrow(new UnauthorizedRequestException()).when(this.authorizationPlugin).isAuthorized(systemUser, operation);
@@ -156,7 +177,9 @@ public class ApplicationFacadeTest {
 		this.facade.removeTargetProvider(token, provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the addRequesterProvider method, it must 
+	// authorize the operation and call the addRequester method of 
+	// the MembershipService instance it holds.
 	@Test
 	public void testAddRequesterProvider() throws FogbowException {
 		this.facade.addRequesterProvider(token, provider);
@@ -165,7 +188,9 @@ public class ApplicationFacadeTest {
 		Mockito.verify(membershipService, Mockito.times(1)).addRequester(provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the addRequesterProvider method and 
+	// the operation is not authorized, it must throw an
+	// UnauthorizedRequestException
 	@Test(expected = UnauthorizedRequestException.class)
 	public void testAddRequesterProviderUnauthorizedOperation() throws FogbowException {
 		Mockito.doThrow(new UnauthorizedRequestException()).when(this.authorizationPlugin).isAuthorized(systemUser, operation);
@@ -173,7 +198,9 @@ public class ApplicationFacadeTest {
 		this.facade.addRequesterProvider(token, provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the removeRequesterProvider method, it must 
+	// authorize the operation and call the removeRequester method of 
+	// the MembershipService instance it holds.
 	@Test
 	public void testRemoveRequesterProvider() throws FogbowException {
 		this.facade.removeRequesterProvider(token, provider);
@@ -182,7 +209,9 @@ public class ApplicationFacadeTest {
 		Mockito.verify(membershipService, Mockito.times(1)).removeRequester(provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the removeRequesterProvider method and 
+	// the operation is not authorized, it must throw an
+	// UnauthorizedRequestException
 	@Test(expected = UnauthorizedRequestException.class)
 	public void testRemoveRequesterProviderUnauthorizedOperation() throws FogbowException {
 		Mockito.doThrow(new UnauthorizedRequestException()).when(this.authorizationPlugin).isAuthorized(systemUser, operation);
