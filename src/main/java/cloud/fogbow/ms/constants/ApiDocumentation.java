@@ -40,6 +40,7 @@ public class ApiDocumentation {
 				+ "to authorized operations from other providers";
 		public static final String REMOVE_REQUESTER = "Removes given provider from the list of requesters, used by the MembershipService "
 				+ "to authorized operations from other providers";
+		public static final String SERVICE = "Changes membership service plugin to the given class name";
     	
     }
 }

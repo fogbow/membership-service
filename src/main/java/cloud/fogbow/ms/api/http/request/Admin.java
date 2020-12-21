@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.ms.api.http.CommonKeys;
 import cloud.fogbow.ms.api.parameters.Provider;
+import cloud.fogbow.ms.api.parameters.Service;
 import cloud.fogbow.ms.constants.ApiDocumentation;
 import cloud.fogbow.ms.constants.SystemConstants;
 import cloud.fogbow.ms.core.ApplicationFacade;
@@ -35,6 +36,16 @@ public class Admin {
     				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
     				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken) throws FogbowException {
         ApplicationFacade.getInstance().reload(systemUserToken);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @ApiOperation(value = ApiDocumentation.Admin.SERVICE)
+    @RequestMapping(value = "/service", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> service(
+                    @ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
+                    @RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY)String systemUserToken,
+                    @RequestBody Service service) throws FogbowException {
+        ApplicationFacade.getInstance().updateMembershipService(systemUserToken, service.getClassName());
         return new ResponseEntity<>(HttpStatus.OK);
     }
     

@@ -22,12 +22,14 @@ import cloud.fogbow.common.exceptions.UnauthorizedRequestException;
 import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.common.plugins.authorization.AuthorizationPlugin;
 import cloud.fogbow.common.util.PublicKeysHolder;
+import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.core.authorization.AdminAuthorizationPlugin;
 import cloud.fogbow.ms.core.authorization.AdminOperation;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AuthenticationUtil.class, MSPublicKeysHolder.class, 
-	PropertiesHolder.class, PublicKeysHolder.class})
+	PropertiesHolder.class, PublicKeysHolder.class,
+	PluginInstantiator.class })
 public class ApplicationFacadeTest {
 
 	private ApplicationFacade facade;
@@ -41,10 +43,13 @@ public class ApplicationFacadeTest {
     private String userId = "userId";
     private String userName = "userName";
     private String provider = "provider";
+    
+    private String newMembershipServiceClassName = "newclass";
 	
 	private SystemUser systemUser; 
 	private RSAPublicKey key;
 	private AdminOperation operation;
+    private PropertiesHolder propertiesHolder;
 
     @Before
     public void setUp() throws FogbowException {
@@ -74,6 +79,47 @@ public class ApplicationFacadeTest {
 		this.facade.setAuthorizationPlugin(authorizationPlugin);
     }
 	
+    // test case: When invoking the updateMembershipService method, it must 
+    // authorize the operation, call the PluginInstantiator to get a new 
+    // MembershipService instance and set this instance as the one used 
+    // by the facade. Also, the configuration file must be updated.
+    @Test
+    public void testUpdateMembershipService() throws FogbowException {
+        // set up
+        MembershipService membershipService = Mockito.mock(MembershipService.class);
+        
+        PowerMockito.mockStatic(PropertiesHolder.class);
+        this.propertiesHolder = Mockito.mock(PropertiesHolder.class);
+        BDDMockito.given(PropertiesHolder.getInstance()).willReturn(this.propertiesHolder);
+                
+        PowerMockito.mockStatic(PluginInstantiator.class);
+        BDDMockito.given(PluginInstantiator.getMembershipService(newMembershipServiceClassName)).willReturn(membershipService);
+        
+        
+        this.facade.updateMembershipService(token, newMembershipServiceClassName);
+        
+        
+        // verify membership service is updated
+        assertEquals(this.facade.getMembershipService(), membershipService);
+        
+        // verify authorization
+        Mockito.verify(authorizationPlugin, Mockito.times(1)).isAuthorized(systemUser, operation);
+        
+        // verify configuration is update
+        Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERSHIP_SERVICE_CLASS_KEY, 
+                newMembershipServiceClassName);
+        Mockito.verify(propertiesHolder, Mockito.times(1)).updatePropertiesFile();
+    }
+    
+    // test case: When invoking the updateMembershipService and the operation
+    // is not authorized, it must throw an UnauthorizedRequestException.
+    @Test(expected = UnauthorizedRequestException.class)
+    public void testUpdateMembershipServiceUnauthorizedOperation() throws FogbowException {
+        Mockito.doThrow(new UnauthorizedRequestException()).when(this.authorizationPlugin).isAuthorized(systemUser, operation);
+        
+        this.facade.updateMembershipService(token, newMembershipServiceClassName);
+    }
+    
 	// test case: When invoking the listMembers method, it
     // must call the listMembers method of the MembershipService
     // instance it holds and return a list containing the same

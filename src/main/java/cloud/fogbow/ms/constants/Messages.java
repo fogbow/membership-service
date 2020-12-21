@@ -19,6 +19,7 @@ public class Messages {
     	public static final String ADDING_NEW_PROVIDER = "Adding provider: %s";
     	public static final String ADDING_REQUESTER_PROVIDER = "Adding requester: %s";
     	public static final String ADDING_TARGET_PROVIDER = "Adding target: %s";
+    	public static final String CHANGING_MEMBERSHIP_PLUGIN = "Changing membership plugin to: %s";
     	public static final String GET_PUBLIC_KEY = "Get public key received.";
         public static final String INTERNAL_SERVER_ERROR = "Internal server error.";
         public static final String RELOADING_AUTHORIZATION_PLUGIN = "Reloading authorization plugin.";

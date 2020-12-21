@@ -15,6 +15,7 @@ import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.common.plugins.authorization.AuthorizationPlugin;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
+import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.core.authorization.AdminOperation;
 
@@ -83,6 +84,10 @@ public class ApplicationFacade {
 
     public void setMembershipService(MembershipService membershipService) {
         this.membershipService = membershipService;
+    }
+    
+    public MembershipService getMembershipService() {
+        return membershipService;
     }
     
     public void setAuthorizationPlugin(AuthorizationPlugin<AdminOperation> authorizationPlugin) {
@@ -230,6 +235,25 @@ public class ApplicationFacade {
 			finishReloading();
 		}
 	}
+	
+    public void updateMembershipService(String userToken, String className) throws FogbowException {
+        RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
+        SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
+        this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+        
+        setAsReloading();
+        
+        try {
+            LOGGER.info(String.format(Messages.Log.CHANGING_MEMBERSHIP_PLUGIN, className));
+            MembershipService membershipService = PluginInstantiator.getMembershipService(className);
+            setMembershipService(membershipService);
+            
+            PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.MEMBERSHIP_SERVICE_CLASS_KEY, className);
+            PropertiesHolder.getInstance().updatePropertiesFile();
+        } finally {
+            finishReloading();
+        }
+    }
 	
     private void setAsReloading() {
         this.reloading = true;
