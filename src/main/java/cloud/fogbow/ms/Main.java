@@ -14,7 +14,7 @@ import cloud.fogbow.ms.core.ApplicationFacade;
 import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PluginInstantiator;
 import cloud.fogbow.ms.core.PropertiesHolder;
-import cloud.fogbow.ms.core.authorization.AdminOperation;
+import cloud.fogbow.ms.core.authorization.MsOperation;
 
 @Component
 public class Main implements ApplicationRunner {
@@ -28,7 +28,7 @@ public class Main implements ApplicationRunner {
             ServiceAsymmetricKeysHolder.getInstance().setPublicKeyFilePath(publicKeyFilePath);
             ServiceAsymmetricKeysHolder.getInstance().setPrivateKeyFilePath(privateKeyFilePath);
             
-            AuthorizationPlugin<AdminOperation> authorizationPlugin = PluginInstantiator.getAuthorizationPlugin();
+            AuthorizationPlugin<MsOperation> authorizationPlugin = PluginInstantiator.getAuthorizationPlugin();
             MembershipService membershipService = PluginInstantiator.getMembershipService();
             
             ApplicationFacade.getInstance().setMembershipService(membershipService);

@@ -24,7 +24,7 @@ import cloud.fogbow.common.plugins.authorization.AuthorizationPlugin;
 import cloud.fogbow.common.util.PublicKeysHolder;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.core.authorization.AdminAuthorizationPlugin;
-import cloud.fogbow.ms.core.authorization.AdminOperation;
+import cloud.fogbow.ms.core.authorization.MsOperation;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AuthenticationUtil.class, MSPublicKeysHolder.class, 
@@ -34,7 +34,7 @@ public class ApplicationFacadeTest {
 
 	private ApplicationFacade facade;
 	private MembershipService membershipService;
-	private AuthorizationPlugin<AdminOperation> authorizationPlugin;
+	private AuthorizationPlugin<MsOperation> authorizationPlugin;
 	private String member1 = "member1";
 	private String member2 = "member2";
 	private List<String> members = Arrays.asList(member1, member2);
@@ -48,12 +48,12 @@ public class ApplicationFacadeTest {
 	
 	private SystemUser systemUser; 
 	private RSAPublicKey key;
-	private AdminOperation operation;
+	private MsOperation operation;
     private PropertiesHolder propertiesHolder;
 
     @Before
     public void setUp() throws FogbowException {
-		this.operation = new AdminOperation();
+		this.operation = new MsOperation();
 		this.systemUser = new SystemUser(userId, userName, provider);
 		
 		// authentication

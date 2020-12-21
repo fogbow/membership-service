@@ -21,7 +21,7 @@ import cloud.fogbow.ms.core.PropertiesHolder;
 @PrepareForTest({PropertiesHolder.class})
 public class AdminAuthorizationPluginTest {
 
-	private AuthorizationPlugin<AdminOperation> plugin;
+	private AuthorizationPlugin<MsOperation> plugin;
 	private final String userIdAdmin1 = "userIdAdmin1";
 	private final String userNameAdmin1 = "userNameAdmin1";
 	private final String userIdAdmin2 = "userIdAdmin2";
@@ -39,7 +39,7 @@ public class AdminAuthorizationPluginTest {
 		
 		SystemUser admin1 = new SystemUser(userIdAdmin1, userNameAdmin1, identityProviderId);
 		SystemUser admin2 = new SystemUser(userIdAdmin2, userNameAdmin2, identityProviderId);
-		AdminOperation operation = new AdminOperation();
+		MsOperation operation = new MsOperation();
 		
 		plugin = new AdminAuthorizationPlugin();
 		
@@ -54,7 +54,7 @@ public class AdminAuthorizationPluginTest {
         setUpConfiguration();
 		
 		SystemUser notAdmin = new SystemUser(userIdNotAdmin, userNameNotAdmin, identityProviderId);
-		AdminOperation operation = new AdminOperation();
+		MsOperation operation = new MsOperation();
 		
 		plugin = new AdminAuthorizationPlugin();
 		

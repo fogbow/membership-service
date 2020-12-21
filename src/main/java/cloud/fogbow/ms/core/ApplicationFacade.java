@@ -17,7 +17,7 @@ import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.constants.Messages;
-import cloud.fogbow.ms.core.authorization.AdminOperation;
+import cloud.fogbow.ms.core.authorization.MsOperation;
 
 // TODO add tests
 public class ApplicationFacade {
@@ -26,7 +26,7 @@ public class ApplicationFacade {
 
     private static ApplicationFacade instance;
     private MembershipService membershipService;
-    private AuthorizationPlugin<AdminOperation> authorizationPlugin;
+    private AuthorizationPlugin<MsOperation> authorizationPlugin;
 	private long onGoingRequests;
 	private boolean reloading;
     
@@ -90,7 +90,7 @@ public class ApplicationFacade {
         return membershipService;
     }
     
-    public void setAuthorizationPlugin(AuthorizationPlugin<AdminOperation> authorizationPlugin) {
+    public void setAuthorizationPlugin(AuthorizationPlugin<MsOperation> authorizationPlugin) {
     	this.authorizationPlugin = authorizationPlugin;
     }
     
@@ -99,7 +99,7 @@ public class ApplicationFacade {
 
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
     	
     	setAsReloading();
     	
@@ -115,7 +115,7 @@ public class ApplicationFacade {
 		
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
     	
     	setAsReloading();
     	
@@ -131,7 +131,7 @@ public class ApplicationFacade {
 		
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
     	
     	setAsReloading();
     	
@@ -148,7 +148,7 @@ public class ApplicationFacade {
 		
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
 
     	setAsReloading();
     	
@@ -165,7 +165,7 @@ public class ApplicationFacade {
 		
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
     	
     	setAsReloading();
     	
@@ -181,7 +181,7 @@ public class ApplicationFacade {
 		
 		RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
     	
     	setAsReloading();
     	
@@ -198,7 +198,7 @@ public class ApplicationFacade {
     	
     	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
     	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
     	
     	doReload();
     }
@@ -239,7 +239,7 @@ public class ApplicationFacade {
     public void updateMembershipService(String userToken, String className) throws FogbowException {
         RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
         SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-        this.authorizationPlugin.isAuthorized(systemUser, new AdminOperation());
+        this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
         
         setAsReloading();
         

@@ -11,7 +11,7 @@ import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.core.PropertiesHolder;
 
-public class AdminAuthorizationPlugin implements AuthorizationPlugin<AdminOperation> {
+public class AdminAuthorizationPlugin implements AuthorizationPlugin<MsOperation> {
 
 	private static final String SEPARATOR = ",";
 	private Set<String> adminsIds;
@@ -31,7 +31,7 @@ public class AdminAuthorizationPlugin implements AuthorizationPlugin<AdminOperat
 	
 	
 	@Override
-	public boolean isAuthorized(SystemUser systemUser, AdminOperation operation) throws UnauthorizedRequestException {
+	public boolean isAuthorized(SystemUser systemUser, MsOperation operation) throws UnauthorizedRequestException {
 		String userId = systemUser.getId();
 		
 		if (!adminsIds.contains(userId)) {
