@@ -93,21 +93,21 @@ public class ApplicationFacade {
     public void setAuthorizationPlugin(AuthorizationPlugin<MsOperation> authorizationPlugin) {
     	this.authorizationPlugin = authorizationPlugin;
     }
-    
-    public void addProvider(String userToken, String provider) throws FogbowException {
-    	LOGGER.info(String.format(Messages.Log.ADDING_NEW_PROVIDER, provider));
 
-    	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
-    	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
-    	
-    	setAsReloading();
-    	
-    	try {
-    		this.membershipService.addMember(provider);
-    	} finally {
-    		finishReloading();    		
-    	}
+    public void addProvider(String userToken, String provider, boolean target, boolean requester) throws FogbowException {
+        LOGGER.info(String.format(Messages.Log.REMOVING_PROVIDER, provider));
+        
+        RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
+        SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
+        this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
+        
+        setAsReloading();        
+        
+        try {
+            this.membershipService.addMember(provider, target, requester);
+        } finally {
+            finishReloading();
+        }
     }
     
 	public void removeProvider(String userToken, String provider) throws FogbowException {
@@ -125,74 +125,23 @@ public class ApplicationFacade {
     		finishReloading();    		
     	}
 	}
-    
-	public void addTargetProvider(String userToken, String provider) throws FogbowException {
-		LOGGER.info(String.format(Messages.Log.ADDING_TARGET_PROVIDER, provider));
-		
-    	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
-    	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
-    	
-    	setAsReloading();
-    	
-    	try {
-    		this.membershipService.addTarget(provider);
-    	} finally {
-    		finishReloading();    		
-    	}
-    	
-	}
-
-	public void addRequesterProvider(String userToken, String provider) throws FogbowException {
-		LOGGER.info(String.format(Messages.Log.ADDING_REQUESTER_PROVIDER, provider));
-		
-    	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
-    	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
-
-    	setAsReloading();
-    	
-    	try {
-    		this.membershipService.addRequester(provider);
-    	} finally {
-    		finishReloading();    		
-    	}
-		
-	}
-    
-	public void removeTargetProvider(String userToken, String provider) throws FogbowException {
-		LOGGER.info(String.format(Messages.Log.REMOVING_TARGET_PROVIDER, provider));
-		
-    	RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
-    	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
-    	
-    	setAsReloading();
-    	
-    	try {
-    		this.membershipService.removeTarget(provider);
-    	} finally {
-    		finishReloading();    		
-    	}
-	}
-
-	public void removeRequesterProvider(String userToken, String provider) throws FogbowException {
-		LOGGER.info(String.format(Messages.Log.REMOVING_REQUESTER_PROVIDER, provider));
-		
-		RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
-    	SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
-    	this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
-    	
-    	setAsReloading();
-    	
-    	try {
-    		this.membershipService.removeRequester(provider);
-    	} finally {
-    		finishReloading();    		
-    	}
-		
-	}
 	
+    public void updateProvider(String userToken, String provider, boolean target, boolean requester) throws FogbowException {
+        LOGGER.info(String.format(Messages.Log.REMOVING_PROVIDER, provider));
+        
+        RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
+        SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
+        this.authorizationPlugin.isAuthorized(systemUser, new MsOperation());
+        
+        setAsReloading();
+        
+        try {
+            this.membershipService.updateMember(provider, target, requester);
+        } finally {
+            finishReloading();
+        }
+    }
+    
     public void reload(String userToken) throws FogbowException {
     	LOGGER.info(Messages.Log.RELOADING_CONFIGURATION);
     	

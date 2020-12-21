@@ -11,6 +11,8 @@ public class AllowList extends MembershipListService implements MembershipServic
         this.membersList = readMembers();
         this.targetMembers = readTargetMembers();
         this.requesterMembers = readRequesterMembers();
+        
+        validateMembersList();
     }
 
     /**

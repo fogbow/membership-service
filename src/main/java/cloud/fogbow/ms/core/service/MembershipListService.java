@@ -75,20 +75,22 @@ public abstract class MembershipListService implements MembershipService {
 		    throw new ConfigurationErrorException(Messages.Exception.INVALID_MEMBER_NAME);
 		}
 	}
-    
-    @Override
-    public void addMember(String provider) throws ConfigurationErrorException {
-    	if (isMember(provider)) {
-    		throw new ConfigurationErrorException(Messages.Exception.PROVIDER_IS_ALREADY_A_MEMBER);
-    	}
-    	
-    	membersList.add(provider);
-    	
-    	String newMembersString = String.join(SEPARATOR, membersList);
-    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, 
-    			newMembersString);
-    	PropertiesHolder.getInstance().updatePropertiesFile();
-    }
+	
+	@Override
+	public void addMember(String provider, boolean target, boolean requester) throws ConfigurationErrorException {
+        if (isMember(provider)) {
+            throw new ConfigurationErrorException(Messages.Exception.PROVIDER_IS_ALREADY_A_MEMBER);
+        }
+        
+        validateProviderProperties(target, requester);
+
+        membersList.add(provider);
+        
+        updateProviderList(targetMembers, provider, target);
+        updateProviderList(requesterMembers, provider, requester);
+        
+        updateConfigurationFile();
+	}
     
 	@Override
 	public void removeMember(String provider) throws ConfigurationErrorException {
@@ -98,76 +100,58 @@ public abstract class MembershipListService implements MembershipService {
 		requesterMembers.remove(provider);
 		membersList.remove(provider);
 		
-		String newTargetMembersList = String.join(SEPARATOR, targetMembers);
-		String newRequesterMembersList = String.join(SEPARATOR, requesterMembers);
-		String newMembersString = String.join(SEPARATOR, membersList);
-		
-    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, 
-    			newTargetMembersList);
-    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, 
-    			newRequesterMembersList);
-    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, 
-    			newMembersString);
-    	
-    	PropertiesHolder.getInstance().updatePropertiesFile();
+		updateConfigurationFile();
 	}
 
 	@Override
-	public void addTarget(String provider) throws ConfigurationErrorException {
-        checkProviderIsMember(provider);
-        
-        if (targetMembers.contains(provider)) {
-        	throw new ConfigurationErrorException(Messages.Exception.PROVIDER_IS_ALREADY_A_TARGET);
+	public void updateMember(String provider, boolean target, boolean requester) throws ConfigurationErrorException {
+	    checkProviderIsMember(provider);
+	    validateProviderProperties(target, requester);
+	    
+	    updateProviderList(targetMembers, provider, target);
+	    updateProviderList(requesterMembers, provider, requester);
+	    
+	    updateConfigurationFile();
+	}
+	
+	// TODO test this
+	protected void validateMembersList() throws ConfigurationErrorException {
+	    for (String provider : membersList) {
+	        validateProviderProperties(targetMembers.contains(provider), requesterMembers.contains(provider));
+	    }
+	}
+	
+	private void validateProviderProperties(boolean target, boolean requester) throws ConfigurationErrorException {
+        if (!target && !requester) {
+            throw new ConfigurationErrorException(Messages.Exception.PROVIDER_MUST_BE_TARGET_REQUESTER_OR_BOTH);
         }
-        
-        targetMembers.add(provider);
-        updateTargetsListOnPropertiesFile();
-    }
-
-	@Override
-	public void addRequester(String provider) throws ConfigurationErrorException {
-        checkProviderIsMember(provider);
-        
-        if (requesterMembers.contains(provider)) {
-        	throw new ConfigurationErrorException(Messages.Exception.PROVIDER_IS_ALREADY_A_REQUESTER);
-        }
-        
-        requesterMembers.add(provider);
-        updateRequestersListOnPropertiesFile();
     }
 	
-	@Override
-	public void removeTarget(String provider) throws ConfigurationErrorException {
-		if (!targetMembers.contains(provider)) {
-			throw new ConfigurationErrorException(Messages.Exception.MEMBER_IS_NOT_TARGET);
-		}
-		
-		targetMembers.remove(provider);
-        updateTargetsListOnPropertiesFile();
+    private void updateProviderList(List<String> providerList, String provider, boolean shouldContain) {
+	    if (shouldContain) {
+	        if (!providerList.contains(provider)) {
+	            providerList.add(provider);
+	        }
+	    } else {
+	        if (providerList.contains(provider)) {
+	            providerList.remove(provider);
+	        }
+	    }
 	}
-
-	@Override
-	public void removeRequester(String provider) throws ConfigurationErrorException {
-		if (!requesterMembers.contains(provider)) {
-			throw new ConfigurationErrorException(Messages.Exception.MEMBER_IS_NOT_REQUESTER);
-		}
-		
-		requesterMembers.remove(provider);
-        updateRequestersListOnPropertiesFile();
-	}
-	
-	private void updateTargetsListOnPropertiesFile() {
-		String newTargetMembersList = String.join(SEPARATOR, targetMembers);
-    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, 
-    			newTargetMembersList);
-    	PropertiesHolder.getInstance().updatePropertiesFile();
-	}
-	
-	private void updateRequestersListOnPropertiesFile() {
-		String newRequesterMembersList = String.join(SEPARATOR, requesterMembers);
-    	PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, 
-    			newRequesterMembersList);
-    	PropertiesHolder.getInstance().updatePropertiesFile();
-	}
-
+    
+    private void updateConfigurationFile() {
+        String newMembersString = String.join(SEPARATOR, membersList);
+        PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, 
+                newMembersString);
+        
+        String newTargetMembersList = String.join(SEPARATOR, targetMembers);
+        PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, 
+                newTargetMembersList);
+        
+        String newRequesterMembersList = String.join(SEPARATOR, requesterMembers);
+        PropertiesHolder.getInstance().setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, 
+                newRequesterMembersList);
+        
+        PropertiesHolder.getInstance().updatePropertiesFile();
+    }
 }

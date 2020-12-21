@@ -11,6 +11,8 @@ public class BlockList extends MembershipListService implements MembershipServic
         membersList = readMembers();
         targetMembers = readTargetMembers();
         requesterMembers = readRequesterMembers();
+        
+        validateMembersList();
     }
 
     /**
