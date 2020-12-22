@@ -33,6 +33,6 @@ public class ApiDocumentation {
 		public static final String ADD_PROVIDER = "Adds given provider to the list of known providers.";
 		public static final String REMOVE_PROVIDER = "Removes given provider from all the lists of providers kept by the service.";
 		public static final String UPDATE_PROVIDER = "Updates permission information for the given provider.";
-		public static final String SERVICE = "Changes membership service plugin to the given class name";
+		public static final String SERVICE = "Changes membership service plugin to the given class name.";
     }
 }

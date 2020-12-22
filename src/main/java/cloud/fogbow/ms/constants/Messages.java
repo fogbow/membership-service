@@ -17,20 +17,20 @@ public class Messages {
     }
 
     public static class Log {
-    	public static final String ADDING_NEW_PROVIDER = "Adding provider: %s";
-    	public static final String ADDING_REQUESTER_PROVIDER = "Adding requester: %s";
-    	public static final String ADDING_TARGET_PROVIDER = "Adding target: %s";
-    	public static final String CHANGING_MEMBERSHIP_PLUGIN = "Changing membership plugin to: %s";
+    	public static final String ADDING_NEW_PROVIDER = "Adding provider: %s.";
+    	public static final String ADDING_REQUESTER_PROVIDER = "Adding requester: %s.";
+    	public static final String ADDING_TARGET_PROVIDER = "Adding target: %s.";
+    	public static final String CHANGING_MEMBERSHIP_PLUGIN = "Changing membership plugin to: %s.";
     	public static final String GET_PUBLIC_KEY = "Get public key received.";
         public static final String INTERNAL_SERVER_ERROR = "Internal server error.";
         public static final String RELOADING_AUTHORIZATION_PLUGIN = "Reloading authorization plugin.";
         public static final String RELOADING_CONFIGURATION = "Reloading service configuration.";
-        public static final Object RELOADING_MEMBERSHIP_PLUGIN = "Reloading membership plugin.";
+        public static final String RELOADING_MEMBERSHIP_PLUGIN = "Reloading membership plugin.";
         public static final String RELOADING_MS_KEYS_HOLDER = "Reloading service keys.";
         public static final String RELOADING_PROPERTIES_HOLDER = "Reloading properties holder.";
         public static final String RELOADING_PUBLIC_KEYS_HOLDER = "Reloading public keys holder.";
-		public static final String REMOVING_PROVIDER = "Removing provider: %s";
-		public static final String REMOVING_REQUESTER_PROVIDER = "Removing requester: %s";
-		public static final String REMOVING_TARGET_PROVIDER = "Removing target: %s";
+		public static final String REMOVING_PROVIDER = "Removing provider: %s.";
+		public static final String REMOVING_REQUESTER_PROVIDER = "Removing requester: %s.";
+		public static final String REMOVING_TARGET_PROVIDER = "Removing target: %s.";
     }
 }
