@@ -27,6 +27,10 @@ public class PropertiesHolder {
     public String getProperty(String propertyName) {
         return properties.getProperty(propertyName);
     }
+    
+    public void setProperty(String propertyName, String propertyValue) {
+    	properties.setProperty(propertyName, propertyValue);
+    }
 
     public String getProperty(String propertyName, String defaultPropertyValue) {
         String propertyValue = this.properties.getProperty(propertyName, defaultPropertyValue);
@@ -38,5 +42,15 @@ public class PropertiesHolder {
     
     public Properties getProperties() {
         return this.properties;
+    }
+    
+    public static synchronized void reset() {
+        instance = null;
+    }
+    
+    public void updatePropertiesFile() {
+        String path = HomeDir.getPath();
+        String configFileName = path + SystemConstants.CONF_FILE_NAME;
+    	PropertiesUtil.writeProperties(properties, configFileName);
     }
 }

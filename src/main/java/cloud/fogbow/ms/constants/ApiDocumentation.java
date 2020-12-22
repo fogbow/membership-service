@@ -27,4 +27,12 @@ public class ApiDocumentation {
         public static final String TARGET_OPERATION = "States whether the local provider is allowed to perform operations in the given provider.";
     }
 
+    public static class Admin {
+    	public static final String API = "Manages admin-only operations";
+		public static final String RELOAD = "Reloads service configuration.";
+		public static final String ADD_PROVIDER = "Adds given provider to the list of known providers.";
+		public static final String REMOVE_PROVIDER = "Removes given provider from all the lists of providers kept by the service.";
+		public static final String UPDATE_PROVIDER = "Updates permission information for the given provider.";
+		public static final String SERVICE = "Changes membership service plugin to the given class name.";
+    }
 }
