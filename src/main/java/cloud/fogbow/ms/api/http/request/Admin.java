@@ -28,12 +28,12 @@ import io.swagger.annotations.ApiParam;
 // TODO add documentation for parameters
 public class Admin {
     public static final String ADMIN_ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "admin";
-    // TODO use these endpoint values
-    public static final String RELOAD_ENDPOINT = ADMIN_ENDPOINT + "/reload";
-    public static final String ADD_PROVIDER_ENDPOINT = ADMIN_ENDPOINT + "/provider";
+    public static final String RELOAD_ENDPOINT = "/reload";
+    public static final String SERVICE_ENDPOINT = "/service";
+    public static final String PROVIDER_ENDPOINT = "/provider";
 	
     @ApiOperation(value = ApiDocumentation.Admin.RELOAD)
-    @RequestMapping(value = "/reload", method = RequestMethod.POST)
+    @RequestMapping(value = RELOAD_ENDPOINT, method = RequestMethod.POST)
     public ResponseEntity<Boolean> reload(
     				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
     				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken) throws FogbowException {
@@ -42,7 +42,7 @@ public class Admin {
     }
     
     @ApiOperation(value = ApiDocumentation.Admin.SERVICE)
-    @RequestMapping(value = "/service", method = RequestMethod.POST)
+    @RequestMapping(value = SERVICE_ENDPOINT, method = RequestMethod.POST)
     public ResponseEntity<Boolean> service(
                     @ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
                     @RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY)String systemUserToken,
@@ -52,7 +52,7 @@ public class Admin {
     }
     
     @ApiOperation(value = ApiDocumentation.Admin.ADD_PROVIDER)
-    @RequestMapping(value = "/provider", method = RequestMethod.POST)
+    @RequestMapping(value = PROVIDER_ENDPOINT, method = RequestMethod.POST)
     public ResponseEntity<Boolean> addProvider(
     				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
     				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
@@ -62,7 +62,7 @@ public class Admin {
     }
     
     @ApiOperation(value = ApiDocumentation.Admin.REMOVE_PROVIDER)
-    @RequestMapping(value = "/provider", method = RequestMethod.DELETE)
+    @RequestMapping(value = PROVIDER_ENDPOINT, method = RequestMethod.DELETE)
     public ResponseEntity<Boolean> removeProvider(
     				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
     				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
@@ -72,7 +72,7 @@ public class Admin {
     }
     
     @ApiOperation(value = ApiDocumentation.Admin.UPDATE_PROVIDER)
-    @RequestMapping(value = "/provider", method = RequestMethod.PUT)
+    @RequestMapping(value = PROVIDER_ENDPOINT, method = RequestMethod.PUT)
     public ResponseEntity<Boolean> updateProvider(
                     @ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
                     @RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,

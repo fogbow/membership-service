@@ -1,5 +1,7 @@
 package cloud.fogbow.ms.core.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -31,12 +33,17 @@ public class BlockListTest {
     private String newRequesterMember = "newRequesterMember";
     private String newTargetAndRequesterMember = "newTargetAndRequesterMember";
     
-    private String membersListString = String.join(",", memberNotAuthorizedAsRequesterAndTarget, 
-                                        memberNotAuthorizedAsRequester, memberNotAuthorizedAsTarget);
-    private String notAllowedRequestersList = String.join(",", memberNotAuthorizedAsRequester, 
-                                        memberNotAuthorizedAsRequesterAndTarget);
-    private String notAllowedTargetsList = String.join(",", memberNotAuthorizedAsTarget, 
-                                        memberNotAuthorizedAsRequesterAndTarget);
+    
+    private List<String> membersList = Arrays.asList(memberNotAuthorizedAsRequesterAndTarget, 
+            memberNotAuthorizedAsRequester, memberNotAuthorizedAsTarget);
+    private List<String> notAllowedRequesters = Arrays.asList(memberNotAuthorizedAsRequesterAndTarget, 
+                                        memberNotAuthorizedAsRequester);
+    private List<String> notAllowedTargets = Arrays.asList(memberNotAuthorizedAsRequesterAndTarget, 
+                                        memberNotAuthorizedAsTarget);
+    
+    private String membersListString = String.join(",", membersList);
+    private String notAllowedRequestersString = String.join(",", notAllowedRequesters);
+    private String notAllowedTargetsString = String.join(",", notAllowedTargets);
     
     private String emptyNotAllowedTargetsList = "";
     private String emptyNotAllowedRequestersList = "";
@@ -133,8 +140,11 @@ public class BlockListTest {
     @Test
     public void testAddMember() throws Exception {
     	setUpBlockListWithDefaultLists();
+        List<String> expectedMembersList = new ArrayList<String>(membersList);
+        List<String> expectedTargetsList = new ArrayList<String>(notAllowedTargets);
+        List<String> expectedRequestersList = new ArrayList<String>(notAllowedRequesters);  
     	
-       List<String> membersId = this.service.listMembers();
+        List<String> membersId = this.service.listMembers();
         
         // verify before adding member
         Assert.assertEquals(3, membersId.size());
@@ -145,37 +155,40 @@ public class BlockListTest {
         Assert.assertFalse(membersId.contains(newRequesterMember));
         Assert.assertFalse(membersId.contains(newTargetAndRequesterMember));
         
+        // add first member
         this.service.addMember(new ProviderPermission(newTargetMember, true, false));
     
-        String firstUpdateMembersListString = String.join(",", memberNotAuthorizedAsRequesterAndTarget, 
-                memberNotAuthorizedAsRequester, memberNotAuthorizedAsTarget, 
-                newTargetMember);
-        
-        // verify configuration is update
-        Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, firstUpdateMembersListString);
+        expectedMembersList.add(newTargetMember);
+        expectedTargetsList.add(newTargetMember);
+
+        // verify configuration is updated
+        checkUpdatedConfiguration(String.join(",", expectedMembersList), String.join(",", expectedTargetsList), 
+                String.join(",", expectedRequestersList));
         Mockito.verify(propertiesHolder, Mockito.times(1)).updatePropertiesFile();
         
+        // add second member
         this.service.addMember(new ProviderPermission(newRequesterMember, false, true));
 
-        String secondUpdatedMembersListString = String.join(",", memberNotAuthorizedAsRequesterAndTarget, 
-                memberNotAuthorizedAsRequester, memberNotAuthorizedAsTarget, 
-                newTargetMember, newRequesterMember);
+        expectedMembersList.add(newRequesterMember);
+        expectedRequestersList.add(newRequesterMember);
         
-        // verify configuration is update
-        Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, secondUpdatedMembersListString);
+        // verify configuration is updated
+        checkUpdatedConfiguration(String.join(",", expectedMembersList), String.join(",", expectedTargetsList), 
+                String.join(",", expectedRequestersList));
         Mockito.verify(propertiesHolder, Mockito.times(2)).updatePropertiesFile();
 
+        // add third member
         this.service.addMember(new ProviderPermission(newTargetAndRequesterMember, true, true));
         
-        String thirdUpdatedMembersListString = String.join(",", memberNotAuthorizedAsRequesterAndTarget, 
-                memberNotAuthorizedAsRequester, memberNotAuthorizedAsTarget, 
-                newTargetMember, newRequesterMember, newTargetAndRequesterMember);
-        
-        // verify configuration is update
-        Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, thirdUpdatedMembersListString);
+        expectedMembersList.add(newTargetAndRequesterMember);
+        expectedTargetsList.add(newTargetAndRequesterMember);
+        expectedRequestersList.add(newTargetAndRequesterMember);
+
+        // verify configuration is updated
+        checkUpdatedConfiguration(String.join(",", expectedMembersList), String.join(",", expectedTargetsList), 
+                String.join(",", expectedRequestersList));
         Mockito.verify(propertiesHolder, Mockito.times(3)).updatePropertiesFile();
 
-        
         List<String> updateMembersId = this.service.listMembers();
 
         // verify after adding member
@@ -209,7 +222,8 @@ public class BlockListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(newTargetAndRequesterMember));
     }
     
-    // TODO documentation
+    // test case: When invoking the addMember method with a provider which is already a member, 
+    // it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testAddingAlreadyKnownProviderMustFail() throws ConfigurationErrorException {
         setUpBlockListWithDefaultLists();
@@ -223,7 +237,8 @@ public class BlockListTest {
         this.service.addMember(new ProviderPermission(newTargetMember, true, false));
     }
     
-    // TODO documentation
+    // test case: When invoking the addMember method with a provider with no permissions,
+    // it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testAddingNoTargetAndNoRequesterMemberMustFail() throws ConfigurationErrorException {
         setUpBlockListWithDefaultLists();
@@ -231,16 +246,22 @@ public class BlockListTest {
         this.service.addMember(new ProviderPermission(newTargetMember, false, false));
     }
     
-    // TODO documentation
+    // test case: When creating a BlockList instance using a configuration file 
+    // containing a provider with no permissions, it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testConstructorMustCheckIfAllMembersHavePermissions( ) throws ConfigurationErrorException {
         setUpBlockListWithProviderWithNoPermission();
     }
     
-    // TODO documentation
+    // test case: When invoking the updateMember method, it must update the given provider 
+    // permissions correctly, so that the change is reflected on the return value of the methods
+    // isTargetAuthorized and isRequesterAuthorized. Also, the configuration file must be updated.
     @Test
     public void testUpdateMember() throws Exception {
         setUpBlockListWithDefaultLists();
+        List<String> expectedMembersList = new ArrayList<String>(membersList);
+        List<String> expectedTargetsList = new ArrayList<String>(notAllowedTargets);
+        List<String> expectedRequestersList = new ArrayList<String>(notAllowedRequesters);  
         
         // verify before adding member
         Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsTarget));
@@ -251,9 +272,22 @@ public class BlockListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequester));
         Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
         
+        // target only member is now a requester only member
         this.service.updateMember(new ProviderPermission(memberNotAuthorizedAsTarget, false, true));
+        // requester only member is now a target only member
         this.service.updateMember(new ProviderPermission(memberNotAuthorizedAsRequester, true, false));
         
+        expectedTargetsList.remove(memberNotAuthorizedAsTarget);
+        expectedTargetsList.add(memberNotAuthorizedAsRequester);
+        expectedRequestersList.remove(memberNotAuthorizedAsRequester);
+        expectedRequestersList.add(memberNotAuthorizedAsTarget);
+        
+        // verify configuration is updated
+        checkUpdatedConfiguration(String.join(",", expectedMembersList), String.join(",", expectedTargetsList), 
+                String.join(",", expectedRequestersList));
+        Mockito.verify(propertiesHolder, Mockito.times(2)).updatePropertiesFile();
+        
+        // verify after updating member
         Assert.assertTrue(this.service.isTargetAuthorized(memberNotAuthorizedAsTarget));
         Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsRequesterAndTarget));
         Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsRequester));
@@ -263,7 +297,8 @@ public class BlockListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
     }
     
-    // TODO documentation
+    // test case: When invoking the updateMember method with a provider which is not on 
+    // the memberList, it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testUpdatingNotKnownMemberMustFail() throws ConfigurationErrorException {
         setUpBlockListWithDefaultLists();
@@ -341,21 +376,33 @@ public class BlockListTest {
     }
     
     private void setUpBlockListWithDefaultLists() throws ConfigurationErrorException {
-        setUpBlockList(membersListString, notAllowedRequestersList, notAllowedTargetsList);
+        setUpBlockList(membersListString, notAllowedRequestersString, notAllowedTargetsString);
     }
     
     private void setUpBlockListWithEmptyNotAllowedTargetsList() throws ConfigurationErrorException {
-     // TODO explain
+        // In this set up case, we want to keep the list of forbidden targets empty, 
+        // however we also want to assign at least one permission to all the providers. 
+        // Thus, in this case, all the providers are requesters.
         setUpBlockList(membersListString, membersListString, emptyNotAllowedTargetsList);
     }
     
     private void setUpBlockListWithEmptyNotAllowedRequestersList() throws ConfigurationErrorException {
-     // TODO explain
+        // In this set up case, we want to keep the list of forbidden requesters empty, 
+        // however we also want to assign at least one permission to all the providers. 
+        // Thus, in this case, all the providers are targets.
         setUpBlockList(membersListString, emptyNotAllowedRequestersList, membersListString);
     }
     
     private void setUpBlockListWithProviderWithNoPermission() throws ConfigurationErrorException {
-        // TODO explain
-        setUpBlockList(membersListString, emptyNotAllowedRequestersList, notAllowedTargetsList);
+        // In this set up case, we want to keep at least one provider without permission.  
+        // In order to achieve this, we keep the list of requesters empty and 
+        // assign the target permission to some providers, but not all.
+        setUpBlockList(membersListString, emptyNotAllowedRequestersList, notAllowedTargetsString);
+    }
+    
+    private void checkUpdatedConfiguration(String membersListString, String targetListString, String requesterListString) {
+        Mockito.verify(propertiesHolder, Mockito.atLeastOnce()).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, membersListString);
+        Mockito.verify(propertiesHolder, Mockito.atLeastOnce()).setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, targetListString);
+        Mockito.verify(propertiesHolder, Mockito.atLeastOnce()).setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, requesterListString);
     }
 }

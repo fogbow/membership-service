@@ -1,5 +1,7 @@
 package cloud.fogbow.ms.core.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -31,13 +33,17 @@ public class AllowListTest {
     private String newRequesterMember = "newRequesterMember";
     private String newTargetAndRequesterMember = "newTargetAndRequesterMember";
     
-    private String membersListString = String.join(",", memberAuthorizedAsRequesterAndTarget, 
-                                        memberAuthorizedAsRequester, memberAuthorizedAsTarget);
-    private String allowedRequestersList = String.join(",", memberAuthorizedAsRequester, 
-                                        memberAuthorizedAsRequesterAndTarget);
-    private String allowedTargetsList = String.join(",", memberAuthorizedAsTarget, 
-                                        memberAuthorizedAsRequesterAndTarget);
+    private List<String> membersList = Arrays.asList(memberAuthorizedAsRequesterAndTarget, 
+            memberAuthorizedAsRequester, memberAuthorizedAsTarget);
+    private List<String> allowedRequesters = Arrays.asList(memberAuthorizedAsRequesterAndTarget, 
+                                        memberAuthorizedAsRequester);
+    private List<String> allowedTargets = Arrays.asList(memberAuthorizedAsRequesterAndTarget, 
+                                        memberAuthorizedAsTarget);
     
+    private String membersListString = String.join(",", membersList);
+    private String allowedRequestersList = String.join(",", allowedRequesters);
+    private String allowedTargetsList = String.join(",", allowedTargets);
+
     private String emptyAllowedTargetsList = "";
     private String emptyAllowedRequestersList = "";
     
@@ -132,10 +138,12 @@ public class AllowListTest {
     @Test
     public void testAddMember() throws Exception {
     	setUpAllowListWithDefaultLists();
-    	
-    	List<String> membersId = this.service.listMembers();
+    	List<String> expectedMembersList = new ArrayList<String>(membersList);
+    	List<String> expectedTargetsList = new ArrayList<String>(allowedTargets);
+    	List<String> expectedRequestersList = new ArrayList<String>(allowedRequesters);    	
     	
         // verify before adding member
+    	List<String> membersId = this.service.listMembers();
         Assert.assertEquals(3, membersId.size());
         Assert.assertTrue(membersId.contains(memberAuthorizedAsRequesterAndTarget));
         Assert.assertTrue(membersId.contains(memberAuthorizedAsRequester));
@@ -144,39 +152,43 @@ public class AllowListTest {
         Assert.assertFalse(membersId.contains(newRequesterMember));
         Assert.assertFalse(membersId.contains(newTargetAndRequesterMember));
     	
+        // add first member
     	this.service.addMember(new ProviderPermission(newTargetMember, true, false));
     
-    	String firstUpdateMembersListString = String.join(",", memberAuthorizedAsRequesterAndTarget, 
-                memberAuthorizedAsRequester, memberAuthorizedAsTarget, 
-                newTargetMember);
-    	
-        // verify configuration is update
-        Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, firstUpdateMembersListString);
-        Mockito.verify(propertiesHolder, Mockito.times(1)).updatePropertiesFile();
-    	
-    	this.service.addMember(new ProviderPermission(newRequesterMember, false, true));
+    	expectedMembersList.add(newTargetMember);
+    	expectedTargetsList.add(newTargetMember);
 
-        String secondUpdatedMembersListString = String.join(",", memberAuthorizedAsRequesterAndTarget, 
-                memberAuthorizedAsRequester, memberAuthorizedAsTarget, 
-                newTargetMember, newRequesterMember);
-    	
-        // verify configuration is update
-        Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, secondUpdatedMembersListString);
+        // verify configuration is updated
+        checkUpdatedConfiguration(String.join(",", expectedMembersList), String.join(",", expectedTargetsList), 
+                String.join(",", expectedRequestersList));
+        Mockito.verify(propertiesHolder, Mockito.times(1)).updatePropertiesFile();
+        
+    	// add second member
+        this.service.addMember(new ProviderPermission(newRequesterMember, false, true));
+
+        expectedMembersList.add(newRequesterMember);
+        expectedRequestersList.add(newRequesterMember);
+        
+        // verify configuration is updated
+        checkUpdatedConfiguration(String.join(",", expectedMembersList), String.join(",", expectedTargetsList), 
+                String.join(",", expectedRequestersList));
         Mockito.verify(propertiesHolder, Mockito.times(2)).updatePropertiesFile();
 
+        // add third member
     	this.service.addMember(new ProviderPermission(newTargetAndRequesterMember, true, true));
     	
-        String thirdUpdatedMembersListString = String.join(",", memberAuthorizedAsRequesterAndTarget, 
-                memberAuthorizedAsRequester, memberAuthorizedAsTarget, 
-                newTargetMember, newRequesterMember, newTargetAndRequesterMember);
-    	
-        // verify configuration is update
-        Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, thirdUpdatedMembersListString);
+        expectedMembersList.add(newTargetAndRequesterMember);
+        expectedTargetsList.add(newTargetAndRequesterMember);
+        expectedRequestersList.add(newTargetAndRequesterMember);
+
+        // verify configuration is updated
+        checkUpdatedConfiguration(String.join(",", expectedMembersList), String.join(",", expectedTargetsList), 
+                String.join(",", expectedRequestersList));
         Mockito.verify(propertiesHolder, Mockito.times(3)).updatePropertiesFile();
-        
+                
+        // verify after adding member
         List<String> updateMembersId = this.service.listMembers();
 
-        // verify after adding member
         Assert.assertEquals(6, updateMembersId.size());
         Assert.assertTrue(updateMembersId.contains(memberAuthorizedAsRequesterAndTarget));
         Assert.assertTrue(updateMembersId.contains(memberAuthorizedAsRequester));
@@ -206,8 +218,9 @@ public class AllowListTest {
         Assert.assertTrue(this.service.isRequesterAuthorized(newRequesterMember));
         Assert.assertTrue(this.service.isRequesterAuthorized(newTargetAndRequesterMember));
     }
-    
-    // TODO documentation
+
+    // test case: When invoking the addMember method with a provider which is already a member, 
+    // it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testAddingAlreadyKnownProviderMustFail() throws ConfigurationErrorException {
         setUpAllowListWithDefaultLists();
@@ -221,7 +234,8 @@ public class AllowListTest {
         this.service.addMember(new ProviderPermission(newTargetMember, true, false));
     }
     
-    // TODO documentation
+    // test case: When invoking the addMember method with a provider with no permissions,
+    // it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testAddingNoTargetAndNoRequesterMemberMustFail() throws ConfigurationErrorException {
         setUpAllowListWithDefaultLists();
@@ -229,18 +243,24 @@ public class AllowListTest {
         this.service.addMember(new ProviderPermission(newTargetMember, false, false));
     }
     
-    // TODO documentation
+    // test case: When creating an AllowList instance using a configuration file 
+    // containing a provider with no permissions, it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
-    public void testConstructorMustCheckIfAllMembersHavePermissions( ) throws ConfigurationErrorException {
+    public void testConstructorMustCheckIfAllMembersHavePermissions() throws ConfigurationErrorException {
         setUpAllowListWithProviderWithNoPermission();
     }
     
-    // TODO documentation
+    // test case: When invoking the updateMember method, it must update the given provider 
+    // permissions correctly, so that the change is reflected on the return value of the methods
+    // isTargetAuthorized and isRequesterAuthorized. Also, the configuration file must be updated.
     @Test
     public void testUpdateMember() throws Exception {
         setUpAllowListWithDefaultLists();
+        List<String> expectedMembersList = new ArrayList<String>(membersList);
+        List<String> expectedTargetsList = new ArrayList<String>(allowedTargets);
+        List<String> expectedRequestersList = new ArrayList<String>(allowedRequesters);  
         
-        // verify before adding member
+        // verify before updating member
         Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsTarget));
         Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsRequesterAndTarget));
         Assert.assertFalse(this.service.isTargetAuthorized(memberAuthorizedAsRequester));
@@ -249,9 +269,22 @@ public class AllowListTest {
         Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequester));
         Assert.assertFalse(this.service.isRequesterAuthorized(memberAuthorizedAsTarget));
         
+        // target only member is now a requester only member
         this.service.updateMember(new ProviderPermission(memberAuthorizedAsTarget, false, true));
+        // requester only member is now a target only member
         this.service.updateMember(new ProviderPermission(memberAuthorizedAsRequester, true, false));
         
+        expectedTargetsList.remove(memberAuthorizedAsTarget);
+        expectedTargetsList.add(memberAuthorizedAsRequester);
+        expectedRequestersList.remove(memberAuthorizedAsRequester);
+        expectedRequestersList.add(memberAuthorizedAsTarget);
+        
+        // verify configuration is updated
+        checkUpdatedConfiguration(String.join(",", expectedMembersList), String.join(",", expectedTargetsList), 
+                String.join(",", expectedRequestersList));
+        Mockito.verify(propertiesHolder, Mockito.times(2)).updatePropertiesFile();
+        
+        // verify after updating member
         Assert.assertFalse(this.service.isTargetAuthorized(memberAuthorizedAsTarget));
         Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsRequesterAndTarget));
         Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsRequester));
@@ -261,7 +294,8 @@ public class AllowListTest {
         Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsTarget));
     }
     
-    // TODO documentation
+    // test case: When invoking the updateMember method with a provider which is not on 
+    // the memberList, it must throw a ConfigurationErrorException.
     @Test(expected = ConfigurationErrorException.class)
     public void testUpdatingNotKnownMemberMustFail() throws ConfigurationErrorException {
         setUpAllowListWithDefaultLists();
@@ -343,17 +377,29 @@ public class AllowListTest {
     }
     
     private void setUpAllowListWithEmptyAllowedTargetsList() throws ConfigurationErrorException {
-        // TODO explain
+        // In this set up case, we want to keep the list of allowed targets empty, 
+        // however we also want to assign at least one permission to all the providers. 
+        // Thus, in this case, all the providers are requesters.
         setUpAllowList(membersListString, membersListString, emptyAllowedTargetsList);
     }
     
     private void setUpAllowListWithEmptyAllowedRequestersList() throws ConfigurationErrorException {
-     // TODO explain
+        // In this set up case, we want to keep the list of allowed requesters empty, 
+        // however we also want to assign at least one permission to all the providers. 
+        // Thus, in this case, all the providers are targets.
         setUpAllowList(membersListString, emptyAllowedRequestersList, membersListString);
     }
     
     private void setUpAllowListWithProviderWithNoPermission() throws ConfigurationErrorException {
-        // TODO explain
+        // In this set up case, we want to keep at least one provider without permission.  
+        // In order to achieve this, we keep the list of requesters empty and 
+        // assign the target permission to some providers, but not all.
         setUpAllowList(membersListString, emptyAllowedRequestersList, allowedTargetsList);
+    }
+    
+    private void checkUpdatedConfiguration(String membersListString, String targetListString, String requesterListString) {
+        Mockito.verify(propertiesHolder, Mockito.atLeastOnce()).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, membersListString);
+        Mockito.verify(propertiesHolder, Mockito.atLeastOnce()).setProperty(ConfigurationPropertyKeys.TARGET_MEMBERS_LIST_KEY, targetListString);
+        Mockito.verify(propertiesHolder, Mockito.atLeastOnce()).setProperty(ConfigurationPropertyKeys.REQUESTER_MEMBERS_LIST_KEY, requesterListString);
     }
 }

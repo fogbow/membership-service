@@ -140,7 +140,9 @@ public class ApplicationFacadeTest {
 		Mockito.verify(this.membershipService, Mockito.times(1)).listMembers();
 	}
 	
-	// TODO documentation
+	// test case: When invoking the isTargetAuthorized method, 
+	// it must call the isTargetAuthorized method of the MembershipService
+	// instance it holds.
     @Test
     public void testIsTargetAuthorized() {
         Mockito.doReturn(true).when(this.membershipService).isTargetAuthorized(provider);
@@ -150,7 +152,9 @@ public class ApplicationFacadeTest {
         Mockito.verify(membershipService, Mockito.times(1)).isTargetAuthorized(provider);
     }
 	
-	// TODO documentation
+    // test case: When invoking the isRequesterAuthorized method, 
+    // it must call the isRequesterAuthorized method of the MembershipService
+    // instance it holds.
 	@Test
 	public void testIsRequesterAuthorized() {
 	    Mockito.doReturn(true).when(this.membershipService).isRequesterAuthorized(provider);
@@ -200,7 +204,9 @@ public class ApplicationFacadeTest {
 		Mockito.verify(membershipService, Mockito.times(1)).removeMember(provider);
 	}
 	
-	// TODO documentation
+	// test case: When invoking the updateProvider method, it must
+	// authorize the operation and call the updateMember method of
+	// the MembershipService instance it holds.
 	@Test
 	public void testUpdateProvider() throws FogbowException {
         boolean target = true;
