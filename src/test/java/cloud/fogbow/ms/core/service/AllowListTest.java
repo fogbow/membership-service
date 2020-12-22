@@ -12,6 +12,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import cloud.fogbow.common.exceptions.ConfigurationErrorException;
+import cloud.fogbow.ms.api.parameters.ProviderPermission;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PropertiesHolder;
@@ -124,7 +125,7 @@ public class AllowListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(notMember1));
         Assert.assertFalse(this.service.isRequesterAuthorized(""));
     }
-    
+
     // test case: When invoking the addMember method, it must add the given provider correctly, 
     // so that the change is reflected on the return value of the methods listMembers, isMember, 
     // isTargetAuthorized and isRequesterAuthorized. Also, the configuration file must be updated.
@@ -143,7 +144,7 @@ public class AllowListTest {
         Assert.assertFalse(membersId.contains(newRequesterMember));
         Assert.assertFalse(membersId.contains(newTargetAndRequesterMember));
     	
-    	this.service.addMember(newTargetMember, true, false);
+    	this.service.addMember(new ProviderPermission(newTargetMember, true, false));
     
     	String firstUpdateMembersListString = String.join(",", memberAuthorizedAsRequesterAndTarget, 
                 memberAuthorizedAsRequester, memberAuthorizedAsTarget, 
@@ -153,7 +154,7 @@ public class AllowListTest {
         Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, firstUpdateMembersListString);
         Mockito.verify(propertiesHolder, Mockito.times(1)).updatePropertiesFile();
     	
-    	this.service.addMember(newRequesterMember, false, true);
+    	this.service.addMember(new ProviderPermission(newRequesterMember, false, true));
 
         String secondUpdatedMembersListString = String.join(",", memberAuthorizedAsRequesterAndTarget, 
                 memberAuthorizedAsRequester, memberAuthorizedAsTarget, 
@@ -163,7 +164,7 @@ public class AllowListTest {
         Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, secondUpdatedMembersListString);
         Mockito.verify(propertiesHolder, Mockito.times(2)).updatePropertiesFile();
 
-    	this.service.addMember(newTargetAndRequesterMember, true, true);
+    	this.service.addMember(new ProviderPermission(newTargetAndRequesterMember, true, true));
     	
         String thirdUpdatedMembersListString = String.join(",", memberAuthorizedAsRequesterAndTarget, 
                 memberAuthorizedAsRequester, memberAuthorizedAsTarget, 
@@ -220,8 +221,8 @@ public class AllowListTest {
         Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequester));
         Assert.assertFalse(this.service.isRequesterAuthorized(memberAuthorizedAsTarget));
         
-        this.service.updateMember(memberAuthorizedAsTarget, false, true);
-        this.service.updateMember(memberAuthorizedAsRequester, true, false);
+        this.service.updateMember(new ProviderPermission(memberAuthorizedAsTarget, false, true));
+        this.service.updateMember(new ProviderPermission(memberAuthorizedAsRequester, true, false));
         
         Assert.assertFalse(this.service.isTargetAuthorized(memberAuthorizedAsTarget));
         Assert.assertTrue(this.service.isTargetAuthorized(memberAuthorizedAsRequesterAndTarget));

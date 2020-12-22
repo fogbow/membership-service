@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cloud.fogbow.common.exceptions.ConfigurationErrorException;
+import cloud.fogbow.ms.api.parameters.ProviderPermission;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.core.MembershipService;
@@ -77,17 +78,21 @@ public abstract class MembershipListService implements MembershipService {
 	}
 	
 	@Override
-	public void addMember(String provider, boolean target, boolean requester) throws ConfigurationErrorException {
-        if (isMember(provider)) {
+	public void addMember(ProviderPermission permission) throws ConfigurationErrorException {
+	    String provider = permission.getProvider();
+	    boolean isTarget = permission.isTarget();
+	    boolean isRequester = permission.isRequester();
+	    
+        if (isMember(permission.getProvider())) {
             throw new ConfigurationErrorException(Messages.Exception.PROVIDER_IS_ALREADY_A_MEMBER);
         }
         
-        validateProviderProperties(target, requester);
+        validateProviderProperties(isTarget, isRequester);
 
         membersList.add(provider);
         
-        updateProviderList(targetMembers, provider, target);
-        updateProviderList(requesterMembers, provider, requester);
+        updateProviderList(targetMembers, provider, isTarget);
+        updateProviderList(requesterMembers, provider, isRequester);
         
         updateConfigurationFile();
 	}
@@ -104,12 +109,16 @@ public abstract class MembershipListService implements MembershipService {
 	}
 
 	@Override
-	public void updateMember(String provider, boolean target, boolean requester) throws ConfigurationErrorException {
+	public void updateMember(ProviderPermission permission) throws ConfigurationErrorException {
+        String provider = permission.getProvider();
+        boolean isTarget = permission.isTarget();
+        boolean isRequester = permission.isRequester();
+ 
 	    checkProviderIsMember(provider);
-	    validateProviderProperties(target, requester);
+	    validateProviderProperties(isTarget, isRequester);
 	    
-	    updateProviderList(targetMembers, provider, target);
-	    updateProviderList(requesterMembers, provider, requester);
+	    updateProviderList(targetMembers, provider, isTarget);
+	    updateProviderList(requesterMembers, provider, isRequester);
 	    
 	    updateConfigurationFile();
 	}

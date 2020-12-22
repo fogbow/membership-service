@@ -15,6 +15,7 @@ import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.common.plugins.authorization.AuthorizationPlugin;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
+import cloud.fogbow.ms.api.parameters.ProviderPermission;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.core.authorization.MsOperation;
@@ -94,8 +95,8 @@ public class ApplicationFacade {
     	this.authorizationPlugin = authorizationPlugin;
     }
 
-    public void addProvider(String userToken, String provider, boolean target, boolean requester) throws FogbowException {
-        LOGGER.info(String.format(Messages.Log.REMOVING_PROVIDER, provider));
+    public void addProvider(String userToken, ProviderPermission permission) throws FogbowException {
+        LOGGER.info(String.format(Messages.Log.REMOVING_PROVIDER, permission.getProvider()));
         
         RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
         SystemUser systemUser = AuthenticationUtil.authenticate(asPublicKey, userToken);
@@ -104,7 +105,7 @@ public class ApplicationFacade {
         setAsReloading();        
         
         try {
-            this.membershipService.addMember(provider, target, requester);
+            this.membershipService.addMember(permission);
         } finally {
             finishReloading();
         }
@@ -126,7 +127,7 @@ public class ApplicationFacade {
     	}
 	}
 	
-    public void updateProvider(String userToken, String provider, boolean target, boolean requester) throws FogbowException {
+    public void updateProvider(String userToken, ProviderPermission provider) throws FogbowException {
         LOGGER.info(String.format(Messages.Log.REMOVING_PROVIDER, provider));
         
         RSAPublicKey asPublicKey = MSPublicKeysHolder.getInstance().getAsPublicKey();
@@ -136,7 +137,7 @@ public class ApplicationFacade {
         setAsReloading();
         
         try {
-            this.membershipService.updateMember(provider, target, requester);
+            this.membershipService.updateMember(provider);
         } finally {
             finishReloading();
         }

@@ -3,6 +3,7 @@ package cloud.fogbow.ms.core;
 import java.util.List;
 
 import cloud.fogbow.common.exceptions.ConfigurationErrorException;
+import cloud.fogbow.ms.api.parameters.ProviderPermission;
 
 public interface MembershipService {
 
@@ -31,10 +32,10 @@ public interface MembershipService {
     public boolean isRequesterAuthorized(String provider);
 
     // TODO documentation
-    public void addMember(String provider, boolean target, boolean requester) throws ConfigurationErrorException;
+    public void addMember(ProviderPermission permission) throws ConfigurationErrorException;
     
     // TODO documentation
-    public void updateMember(String provider, boolean target, boolean requester) throws ConfigurationErrorException;
+    public void updateMember(ProviderPermission provider) throws ConfigurationErrorException;
    
     // TODO documentation
 	public void removeMember(String provider) throws ConfigurationErrorException;

@@ -57,7 +57,7 @@ public class Admin {
     				@ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
     				@RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
     				@RequestBody ProviderPermission provider) throws FogbowException {
-        ApplicationFacade.getInstance().addProvider(systemUserToken, provider.getProvider(), provider.getTarget(), provider.getRequester());
+        ApplicationFacade.getInstance().addProvider(systemUserToken, provider);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
@@ -77,7 +77,7 @@ public class Admin {
                     @ApiParam(value = cloud.fogbow.common.constants.ApiDocumentation.Token.SYSTEM_USER_TOKEN)
                     @RequestHeader(required = false, value = CommonKeys.SYSTEM_USER_TOKEN_HEADER_KEY) String systemUserToken,
                     @RequestBody ProviderPermission provider) throws FogbowException {
-        ApplicationFacade.getInstance().updateProvider(systemUserToken, provider.getProvider(), provider.getTarget(), provider.getRequester());
+        ApplicationFacade.getInstance().updateProvider(systemUserToken, provider);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

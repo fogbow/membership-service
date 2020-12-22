@@ -22,6 +22,7 @@ import cloud.fogbow.common.exceptions.UnauthorizedRequestException;
 import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.common.plugins.authorization.AuthorizationPlugin;
 import cloud.fogbow.common.util.PublicKeysHolder;
+import cloud.fogbow.ms.api.parameters.ProviderPermission;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.core.authorization.AdminAuthorizationPlugin;
 import cloud.fogbow.ms.core.authorization.MsOperation;
@@ -146,11 +147,12 @@ public class ApplicationFacadeTest {
 	public void testAddProvider() throws FogbowException {
 	    boolean target = true;
 	    boolean requester = true;
+	    ProviderPermission permission = new ProviderPermission(provider, target, requester);
 	    
-		this.facade.addProvider(token, provider, true, true);
+		this.facade.addProvider(token, permission);
 		
 		Mockito.verify(authorizationPlugin, Mockito.times(1)).isAuthorized(systemUser, operation);
-		Mockito.verify(membershipService, Mockito.times(1)).addMember(provider, target, requester);
+		Mockito.verify(membershipService, Mockito.times(1)).addMember(permission);
 	}
 	
 	// test case: When invoking the addProvider method and 
@@ -160,10 +162,11 @@ public class ApplicationFacadeTest {
 	public void testAddProviderUnauthorizedOperation() throws FogbowException {
         boolean target = true;
         boolean requester = true;
+        ProviderPermission permission = new ProviderPermission(provider, target, requester);
 
 		Mockito.doThrow(new UnauthorizedRequestException()).when(this.authorizationPlugin).isAuthorized(systemUser, operation);
 		
-		this.facade.addProvider(token, provider, target, requester);
+		this.facade.addProvider(token, permission);
 	}
 	
 	// test case: When invoking the removeProvider method, it must 

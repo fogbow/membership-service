@@ -12,6 +12,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import cloud.fogbow.common.exceptions.ConfigurationErrorException;
+import cloud.fogbow.ms.api.parameters.ProviderPermission;
 import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.core.MembershipService;
 import cloud.fogbow.ms.core.PropertiesHolder;
@@ -144,7 +145,7 @@ public class BlockListTest {
         Assert.assertFalse(membersId.contains(newRequesterMember));
         Assert.assertFalse(membersId.contains(newTargetAndRequesterMember));
         
-        this.service.addMember(newTargetMember, true, false);
+        this.service.addMember(new ProviderPermission(newTargetMember, true, false));
     
         String firstUpdateMembersListString = String.join(",", memberNotAuthorizedAsRequesterAndTarget, 
                 memberNotAuthorizedAsRequester, memberNotAuthorizedAsTarget, 
@@ -154,7 +155,7 @@ public class BlockListTest {
         Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, firstUpdateMembersListString);
         Mockito.verify(propertiesHolder, Mockito.times(1)).updatePropertiesFile();
         
-        this.service.addMember(newRequesterMember, false, true);
+        this.service.addMember(new ProviderPermission(newRequesterMember, false, true));
 
         String secondUpdatedMembersListString = String.join(",", memberNotAuthorizedAsRequesterAndTarget, 
                 memberNotAuthorizedAsRequester, memberNotAuthorizedAsTarget, 
@@ -164,7 +165,7 @@ public class BlockListTest {
         Mockito.verify(propertiesHolder, Mockito.times(1)).setProperty(ConfigurationPropertyKeys.MEMBERS_LIST_KEY, secondUpdatedMembersListString);
         Mockito.verify(propertiesHolder, Mockito.times(2)).updatePropertiesFile();
 
-        this.service.addMember(newTargetAndRequesterMember, true, true);
+        this.service.addMember(new ProviderPermission(newTargetAndRequesterMember, true, true));
         
         String thirdUpdatedMembersListString = String.join(",", memberNotAuthorizedAsRequesterAndTarget, 
                 memberNotAuthorizedAsRequester, memberNotAuthorizedAsTarget, 
@@ -222,8 +223,8 @@ public class BlockListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequester));
         Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
         
-        this.service.updateMember(memberNotAuthorizedAsTarget, false, true);
-        this.service.updateMember(memberNotAuthorizedAsRequester, true, false);
+        this.service.updateMember(new ProviderPermission(memberNotAuthorizedAsTarget, false, true));
+        this.service.updateMember(new ProviderPermission(memberNotAuthorizedAsRequester, true, false));
         
         Assert.assertTrue(this.service.isTargetAuthorized(memberNotAuthorizedAsTarget));
         Assert.assertFalse(this.service.isTargetAuthorized(memberNotAuthorizedAsRequesterAndTarget));

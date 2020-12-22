@@ -5,15 +5,25 @@ public class ProviderPermission {
     private boolean target;
     private boolean requester;
     
+    public ProviderPermission() {
+        
+    }
+    
+    public ProviderPermission(String provider, boolean target, boolean requester) {
+        this.provider = provider;
+        this.target = target;
+        this.requester = requester;
+    }
+    
     public String getProvider() {
         return provider;
     }
     
-    public boolean getTarget() {
+    public boolean isTarget() {
         return target;
     }
     
-    public boolean getRequester() {
+    public boolean isRequester() {
         return requester;
     }
 }
