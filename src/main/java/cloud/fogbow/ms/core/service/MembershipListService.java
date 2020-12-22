@@ -123,7 +123,6 @@ public abstract class MembershipListService implements MembershipService {
 	    updateConfigurationFile();
 	}
 	
-	// TODO test this
 	protected void validateMembersList() throws ConfigurationErrorException {
 	    for (String provider : membersList) {
 	        validateProviderProperties(targetMembers.contains(provider), requesterMembers.contains(provider));

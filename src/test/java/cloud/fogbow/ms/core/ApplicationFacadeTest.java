@@ -79,7 +79,7 @@ public class ApplicationFacadeTest {
 		this.facade.setMembershipService(membershipService);
 		this.facade.setAuthorizationPlugin(authorizationPlugin);
     }
-	
+    
     // test case: When invoking the updateMembershipService method, it must 
     // authorize the operation, call the PluginInstantiator to get a new 
     // MembershipService instance and set this instance as the one used 
@@ -140,6 +140,26 @@ public class ApplicationFacadeTest {
 		Mockito.verify(this.membershipService, Mockito.times(1)).listMembers();
 	}
 	
+	// TODO documentation
+    @Test
+    public void testIsTargetAuthorized() {
+        Mockito.doReturn(true).when(this.membershipService).isTargetAuthorized(provider);
+        
+        assertTrue(this.facade.isTargetAuthorized(provider));
+        
+        Mockito.verify(membershipService, Mockito.times(1)).isTargetAuthorized(provider);
+    }
+	
+	// TODO documentation
+	@Test
+	public void testIsRequesterAuthorized() {
+	    Mockito.doReturn(true).when(this.membershipService).isRequesterAuthorized(provider);
+	    
+	    assertTrue(this.facade.isRequesterAuthorized(provider));
+	    
+	    Mockito.verify(membershipService, Mockito.times(1)).isRequesterAuthorized(provider);
+	}
+	
 	// test case: When invoking the addProvider method, it must 
 	// authorize the operation and call the addMember method of 
 	// the MembershipService instance it holds.
@@ -178,6 +198,19 @@ public class ApplicationFacadeTest {
 		
 		Mockito.verify(authorizationPlugin, Mockito.times(1)).isAuthorized(systemUser, operation);
 		Mockito.verify(membershipService, Mockito.times(1)).removeMember(provider);
+	}
+	
+	// TODO documentation
+	@Test
+	public void testUpdateProvider() throws FogbowException {
+        boolean target = true;
+        boolean requester = true;
+        ProviderPermission permission = new ProviderPermission(provider, target, requester);
+
+        this.facade.updateProvider(token, permission);
+
+        Mockito.verify(authorizationPlugin, Mockito.times(1)).isAuthorized(systemUser, operation);
+        Mockito.verify(membershipService, Mockito.times(1)).updateMember(permission);
 	}
 
 	// test case: When invoking the removeProvider method and 

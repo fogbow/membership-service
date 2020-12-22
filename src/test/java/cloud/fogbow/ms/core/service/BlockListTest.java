@@ -210,6 +210,34 @@ public class BlockListTest {
     }
     
     // TODO documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void testAddingAlreadyKnownProviderMustFail() throws ConfigurationErrorException {
+        setUpBlockListWithDefaultLists();
+        
+        try {
+            this.service.addMember(new ProviderPermission(newTargetMember, true, false));
+        } catch (Exception e) {
+            Assert.fail("This call should not fail.");
+        }
+        
+        this.service.addMember(new ProviderPermission(newTargetMember, true, false));
+    }
+    
+    // TODO documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void testAddingNoTargetAndNoRequesterMemberMustFail() throws ConfigurationErrorException {
+        setUpBlockListWithDefaultLists();
+        
+        this.service.addMember(new ProviderPermission(newTargetMember, false, false));
+    }
+    
+    // TODO documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void testConstructorMustCheckIfAllMembersHavePermissions( ) throws ConfigurationErrorException {
+        setUpBlockListWithProviderWithNoPermission();
+    }
+    
+    // TODO documentation
     @Test
     public void testUpdateMember() throws Exception {
         setUpBlockListWithDefaultLists();
@@ -233,6 +261,14 @@ public class BlockListTest {
         Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequesterAndTarget));
         Assert.assertTrue(this.service.isRequesterAuthorized(memberNotAuthorizedAsRequester));
         Assert.assertFalse(this.service.isRequesterAuthorized(memberNotAuthorizedAsTarget));
+    }
+    
+    // TODO documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void testUpdatingNotKnownMemberMustFail() throws ConfigurationErrorException {
+        setUpBlockListWithDefaultLists();
+        
+        this.service.updateMember(new ProviderPermission(notMember1, false, true));
     }
     
     // test case: When invoking the removeMember method, it must remove the given provider correctly
@@ -309,10 +345,17 @@ public class BlockListTest {
     }
     
     private void setUpBlockListWithEmptyNotAllowedTargetsList() throws ConfigurationErrorException {
+     // TODO explain
         setUpBlockList(membersListString, membersListString, emptyNotAllowedTargetsList);
     }
     
     private void setUpBlockListWithEmptyNotAllowedRequestersList() throws ConfigurationErrorException {
+     // TODO explain
         setUpBlockList(membersListString, emptyNotAllowedRequestersList, membersListString);
+    }
+    
+    private void setUpBlockListWithProviderWithNoPermission() throws ConfigurationErrorException {
+        // TODO explain
+        setUpBlockList(membersListString, emptyNotAllowedRequestersList, notAllowedTargetsList);
     }
 }

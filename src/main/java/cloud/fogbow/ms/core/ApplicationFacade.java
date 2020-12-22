@@ -20,7 +20,6 @@ import cloud.fogbow.ms.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.ms.constants.Messages;
 import cloud.fogbow.ms.core.authorization.MsOperation;
 
-// TODO add tests
 public class ApplicationFacade {
 
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);

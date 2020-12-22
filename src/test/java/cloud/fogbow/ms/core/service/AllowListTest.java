@@ -208,6 +208,34 @@ public class AllowListTest {
     }
     
     // TODO documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void testAddingAlreadyKnownProviderMustFail() throws ConfigurationErrorException {
+        setUpAllowListWithDefaultLists();
+        
+        try {
+            this.service.addMember(new ProviderPermission(newTargetMember, true, false));
+        } catch (Exception e) {
+            Assert.fail("This call should not fail.");
+        }
+        
+        this.service.addMember(new ProviderPermission(newTargetMember, true, false));
+    }
+    
+    // TODO documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void testAddingNoTargetAndNoRequesterMemberMustFail() throws ConfigurationErrorException {
+        setUpAllowListWithDefaultLists();
+        
+        this.service.addMember(new ProviderPermission(newTargetMember, false, false));
+    }
+    
+    // TODO documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void testConstructorMustCheckIfAllMembersHavePermissions( ) throws ConfigurationErrorException {
+        setUpAllowListWithProviderWithNoPermission();
+    }
+    
+    // TODO documentation
     @Test
     public void testUpdateMember() throws Exception {
         setUpAllowListWithDefaultLists();
@@ -231,6 +259,14 @@ public class AllowListTest {
         Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsRequesterAndTarget));
         Assert.assertFalse(this.service.isRequesterAuthorized(memberAuthorizedAsRequester));
         Assert.assertTrue(this.service.isRequesterAuthorized(memberAuthorizedAsTarget));
+    }
+    
+    // TODO documentation
+    @Test(expected = ConfigurationErrorException.class)
+    public void testUpdatingNotKnownMemberMustFail() throws ConfigurationErrorException {
+        setUpAllowListWithDefaultLists();
+        
+        this.service.updateMember(new ProviderPermission(notMember1, false, true));
     }
     
     // test case: When invoking the removeMember method, it must remove the given provider correctly
@@ -307,10 +343,17 @@ public class AllowListTest {
     }
     
     private void setUpAllowListWithEmptyAllowedTargetsList() throws ConfigurationErrorException {
+        // TODO explain
         setUpAllowList(membersListString, membersListString, emptyAllowedTargetsList);
     }
     
     private void setUpAllowListWithEmptyAllowedRequestersList() throws ConfigurationErrorException {
+     // TODO explain
         setUpAllowList(membersListString, emptyAllowedRequestersList, membersListString);
+    }
+    
+    private void setUpAllowListWithProviderWithNoPermission() throws ConfigurationErrorException {
+        // TODO explain
+        setUpAllowList(membersListString, emptyAllowedRequestersList, allowedTargetsList);
     }
 }
