@@ -41,4 +41,15 @@ public class AdminAuthorizationPlugin implements AuthorizationPlugin<MsOperation
 		return true;
 	}
 
+	@Override
+	public void setPolicy(String policy) {
+		// Currently there is no implementation 
+		// for this version of AuthorizationPlugin
+	}
+
+	@Override
+	public void updatePolicy(String policy) {
+		// Currently there is no implementation 
+		// for this version of AuthorizationPlugin
+	}
 }
